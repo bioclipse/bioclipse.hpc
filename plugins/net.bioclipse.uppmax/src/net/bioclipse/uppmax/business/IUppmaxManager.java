@@ -10,7 +10,12 @@
  ******************************************************************************/
 package net.bioclipse.uppmax.business;
 
+import java.util.List;
+
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import net.bioclipse.core.PublishedClass;
+import net.bioclipse.core.PublishedMethod;
+import net.bioclipse.core.Recorded;
 import net.bioclipse.managers.business.IBioclipseManager;
 
 @PublishedClass(
@@ -18,4 +23,13 @@ import net.bioclipse.managers.business.IBioclipseManager;
 )
 public interface IUppmaxManager extends IBioclipseManager {
 
+	
+	@Recorded
+	@PublishedMethod(
+			params="String command", 
+			methodSummary="Executes a command"
+	)
+	public void executeCommand(String command);
+
+	
 }

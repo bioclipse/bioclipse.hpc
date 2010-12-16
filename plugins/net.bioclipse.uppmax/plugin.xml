@@ -9,5 +9,56 @@
             id="net.bioclipse.uppmax.business.UppmaxManager">
       </scriptContribution>
    </extension>
+   
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="net.bioclipse.uppmax"
+            name="UPPMAX Category">
+      </category>
+      <view
+            category="net.bioclipse.uppmax"
+            class="net.bioclipse.uppmax.views.UppmaxView"
+            icon="icons/sample.gif"
+            id="net.bioclipse.uppmax.views.UppmaxView"
+            name="UPPMAX View">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
 
+   <!-- ======================================= -->
+   <!-- Remote Object Popup Menu Actions        -->
+   <!-- ======================================= -->
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+               objectClass="org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile"
+               id="actions.showProjInfo">
+           <action
+                   label="Show Project Info"
+                   tooltip="Show detailed info about current project quotas etc."
+                   class="samples.ui.actions.ShowContents"
+                   menubarPath="additions"
+                   enablesFor="1"
+                   id="actions.txt.projinfo">
+           </action>
+       </objectContribution>       
+    </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="net.bioclipse.uppmax.views.SampleView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   
 </plugin>
