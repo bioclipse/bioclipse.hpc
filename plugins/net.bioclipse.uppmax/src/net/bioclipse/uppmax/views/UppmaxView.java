@@ -60,7 +60,7 @@ public class UppmaxView extends ViewPart {
 //		lblName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 //		lblName.setText("Name:");
 
-		txtContents = new Text(container, SWT.BORDER | SWT.MULTI);
+		txtContents = new Text(container, SWT.SCROLL_PAGE | SWT.BORDER | SWT.MULTI);
 		GridData gridData_1 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gridData_1.widthHint = 482;
 		gridData_1.heightHint = 200;

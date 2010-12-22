@@ -23,6 +23,11 @@
             id="net.bioclipse.uppmax.views.UppmaxView"
             name="UPPMAX View">
       </view>
+      <view
+            class="net.bioclipse.uppmax.views.ProjInfoView"
+            id="net.bioclipse.uppmax.views.ProjInfoView"
+            name="Project Info">
+      </view>
    </extension>
    <extension
          point="org.eclipse.help.contexts">

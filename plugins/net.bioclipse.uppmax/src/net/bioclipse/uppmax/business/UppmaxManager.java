@@ -23,6 +23,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.rse.shells.ui.RemoteCommandHelpers;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
+import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileEmpty;
 import org.eclipse.rse.subsystems.shells.core.model.SimpleCommandOperation;
 import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
 import org.eclipse.rse.ui.SystemBasePlugin;
@@ -30,11 +31,16 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 import net.bioclipse.managers.business.IBioclipseManager;
+import net.bioclipse.uppmax.views.UppmaxView;
+
 import org.apache.log4j.Logger;
 import org.eclipse.rse.core.*;
 import org.eclipse.rse.core.model.IHost;
+import org.eclipse.rse.core.model.ISystemRegistry;
+import org.eclipse.rse.core.model.SystemStartHere;
 import org.eclipse.rse.core.subsystems.ISubSystem;
 import org.eclipse.rse.subsystems.shells.core.*;
 import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
@@ -82,6 +88,63 @@ public class UppmaxManager implements IBioclipseManager {
 		return null;
 	}
 	
+	public void updateProjectInfoView() {
+		String temp;
+		String allOutput;
+		IHost uppmaxHost;
+		
+		System.out.println("Button was clicked!");
+		// updateProjectInfoTable();
+		UppmaxView uppmaxView = (UppmaxView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(UppmaxView.ID);
+		if (uppmaxView!=null) {
+			System.out.println("Found UVIEW: " + uppmaxView);
+
+			ISystemRegistry reg = SystemStartHere.getSystemRegistry();
+			IHost[] hosts = reg.getHosts();
+			if (hosts.length == 0) {
+				System.out.println("No host names found!");
+				uppmaxView.setContents("No host names found!");
+			}
+			for (IHost host : hosts) {
+				String hostAlias = host.getAliasName();
+				if (hostAlias.equals("kalkyl.uppmax.uu.se")) {
+					uppmaxHost = host;
+					IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(uppmaxHost);
+					SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
+					try {
+						allOutput = "";
+						temp = "";
+						simpleCommandOp.runCommand("projinfo", true);
+						for (int i=0;i<100;i++) {
+							temp = "";
+							temp = simpleCommandOp.readLine(true);
+							if (temp == null) {
+								System.out.println("Temp is nulĺ!");
+							} else if (temp.equals("")) {
+								System.out.println("*** readLine returned empty result!");
+							} else {
+								System.out.println("Temp: " + temp);
+								allOutput += temp + "\n";
+							}		
+							try {
+								Thread.sleep(25);
+							} catch (Exception e4) {
+								e4.printStackTrace();
+							}
+						}
+						uppmaxView.setContents(allOutput);
+					} catch (Exception e3) {
+						// TODO Auto-generated catch block
+						e3.printStackTrace();
+					}
+					break;
+				}
+			}
+		} else {
+			System.out.println("No View found!");
+		}
+	}
+	
 	/* Utility methods */
 	
 	protected Shell getShell() {
@@ -100,5 +163,5 @@ public class UppmaxManager implements IBioclipseManager {
 	protected ISubSystem getSubSystem() {
 		return getFirstSelectedRemoteFile().getParentRemoteFileSubSystem();
 	}
-
+	
 }

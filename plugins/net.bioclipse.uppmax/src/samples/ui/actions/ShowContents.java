@@ -58,18 +58,8 @@ public class ShowContents implements IObjectActionDelegate {
 	 * @see org.eclipse.ui.IActionDelegate#run(org.eclipse.jface.action.IAction)
 	 */
 	public void run(IAction action) {
-		String commandOutput;
+		String allOutput;
 		String temp;
-		
-//		IRemoteFile selectedFile = getFirstSelectedRemoteFile();
-//		String cmdToRun = "cat " + selectedFile.getAbsolutePath(); //$NON-NLS-1$
-//		try {
-//			runCommand(cmdToRun);
-//		} catch (Exception e) {
-//			String excType = e.getClass().getName();
-//			MessageDialog.openError(getShell(), excType, excType + ": " + e.getLocalizedMessage()); //$NON-NLS-1$
-//			e.printStackTrace();
-//		}
 
 		IRemoteFile selectedFile = getFirstSelectedRemoteFile();
 		IHost host = selectedFile.getHost();
@@ -78,32 +68,38 @@ public class ShowContents implements IObjectActionDelegate {
 		SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, parentDirectory, true);
 		try {
 			simpleCommandOp.runCommand("projinfo", false);
-			commandOutput = "";
+			allOutput = "";
+			temp = "";
 			for (int i=0;i<100;i++) {
-				 temp = "";
-				 temp = simpleCommandOp.readLine(false);
-				 System.out.println("Temp: " + temp);
-				 if (temp == null) {
-					 System.out.println("Temp is nulĺ!");
-				 } else if (temp.equals("")) {
-					 System.out.println("Temp is empty!");
-				 } else {
-					 commandOutput += temp + "...\n";
-				 }		
-				 try {
-					 Thread.sleep(10);
-				 } catch (Exception e) {
-					 e.printStackTrace();
-				 }
+				temp = "";
+				temp = simpleCommandOp.readLine(false);
+				System.out.println("Temp: " + temp);
+				if (temp == null) {
+					System.out.println("Temp is nulĺ!");
+				} else if (temp.equals("")) {
+					System.out.println("Temp is empty!");
+				} else {
+					allOutput += temp + "\n";
+				}		
+				try {
+					Thread.sleep(50);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			//Also update UPPMAXC view (for now)
-			updateUPPMAXView(commandOutput);
-			
-		} catch (Exception e) {
+
+			String[] outputParts = allOutput.split("projinfo");
+			if (outputParts.length > 1) {
+				String commandOutput = outputParts[1];
+				System.out.println("Command output: " + commandOutput);
+			} else {
+				System.out.println("Length less than 1!");
+			}
+
+		} catch (Exception e2) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+			e2.printStackTrace();
+		} 
 	}
 
 	private void updateUPPMAXView(String content) {
