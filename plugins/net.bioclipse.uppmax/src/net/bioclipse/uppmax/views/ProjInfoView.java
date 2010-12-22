@@ -130,8 +130,9 @@ public class ProjInfoView extends ViewPart {
 		// Set the focus
 	}
 
-	public void setContents(String allOutput) {
-		// TODO Auto-generated method stub
+	public void setContentsFromXML(String xmlString) {
+		System.out.println("XML String:\n" + xmlString);
+		
 		
 	}
 }

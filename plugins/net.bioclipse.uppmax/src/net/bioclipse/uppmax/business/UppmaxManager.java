@@ -13,6 +13,8 @@ package net.bioclipse.uppmax.business;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -108,22 +110,27 @@ public class UppmaxManager implements IBioclipseManager {
 				SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
 				try {
 					allOutput = "";
-					temp = null;
+					temp = "";
 					simpleCommandOp.runCommand("projinfoxml", true);
-					while (temp != "") {
+					while (temp != null) {
 						temp = null;
-						temp = simpleCommandOp.readLine(false);
+						temp = simpleCommandOp.readLine(true);
 						if (temp != "") {
 							allOutput += temp;
 							System.out.println("Temp: " + temp);
 						}
 						try {
-							Thread.sleep(100);
+							Thread.sleep(15);
 						} catch (Exception e4) {
 							e4.printStackTrace();
 						}
 					}
-					// projInfoView.setContents(allOutput);
+					String projInfoXml = getMatch("<projinfo>.*</projinfo>", allOutput);
+					if (projInfoXml != null) {
+						projInfoView.setContentsFromXML(projInfoXml);
+					} else {
+						System.out.println("Could not extract XML!");
+					}
 				} catch (Exception e3) {
 					// TODO Auto-generated catch block
 					e3.printStackTrace();
@@ -170,6 +177,16 @@ public class UppmaxManager implements IBioclipseManager {
 
 	protected ISubSystem getSubSystem() {
 		return getFirstSelectedRemoteFile().getParentRemoteFileSubSystem();
+	}
+	
+	protected String getMatch(String regexPattern, String text) {
+		String result = null;
+		Pattern p = Pattern.compile(regexPattern);
+		Matcher m = p.matcher(text);
+		if (m.find()) {
+			result = m.group();
+		}
+		return result;
 	}
 
 }
