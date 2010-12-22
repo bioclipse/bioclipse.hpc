@@ -49,7 +49,7 @@ public class UppmaxManager implements IBioclipseManager {
 
 	private static final Logger logger = Logger.getLogger(UppmaxManager.class);
 	private List _selectedFiles;
-	
+
 	public UppmaxManager() {
 		_selectedFiles = new ArrayList();
 	}
@@ -63,7 +63,7 @@ public class UppmaxManager implements IBioclipseManager {
 	}
 
 	/* Main methods */
-	
+
 	public void executeCommand(String command) {
 		IRemoteCmdSubSystem cmdss = getRemoteCmdSubSystem();
 		if (cmdss != null && cmdss.isConnected()) {
@@ -87,66 +87,73 @@ public class UppmaxManager implements IBioclipseManager {
 		}
 		return null;
 	}
-	
+
 	public void updateProjectInfoView() {
-		String temp;
+		String temp = "";
 		String allOutput;
 		IHost uppmaxHost;
-		
+
 		System.out.println("Button was clicked!");
 		// updateProjectInfoTable();
 		UppmaxView uppmaxView = (UppmaxView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(UppmaxView.ID);
 		if (uppmaxView!=null) {
 			System.out.println("Found UVIEW: " + uppmaxView);
 
-			ISystemRegistry reg = SystemStartHere.getSystemRegistry();
-			IHost[] hosts = reg.getHosts();
-			if (hosts.length == 0) {
-				System.out.println("No host names found!");
-				uppmaxView.setContents("No host names found!");
-			}
-			for (IHost host : hosts) {
-				String hostAlias = host.getAliasName();
-				if (hostAlias.equals("kalkyl.uppmax.uu.se")) {
-					uppmaxHost = host;
-					IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(uppmaxHost);
-					SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
-					try {
-						allOutput = "";
-						temp = "";
-						simpleCommandOp.runCommand("projinfo", true);
-						for (int i=0;i<100;i++) {
-							temp = "";
-							temp = simpleCommandOp.readLine(true);
-							if (temp == null) {
-								System.out.println("Temp is nulĺ!");
-							} else if (temp.equals("")) {
-								System.out.println("*** readLine returned empty result!");
-							} else {
-								System.out.println("Temp: " + temp);
-								allOutput += temp + "\n";
-							}		
-							try {
-								Thread.sleep(25);
-							} catch (Exception e4) {
-								e4.printStackTrace();
-							}
+			uppmaxHost = getUppmaxHost();
+			if (uppmaxHost == null) {
+				System.out.println("No active UPPMAX host!");
+			} else {
+				IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(uppmaxHost);
+				SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
+				try {
+					allOutput = "";
+					temp = "";
+					simpleCommandOp.runCommand("projinfo", true);
+					while (temp != null) {
+						temp = null;
+						temp = simpleCommandOp.readLine(false);
+						if (temp != "") {
+							allOutput += temp;
+							System.out.println("Temp: " + temp);
 						}
-						uppmaxView.setContents(allOutput);
-					} catch (Exception e3) {
-						// TODO Auto-generated catch block
-						e3.printStackTrace();
+						try {
+							Thread.sleep(50);
+						} catch (Exception e4) {
+							e4.printStackTrace();
+						}
 					}
-					break;
+					uppmaxView.setContents(allOutput);
+				} catch (Exception e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
 				}
 			}
+
 		} else {
 			System.out.println("No View found!");
 		}
 	}
-	
+
+	private IHost getUppmaxHost() {
+		IHost uppmaxHost = null;
+		ISystemRegistry reg = SystemStartHere.getSystemRegistry();
+		IHost[] hosts = reg.getHosts();
+		if (hosts.length == 0) {
+			System.out.println("No host names found!");
+		}
+
+		for (IHost host : hosts) {
+			String hostAlias = host.getAliasName();
+			if (hostAlias.equals("kalkyl.uppmax.uu.se")) {
+				uppmaxHost = host;
+				break;
+			}
+		}
+		return uppmaxHost;
+	}
+
 	/* Utility methods */
-	
+
 	protected Shell getShell() {
 		return SystemBasePlugin.getActiveWorkbenchShell();
 	}
@@ -163,5 +170,5 @@ public class UppmaxManager implements IBioclipseManager {
 	protected ISubSystem getSubSystem() {
 		return getFirstSelectedRemoteFile().getParentRemoteFileSubSystem();
 	}
-	
+
 }
