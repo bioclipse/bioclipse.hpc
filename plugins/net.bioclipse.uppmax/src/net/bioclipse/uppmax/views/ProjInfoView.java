@@ -129,4 +129,9 @@ public class ProjInfoView extends ViewPart {
 	public void setFocus() {
 		// Set the focus
 	}
+
+	public void setContents(String allOutput) {
+		// TODO Auto-generated method stub
+		
+	}
 }

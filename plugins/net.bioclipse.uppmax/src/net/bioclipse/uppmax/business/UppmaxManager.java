@@ -34,6 +34,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import net.bioclipse.managers.business.IBioclipseManager;
+import net.bioclipse.uppmax.views.ProjInfoView;
 import net.bioclipse.uppmax.views.UppmaxView;
 
 import org.apache.log4j.Logger;
@@ -95,9 +96,9 @@ public class UppmaxManager implements IBioclipseManager {
 
 		System.out.println("Button was clicked!");
 		// updateProjectInfoTable();
-		UppmaxView uppmaxView = (UppmaxView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(UppmaxView.ID);
-		if (uppmaxView!=null) {
-			System.out.println("Found UVIEW: " + uppmaxView);
+		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
+		if (projInfoView!=null) {
+			System.out.println("Found ProjInfoView: " + projInfoView);
 
 			uppmaxHost = getUppmaxHost();
 			if (uppmaxHost == null) {
@@ -107,9 +108,9 @@ public class UppmaxManager implements IBioclipseManager {
 				SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
 				try {
 					allOutput = "";
-					temp = "";
-					simpleCommandOp.runCommand("projinfo", true);
-					while (temp != null) {
+					temp = null;
+					simpleCommandOp.runCommand("projinfoxml", true);
+					while (temp != "") {
 						temp = null;
 						temp = simpleCommandOp.readLine(false);
 						if (temp != "") {
@@ -117,12 +118,12 @@ public class UppmaxManager implements IBioclipseManager {
 							System.out.println("Temp: " + temp);
 						}
 						try {
-							Thread.sleep(50);
+							Thread.sleep(100);
 						} catch (Exception e4) {
 							e4.printStackTrace();
 						}
 					}
-					uppmaxView.setContents(allOutput);
+					// projInfoView.setContents(allOutput);
 				} catch (Exception e3) {
 					// TODO Auto-generated catch block
 					e3.printStackTrace();
