@@ -53,6 +53,9 @@ public class UppmaxManager implements IBioclipseManager {
 	private static final Logger logger = Logger.getLogger(UppmaxManager.class);
 	private List _selectedFiles;
 
+	/**
+	 * @wbp.parser.entryPoint
+	 */
 	public UppmaxManager() {
 		_selectedFiles = new ArrayList();
 	}

@@ -3,5 +3,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/samuel/eclipse-workspaces/bioclipse2/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool/plugins/org.eclipse.jface.databinding.source_1.4.0.I20100601-0800.jar"/>
+	<classpathentry kind="lib" path="/home/samuel/eclipse-workspaces/bioclipse2/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool/plugins/org.eclipse.jface.databinding_1.4.0.I20100601-0800.jar" sourcepath="/home/samuel/eclipse-workspaces/bioclipse2/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool/plugins/org.eclipse.jface.databinding.source_1.4.0.I20100601-0800.jar"/>
+	<classpathentry kind="lib" path="/home/samuel/eclipse-workspaces/bioclipse2/.metadata/.plugins/org.eclipse.pde.core/.bundle_pool/plugins/org.eclipse.jface.source_3.6.1.M20100825-0800.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
