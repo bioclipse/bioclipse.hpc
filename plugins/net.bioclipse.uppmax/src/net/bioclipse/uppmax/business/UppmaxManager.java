@@ -36,6 +36,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import net.bioclipse.managers.business.IBioclipseManager;
+import net.bioclipse.uppmax.views.JobInfoView;
 import net.bioclipse.uppmax.views.ProjInfoView;
 import net.bioclipse.uppmax.views.UppmaxView;
 
@@ -80,27 +81,13 @@ public class UppmaxManager implements IBioclipseManager {
 		}
 	}
 
-	/**
-	 * Gets the Command subsystem associated with the current host
-	 */
-	public IRemoteCmdSubSystem getRemoteCmdSubSystem() {
-		IHost myHost = getSubSystem().getHost();
-		IRemoteCmdSubSystem[] subsys = RemoteCommandHelpers.getCmdSubSystems(myHost);
-		for (int i = 0; i < subsys.length; i++) {
-			if (subsys[i].getSubSystemConfiguration().supportsCommands()) {
-				return subsys[i];
-			}
-		}
-		return null;
-	}
-
 	public void updateProjectInfoView() {
 		String temp = "";
 		String allOutput;
 		IHost uppmaxHost;
 
 		System.out.println("Button was clicked!");
-		// updateProjectInfoTable();
+		// find the right view
 		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
 			System.out.println("Found ProjInfoView: " + projInfoView);
@@ -139,13 +126,90 @@ public class UppmaxManager implements IBioclipseManager {
 					e3.printStackTrace();
 				}
 			}
-
 		} else {
 			System.out.println("No View found!");
 		}
 	}
+	
+	public void updateJobInfoView() {
+		String commandOutput;
+		IHost uppmaxHost;
 
-	private IHost getUppmaxHost() {
+		System.out.println("Button was clicked!");
+		// find the right view
+		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
+		if (jobInfoView!=null) {
+			System.out.println("Found jobInfoView: " + jobInfoView);
+
+			uppmaxHost = getUppmaxHost();
+			commandOutput = executeRemoteCommand(uppmaxHost, "showprojinfo");
+			
+			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
+			if (projInfoXml != null) {
+				jobInfoView.setContentsFromXML(projInfoXml);
+			} else {
+				System.out.println("Could not extract XML!");
+			}
+		} else {
+			System.out.println("No View found!");
+		}
+	}
+	
+	protected String executeRemoteCommand(IHost host, String command) {
+		String temp = "";
+		String allOutput = "";
+		if (host == null) {
+			System.out.println("No active UPPMAX host!");
+		} else {
+			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(host);
+			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
+			try {
+				allOutput = "";
+				temp = "";
+				simpleCommandOp.runCommand("projinfoxml", true);
+				while (temp != null) {
+					temp = null;
+					temp = simpleCommandOp.readLine(true);
+					if (temp != "") {
+						allOutput += temp;
+						System.out.println("Output from : " + temp);
+					}
+					try {
+						Thread.sleep(15);
+					} catch (Exception sleepError) {
+						sleepError.printStackTrace();
+					}
+				}
+			} catch (Exception commandError) {
+				// TODO Auto-generated catch block
+				commandError.printStackTrace();
+			}
+		}
+		return allOutput;
+	}
+	
+	/**
+	 * Gets the Command subsystem associated with the current host
+	 */
+	protected IRemoteCmdSubSystem getRemoteCmdSubSystem() {
+		IHost myHost = getSubSystem().getHost();
+		IRemoteCmdSubSystem[] subsys = RemoteCommandHelpers.getCmdSubSystems(myHost);
+		for (int i = 0; i < subsys.length; i++) {
+			if (subsys[i].getSubSystemConfiguration().supportsCommands()) {
+				return subsys[i];
+			}
+		}
+		return null;
+	}
+	
+	/* Utility methods */
+
+	/**
+	 * Find an RSE host which is currently connected to the
+	 * the kalkyl cluster, by checking the hostname of each host
+	 * @return
+	 */
+	protected IHost getUppmaxHost() {
 		IHost uppmaxHost = null;
 		ISystemRegistry reg = SystemStartHere.getSystemRegistry();
 		IHost[] hosts = reg.getHosts();
@@ -162,8 +226,6 @@ public class UppmaxManager implements IBioclipseManager {
 		}
 		return uppmaxHost;
 	}
-
-	/* Utility methods */
 
 	protected Shell getShell() {
 		return SystemBasePlugin.getActiveWorkbenchShell();

@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import javax.management.openmbean.CompositeData;
 
+import net.bioclipse.uppmax.business.ColumnSortListener;
 import net.bioclipse.uppmax.business.ProjInfoContentModel;
 import net.bioclipse.uppmax.business.ProjInfoContentProvider;
 import net.bioclipse.uppmax.business.ProjInfoLabelProvider;
@@ -97,7 +98,12 @@ public class ProjInfoView extends ViewPart {
 	    
 	    // Pack the columns
 	    for (int i = 0, n = table.getColumnCount(); i < n; i++) {
-	      table.getColumn(i).pack();
+	      TableColumn column = table.getColumn(i);
+	      column.pack();
+	      // Make columns sortable (doesn't work for TableTreeViewer though)
+//	      ColumnSortListener sortListen = new ColumnSortListener();
+//	      sortListen.setTable(table);
+//	      column.addListener(SWT.Selection, sortListen);
 	    }
 	    
 	    // Turn on the header and the lines

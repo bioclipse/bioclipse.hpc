@@ -28,6 +28,11 @@
             id="net.bioclipse.uppmax.views.ProjInfoView"
             name="Project Info">
       </view>
+      <view
+            class="net.bioclipse.uppmax.views.JobInfoView"
+            id="net.bioclipse.uppmax.views.JobInfoView"
+            name="JobInfo">
+      </view>
    </extension>
    <extension
          point="org.eclipse.help.contexts">
