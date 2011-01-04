@@ -82,49 +82,23 @@ public class UppmaxManager implements IBioclipseManager {
 	}
 
 	public void updateProjectInfoView() {
-		String temp = "";
-		String allOutput;
+		String commandOutput;
 		IHost uppmaxHost;
 
 		System.out.println("Button was clicked!");
 		// find the right view
 		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
-			System.out.println("Found ProjInfoView: " + projInfoView);
+			System.out.println("Found jobInfoView: " + projInfoView);
 
 			uppmaxHost = getUppmaxHost();
-			if (uppmaxHost == null) {
-				System.out.println("No active UPPMAX host!");
+			commandOutput = executeRemoteCommand(uppmaxHost, "showprojinfo");
+			
+			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
+			if (projInfoXml != null) {
+				projInfoView.setContentsFromXML(projInfoXml);
 			} else {
-				IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(uppmaxHost);
-				SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
-				try {
-					allOutput = "";
-					temp = "";
-					simpleCommandOp.runCommand("projinfoxml", true);
-					while (temp != null) {
-						temp = null;
-						temp = simpleCommandOp.readLine(true);
-						if (temp != "") {
-							allOutput += temp;
-							System.out.println("Temp: " + temp);
-						}
-						try {
-							Thread.sleep(15);
-						} catch (Exception e4) {
-							e4.printStackTrace();
-						}
-					}
-					String projInfoXml = getMatch("<projinfo>.*</projinfo>", allOutput);
-					if (projInfoXml != null) {
-						projInfoView.setContentsFromXML(projInfoXml);
-					} else {
-						System.out.println("Could not extract XML!");
-					}
-				} catch (Exception e3) {
-					// TODO Auto-generated catch block
-					e3.printStackTrace();
-				}
+				System.out.println("Could not extract XML!");
 			}
 		} else {
 			System.out.println("No View found!");
