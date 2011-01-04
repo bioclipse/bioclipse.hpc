@@ -109,18 +109,16 @@ public class UppmaxManager implements IBioclipseManager {
 		String commandOutput;
 		IHost uppmaxHost;
 
-		System.out.println("Button was clicked!");
+		System.out.println("Update JobInfo-Button was clicked!");
 		// find the right view
 		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
 		if (jobInfoView!=null) {
 			System.out.println("Found jobInfoView: " + jobInfoView);
 
 			uppmaxHost = getUppmaxHost();
-			commandOutput = executeRemoteCommand(uppmaxHost, "showprojinfo");
-			
-			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
-			if (projInfoXml != null) {
-				jobInfoView.setContentsFromXML(projInfoXml);
+			String jobInfoXml = executeRemoteCommand(uppmaxHost, "clusterproxy -t jobinfo");
+			if (jobInfoXml != null) {
+				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
 				System.out.println("Could not extract XML!");
 			}
