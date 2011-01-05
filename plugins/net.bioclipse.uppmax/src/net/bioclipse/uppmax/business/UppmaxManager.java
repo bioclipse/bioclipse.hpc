@@ -138,7 +138,7 @@ public class UppmaxManager implements IBioclipseManager {
 			try {
 				allOutput = "";
 				temp = "";
-				simpleCommandOp.runCommand("projinfoxml", true);
+				simpleCommandOp.runCommand(command, true);
 				while (temp != null) {
 					temp = null;
 					temp = simpleCommandOp.readLine(true);
@@ -147,7 +147,7 @@ public class UppmaxManager implements IBioclipseManager {
 						System.out.println("Output from : " + temp);
 					}
 					try {
-						Thread.sleep(15);
+						Thread.sleep(25);
 					} catch (Exception sleepError) {
 						sleepError.printStackTrace();
 					}

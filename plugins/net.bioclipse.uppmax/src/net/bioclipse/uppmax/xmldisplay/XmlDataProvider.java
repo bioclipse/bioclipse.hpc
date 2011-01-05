@@ -8,6 +8,11 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -98,5 +103,22 @@ public class XmlDataProvider {
 			System.out.println("IO Exception:");
 			e.printStackTrace();
 		}
+		
+		XPathFactory xPathFactory = XPathFactory.newInstance();
+		XPath xpathObj = xPathFactory.newXPath();
+		XPathExpression expr;
+		Object result;
+		try {
+			expr = xpathObj.compile("//runningjob");
+			result = expr.evaluate(xmlDocument, XPathConstants.NODESET);
+			NodeList nodes = (NodeList) result;
+			for (int i = 0; i < nodes.getLength(); i++) {
+			    System.out.println(nodes.item(i).getNodeValue()); 
+			}
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+
 	}
 }
+
