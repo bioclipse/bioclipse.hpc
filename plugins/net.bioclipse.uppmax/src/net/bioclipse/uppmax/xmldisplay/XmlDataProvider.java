@@ -1,5 +1,7 @@
 package net.bioclipse.uppmax.xmldisplay;
 
+import galang.research.jface.Row;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -118,19 +120,17 @@ public class XmlDataProvider {
 		XPathExpression expr;
 		Object result;
 		try {
-			expr = xpathObj.compile("//runningjob");
+			RowCollection tempRowCollection = new RowCollection();
+			expr = xpathObj.compile("/jobinfo/runningjobs/runningjob");
 			result = expr.evaluate(xmlDocument, XPathConstants.NODESET);
 			nodeList = (NodeList) result;
 			for (int i = 0; i < nodeList.getLength(); i++) {
-				Node node = nodeList.item(i);
-				System.out.println("Node name: " + node.getNodeName());
-				System.out.println("Node value: " + node.getNodeValue());
-				System.out.println("Node type: " + node.getNodeType());
-				
-				System.out.println("Child node name: " + node.getChildNodes().item(0).getNodeName());
-				System.out.println("Child node value: " + node.getChildNodes().item(0).getNodeValue());
-				System.out.println("Child node type: " + node.getChildNodes().item(0).getNodeType());
+				Node tempNode = nodeList.item(i);
+				Row tempRow = new Row();
+				tempRow.setNode(tempNode);
+				tempRowCollection.addRow(tempRow);
 			}
+			rowCollections.add(tempRowCollection);
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}

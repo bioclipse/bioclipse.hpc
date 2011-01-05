@@ -16,16 +16,16 @@ public class RowCollection {
 		}
 	}
 
-	public List<Row> getEntityList() {
+	public List<Row> getRowCollection() {
 		return rowCollection;
 	}
 
-	private List<Row> getRowCollection() {
-		return rowCollection;
-	}
-
-	private void setRowCollection(List<Row> rowCollection) {
+	public void setRowCollection(List<Row> rowCollection) {
 		this.rowCollection = rowCollection;
+	}
+
+	public void addRow(Row row) {
+		this.rowCollection.add(row);
 	}
 
 }
