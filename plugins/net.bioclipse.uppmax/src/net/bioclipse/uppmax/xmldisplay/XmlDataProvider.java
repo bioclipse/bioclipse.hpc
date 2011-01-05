@@ -44,13 +44,18 @@ public class XmlDataProvider {
 
 	public List<TreeViewerColumn> createColumns(TreeViewer treeViewer) {
 		List<TreeViewerColumn> columns = new ArrayList<TreeViewerColumn>();
+		NodeList children = nodeList.item(0).getChildNodes();
 		if (nodeList != null) {
-			for (int i=0; i<nodeList.getLength(); i++) {
-				Node node = nodeList.item(i);
+			for (int i=1; i<children.getLength(); i=i+2) {
+				Node childNode = children.item(i);
 				TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 				TreeColumn trclmnName = treeViewerColumn.getColumn();
 				trclmnName.setWidth(100);
-				trclmnName.setText(node.getNodeValue());
+				String colHeader = childNode.getNodeName();
+				if (colHeader == null) {
+					colHeader = "Untitled";
+				}
+				trclmnName.setText(colHeader);
 				columns.add(treeViewerColumn);
 			}
 		} else {
@@ -113,11 +118,11 @@ public class XmlDataProvider {
 		XPathExpression expr;
 		Object result;
 		try {
-			expr = xpathObj.compile("//runningjob/name");
+			expr = xpathObj.compile("//runningjob");
 			result = expr.evaluate(xmlDocument, XPathConstants.NODESET);
-			NodeList nodes = (NodeList) result;
-			for (int i = 0; i < nodes.getLength(); i++) {
-				Node node = nodes.item(i);
+			nodeList = (NodeList) result;
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node node = nodeList.item(i);
 				System.out.println("Node name: " + node.getNodeName());
 				System.out.println("Node value: " + node.getNodeValue());
 				System.out.println("Node type: " + node.getNodeType());
