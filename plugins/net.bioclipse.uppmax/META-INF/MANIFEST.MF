@@ -5,6 +5,8 @@ Bundle-SymbolicName: net.bioclipse.uppmax; singleton:=true
 Bundle-Version: 1.0.0.v20101007
 Bundle-Activator: net.bioclipse.uppmax.Activator
 Bundle-Vendor: The Bioclipse project
+Bundle-ClassPath: .,
+ lib/commons-io-2.0.1.jar
 Export-Package: net.bioclipse.uppmax, net.bioclipse.uppmax.business
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
@@ -17,6 +19,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.rse.core;bundle-version="3.1.101"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.log4j,
+ org.eclipse.jface.databinding.viewers,
  org.eclipse.rse.shells.ui,
  org.eclipse.rse.subsystems.files.core.subsystems,
  org.eclipse.rse.ui
