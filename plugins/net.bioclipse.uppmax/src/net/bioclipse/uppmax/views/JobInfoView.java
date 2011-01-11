@@ -5,35 +5,27 @@ import java.util.List;
 
 import net.bioclipse.uppmax.business.UppmaxManager;
 import net.bioclipse.uppmax.xmldisplay.XmlContentProvider;
-import net.bioclipse.uppmax.xmldisplay.XmlDataProvider;
+import net.bioclipse.uppmax.xmldisplay.XmlDataProviderFactory;
 import net.bioclipse.uppmax.xmldisplay.XmlRow;
-import net.bioclipse.uppmax.xmldisplay.XmlRowContentProvider;
-import net.bioclipse.uppmax.xmldisplay.XmlRowLabelProvider;
+import net.bioclipse.uppmax.xmldisplay.XmlLabelProvider;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.viewers.TableTreeViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.custom.TableTree;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 
 public class JobInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.uppmax.views.JobInfoView"; //$NON-NLS-1$
-	private XmlDataProvider xmlDataProvider = new XmlDataProvider();
+	private XmlDataProviderFactory xmlDataProvider = new XmlDataProviderFactory();
 	List<TreeViewerColumn> columns;
 	TreeViewer treeViewer;
 	
@@ -72,13 +64,16 @@ public class JobInfoView extends ViewPart {
 	public void updateViewFromXml(String rawXmlContent) {
 		xmlDataProvider.setAndParseXmlContent(rawXmlContent);
 		XmlContentProvider aXmlContentProvider = xmlDataProvider.getContentProvider();
-		XmlRowLabelProvider aXmlLabelProvider = xmlDataProvider.getRowLabelProvider();
-		columns = xmlDataProvider.createColumns(treeViewer);
+		XmlLabelProvider aXmlLabelProvider = xmlDataProvider.getLabelProvider();
+		
+		if ( xmlDataProvider.getColumns().size() == 0 ) {
+			columns = xmlDataProvider.createColumns(treeViewer);
+		}
 		
 		List<XmlRow> rows = xmlDataProvider.getXmlRows();
 
 		treeViewer.setContentProvider(aXmlContentProvider);
-		treeViewer.setLabelProvider(new XmlRowLabelProvider());
+		treeViewer.setLabelProvider(new XmlLabelProvider());
 		treeViewer.refresh();
 
 		for (Iterator<XmlRow> i = rows.iterator(); i.hasNext(); ) {
@@ -121,11 +116,11 @@ public class JobInfoView extends ViewPart {
 
 	}
 
-	public XmlDataProvider getContentModel() {
+	public XmlDataProviderFactory getContentModel() {
 		return xmlDataProvider;
 	}
 
-	public void setContentModel(XmlDataProvider newXmlDataProvider) {
+	public void setContentModel(XmlDataProviderFactory newXmlDataProvider) {
 		this.xmlDataProvider = newXmlDataProvider;
 	}
 }
