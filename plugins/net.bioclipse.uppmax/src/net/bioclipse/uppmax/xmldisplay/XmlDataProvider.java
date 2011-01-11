@@ -43,29 +43,48 @@ public class XmlDataProvider {
 	public void getColumns() {
 		// Nothing so far ...
 	}
+	
+	public List<XmlRow> getXmlRows() {
+		List<XmlRow> rows = new ArrayList<XmlRow>();
+		for (int i=0; i<nodeList.getLength(); i++) {
+			XmlRow tempXmlRow = new XmlRow();
+			Node tempNode = nodeList.item(i);
+			tempXmlRow.setNode(tempNode);
+			rows.add(tempXmlRow);
+		}
+		return rows;
+	}
 
 	public List<TreeViewerColumn> createColumns(TreeViewer treeViewer) {
 		List<TreeViewerColumn> columns = new ArrayList<TreeViewerColumn>();
+		// Get all subnodes of the first item, for determining column labels
 		NodeList children = nodeList.item(0).getChildNodes();
 		if (nodeList != null) {
-			for (int i=1; i<children.getLength(); i=i+2) {
+			// Loop through all the children of the first item
+			for (int i=0; i<children.getLength(); i++) {
 				Node childNode = children.item(i);
-				TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
-				TreeColumn trclmnName = treeViewerColumn.getColumn();
-				trclmnName.setWidth(100);
-				String colHeader = childNode.getNodeName();
-				if (colHeader == null) {
-					colHeader = "Untitled";
+				// Skip skip the nodes consisting of just the actual text content of the nodes
+				// (themselves being nodes)
+				if (!"#text".equalsIgnoreCase(childNode.getNodeName())) {
+					TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+					TreeColumn aTreeColumn = treeViewerColumn.getColumn();
+					aTreeColumn.setWidth(100);
+					// Use the XML Node name as column header label
+					// TODO: Define and use some custom label attribute instead
+					String colHeader = childNode.getNodeName();
+					if (colHeader == null) {
+						colHeader = "Untitled";
+					}
+					aTreeColumn.setText(colHeader);
+					columns.add(treeViewerColumn);
+				} else {
+					System.out.println("Skipping text node ..."); // TODO: Remove debug-code
 				}
-				trclmnName.setText(colHeader);
-				columns.add(treeViewerColumn);
 			}
-		} else {
-			System.out.println("nodeList is null, so could not create columns!");
-		}
+		} 
 		return columns;
 	}
-
+	
 	private String getRawXmlContent() {
 		return rawXmlContent;
 	}
@@ -120,7 +139,7 @@ public class XmlDataProvider {
 		XPathExpression expr;
 		Object result;
 		try {
-			RowCollection tempRowCollection = new RowCollection();
+			RowCollection tempRowCollection = RowCollection.getInstance();
 			expr = xpathObj.compile("/jobinfo/runningjobs/runningjob");
 			result = expr.evaluate(xmlDocument, XPathConstants.NODESET);
 			nodeList = (NodeList) result;
@@ -134,7 +153,17 @@ public class XmlDataProvider {
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
 		}
+	}
 
+	public XmlContentProvider getContentProvider() {
+		XmlContentProvider aXmlContentProvider = new XmlContentProvider();
+		aXmlContentProvider.setXmlDataProvider(this);
+		return aXmlContentProvider;
+	}
+
+	public XmlRowLabelProvider getRowLabelProvider() {
+		XmlRowLabelProvider aXmlRowLabelProvider = new XmlRowLabelProvider();
+		return aXmlRowLabelProvider;
 	}
 }
 

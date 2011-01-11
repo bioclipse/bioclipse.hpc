@@ -1,11 +1,13 @@
 package net.bioclipse.uppmax.xmldisplay;
 
 import galang.research.jface.Row;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class RowCollection {
 	private static RowCollection content;
-	private List<Row> rowCollection;
+	private List<Row> rowCollection = new ArrayList<Row>();
 
 	public static synchronized RowCollection getInstance() {
 		if (content != null) {

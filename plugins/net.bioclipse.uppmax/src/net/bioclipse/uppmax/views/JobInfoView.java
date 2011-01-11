@@ -1,9 +1,14 @@
 package net.bioclipse.uppmax.views;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.bioclipse.uppmax.business.UppmaxManager;
+import net.bioclipse.uppmax.xmldisplay.XmlContentProvider;
 import net.bioclipse.uppmax.xmldisplay.XmlDataProvider;
+import net.bioclipse.uppmax.xmldisplay.XmlRow;
+import net.bioclipse.uppmax.xmldisplay.XmlRowContentProvider;
+import net.bioclipse.uppmax.xmldisplay.XmlRowLabelProvider;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -58,7 +63,7 @@ public class JobInfoView extends ViewPart {
 		Tree tree = treeViewer.getTree();
 		tree.setHeaderVisible(true);
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
+		
 		createActions();
 		initializeToolBar();
 		initializeMenu();
@@ -66,8 +71,21 @@ public class JobInfoView extends ViewPart {
 	
 	public void updateViewFromXml(String rawXmlContent) {
 		xmlDataProvider.setAndParseXmlContent(rawXmlContent);
+		XmlContentProvider aXmlContentProvider = xmlDataProvider.getContentProvider();
+		XmlRowLabelProvider aXmlLabelProvider = xmlDataProvider.getRowLabelProvider();
 		columns = xmlDataProvider.createColumns(treeViewer);
+		
+		List<XmlRow> rows = xmlDataProvider.getXmlRows();
+
+		treeViewer.setContentProvider(aXmlContentProvider);
+		treeViewer.setLabelProvider(new XmlRowLabelProvider());
 		treeViewer.refresh();
+
+		for (Iterator<XmlRow> i = rows.iterator(); i.hasNext(); ) {
+			XmlRow row = i.next();
+			treeViewer.setInput(row);
+		}
+		
 	}
 
 	/**
