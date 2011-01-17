@@ -21,12 +21,14 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.TreeViewerColumn;
 
 public class JobInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.uppmax.views.JobInfoView"; //$NON-NLS-1$
-	private XmlDataProviderFactory xmlDataProvider = new XmlDataProviderFactory();
-	List<TreeViewerColumn> columns;
+
+	String[] xmlPartsExpr = new String[] {"jobinfo/runningjobs/runningjob"};
+	String dataItemExpr = "*";
+	String dataItemLabelExpr = null;
+	private XmlDataProviderFactory xmlDataProvider = new XmlDataProviderFactory(xmlPartsExpr, dataItemExpr, dataItemLabelExpr);
 	TreeViewer treeViewer;
 	
 	public JobInfoView() {
@@ -67,13 +69,13 @@ public class JobInfoView extends ViewPart {
 		XmlLabelProvider aXmlLabelProvider = xmlDataProvider.getLabelProvider();
 		
 		if ( xmlDataProvider.getColumns().size() == 0 ) {
-			columns = xmlDataProvider.createColumns(treeViewer);
+			xmlDataProvider.createColumnsForTreeViewer(treeViewer);
 		}
 		
 		List<XmlRow> rows = xmlDataProvider.getXmlRows();
 
 		treeViewer.setContentProvider(aXmlContentProvider);
-		treeViewer.setLabelProvider(new XmlLabelProvider());
+		treeViewer.setLabelProvider(aXmlLabelProvider);
 		treeViewer.refresh();
 
 		for (Iterator<XmlRow> i = rows.iterator(); i.hasNext(); ) {
