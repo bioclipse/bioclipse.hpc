@@ -61,8 +61,9 @@ public class XmlDataProviderFactory {
 
 	public List<TreeViewerColumn> createColumns(TreeViewer treeViewer) {
 		// Get all subnodes of the first item, for determining column labels
-		NodeList children = nodeList.item(0).getChildNodes();
-		if (nodeList != null) {
+		int nodeListLen = nodeList.getLength();
+		if (nodeList != null && nodeListLen > 0) {
+			NodeList children = nodeList.item(0).getChildNodes();
 			// Loop through all the children of the first item
 			for (int i=0; i<children.getLength(); i++) {
 				Node childNode = children.item(i);

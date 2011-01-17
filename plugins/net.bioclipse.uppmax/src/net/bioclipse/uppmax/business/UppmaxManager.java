@@ -38,7 +38,6 @@ import org.eclipse.ui.PlatformUI;
 import net.bioclipse.managers.business.IBioclipseManager;
 import net.bioclipse.uppmax.views.JobInfoView;
 import net.bioclipse.uppmax.views.ProjInfoView;
-import net.bioclipse.uppmax.views.UppmaxView;
 
 import org.apache.log4j.Logger;
 import org.eclipse.rse.core.*;
