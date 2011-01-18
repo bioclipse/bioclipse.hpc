@@ -97,7 +97,7 @@ public class UppmaxManager implements IBioclipseManager {
 			if (projInfoXml != null) {
 				projInfoView.setContentsFromXML(projInfoXml);
 			} else {
-				System.out.println("Could not extract XML!");
+				System.out.println("Could not extract XML for projinfo!");
 			}
 		} else {
 			System.out.println("No View found!");
@@ -116,11 +116,11 @@ public class UppmaxManager implements IBioclipseManager {
 
 			uppmaxHost = getUppmaxHost();
 			String rawContent = executeRemoteCommand(uppmaxHost, "clusterproxy -t jobinfo");
-			String jobInfoXml = getMatch("<jobinfo>.*?</jobinfo>", rawContent);
+			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
-				System.out.println("Could not extract XML!");
+				System.out.println("Could not extract XML for jobinfo!");
 			}
 		} else {
 			System.out.println("No View found!");

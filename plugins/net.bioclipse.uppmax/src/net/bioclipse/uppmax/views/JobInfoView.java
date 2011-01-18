@@ -24,11 +24,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 public class JobInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.uppmax.views.JobInfoView"; //$NON-NLS-1$
-
-	String[] xmlPartsExpr = new String[] {"jobinfo/runningjobs/runningjob"};
-	String dataItemExpr = "*";
-	String dataItemLabelExpr = null;
-	private XmlDataProviderFactory xmlDataProvider = new XmlDataProviderFactory(xmlPartsExpr, dataItemExpr, dataItemLabelExpr);
+	private XmlDataProviderFactory xmlDataProvider = new XmlDataProviderFactory();
 	TreeViewer treeViewer;
 	
 	public JobInfoView() {

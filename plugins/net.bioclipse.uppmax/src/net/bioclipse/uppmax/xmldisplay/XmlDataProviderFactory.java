@@ -3,7 +3,9 @@ package net.bioclipse.uppmax.xmldisplay;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.management.modelmbean.XMLParseException;
 import javax.xml.parsers.DocumentBuilder;
@@ -21,9 +23,12 @@ import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import static org.w3c.dom.Node.TEXT_NODE;
 
 public class XmlDataProviderFactory {
 	/**
@@ -36,14 +41,9 @@ public class XmlDataProviderFactory {
 	private String fRawXmlContent;
 	private NodeList fNodeList;
 	private Document fXmlDocument;
-	private String[] fXmlPathsExpr;
-	private String fDataItemExpr;
-	private String fDataItemLabelExpr;
+	private Map<String, String> fColumnLabelMappings = new HashMap<String, String>();
 	
-	public XmlDataProviderFactory(String[] xmlPathsExpr, String dataItemExpr, String dataItemLabelExpr) {
-		setXmlPathsExpr(xmlPathsExpr);
-		setDataItemExpr(dataItemExpr);
-		setDataItemLabelExpr(dataItemLabelExpr);
+	public XmlDataProviderFactory() {
 	}
 	
 	/**
@@ -61,11 +61,31 @@ public class XmlDataProviderFactory {
 		setXmlDocument(xmlDoc);
 		
 		// TODO: Make this into a recursive function instead
-		String pathExpr = getXmlPathsExpr()[0];
-		
-		Object result = evaluateXPathExpr(pathExpr);
-		setNodeList((NodeList) result);
+		createColumnLabelMappings((NodeList) evaluateXPathExpr("infodocument/columnlabelmappings/mapping"));
+		setNodeList((NodeList) evaluateXPathExpr("infodocument/item"));
 		createRowCollectionsFromNodeList(getNodeList());
+	}
+
+	private void createColumnLabelMappings(NodeList mappings) {
+			for ( int i = 0; i < mappings.getLength(); i++ ) {
+				Node tempNode = mappings.item(i);
+				if ( tempNode.getNodeType() != TEXT_NODE ) {
+					NamedNodeMap tempNodeAttrs = tempNode.getAttributes();
+					try {
+						Node colidAttr = tempNodeAttrs.getNamedItem("colid");
+						Node labelAttr = tempNodeAttrs.getNamedItem("label");
+						String colIdStr = colidAttr.getNodeValue();
+						String labelStr = labelAttr.getNodeValue();
+						System.out.println("Column ID: " +colIdStr + ", Label: " + labelStr); // TODO: Remove debug-code
+						fColumnLabelMappings.put(colIdStr, labelStr);
+					} catch (Exception e) {
+						System.out.println("Could not find attributes in columnlabelmappings/mapping!");
+						e.printStackTrace();
+					}
+				}
+			}
+			System.out.println("fColumnLabelMappings: ");
+			fColumnLabelMappings.toString();
 	}
 
 	private Document parseRawXmlToXmlDocument(String rawXmlContent) {
@@ -112,6 +132,7 @@ public class XmlDataProviderFactory {
 	}
 	
 	private void createRowCollectionsFromNodeList(NodeList nodeList) {
+		
 		XmlRowCollection tempRowCollection = XmlRowCollection.getInstance();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node tempNode = nodeList.item(i);
@@ -211,28 +232,5 @@ public class XmlDataProviderFactory {
 		this.fXmlDocument = xmlDocument;
 	}
 
-	private String[] getXmlPathsExpr() {
-		return fXmlPathsExpr;
-	}
-
-	private void setXmlPathsExpr(String[] xmlPathsExpr) {
-		this.fXmlPathsExpr = xmlPathsExpr;
-	}
-
-	private String getDataItemExpr() {
-		return fDataItemExpr;
-	}
-
-	private void setDataItemExpr(String dataItemExpr) {
-		this.fDataItemExpr = dataItemExpr;
-	}
-
-	private String getDataItemLabelExpr() {
-		return fDataItemLabelExpr;
-	}
-
-	private void setDataItemLabelExpr(String dataItemLabelExpr) {
-		this.fDataItemLabelExpr = dataItemLabelExpr;
-	}
 }
 
