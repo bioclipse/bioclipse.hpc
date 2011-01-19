@@ -84,8 +84,6 @@ public class XmlDataProviderFactory {
 					}
 				}
 			}
-			System.out.println("fColumnLabelMappings: ");
-			fColumnLabelMappings.toString();
 	}
 
 	private Document parseRawXmlToXmlDocument(String rawXmlContent) {
@@ -132,15 +130,30 @@ public class XmlDataProviderFactory {
 	}
 	
 	private void createRowCollectionsFromNodeList(NodeList nodeList) {
-		
-		XmlRowCollection tempRowCollection = XmlRowCollection.getInstance();
+		// We create a temporary hashmap so that we can easily check if a row collection
+		// for a certain category is already created or not ... 
+		Map<String, XmlRowCollection> rowCollections = new HashMap<String, XmlRowCollection>();
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Node tempNode = nodeList.item(i);
+			String category = tempNode.getAttributes().getNamedItem("category").getNodeValue();
 			XmlRow tempRow = new XmlRow();
 			tempRow.setNode(tempNode);
-			tempRowCollection.addRow(tempRow);
+			if (rowCollections.containsKey(category)) {
+				XmlRowCollection tempRowCollection = rowCollections.get(category);
+				tempRowCollection.setCategory(category);
+				tempRowCollection.addRow(tempRow);
+			} else {
+				// Create new rowcollection
+				XmlRowCollection tempRowCollection = XmlRowCollection.getInstance();
+				tempRowCollection.setCategory(category);
+				tempRowCollection.addRow(tempRow);
+				rowCollections.put(category, tempRowCollection);
+			}
 		}
-		getRowCollections().add(tempRowCollection);
+		for (Map.Entry<String, XmlRowCollection> entry : rowCollections.entrySet()) {
+			XmlRowCollection tempRowCollection = entry.getValue();
+			getRowCollections().add(tempRowCollection);
+		}
 	}
 
 	public void createColumnsForTreeViewer(TreeViewer treeViewer) {

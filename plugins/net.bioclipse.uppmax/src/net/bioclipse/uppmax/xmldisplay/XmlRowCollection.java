@@ -5,6 +5,7 @@ import java.util.List;
 
 public class XmlRowCollection {
 	private static XmlRowCollection content;
+	private String fCategory;
 	private List<XmlRow> rowCollection = new ArrayList<XmlRow>();
 
 	public static synchronized XmlRowCollection getInstance() {
@@ -26,6 +27,14 @@ public class XmlRowCollection {
 
 	public void addRow(XmlRow row) {
 		this.rowCollection.add(row);
+	}
+
+	public String getCategory() {
+		return fCategory;
+	}
+ 
+	public void setCategory(String category) {
+		fCategory = category;
 	}
 
 }
