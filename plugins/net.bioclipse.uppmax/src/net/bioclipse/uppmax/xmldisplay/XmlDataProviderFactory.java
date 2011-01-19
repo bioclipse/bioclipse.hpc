@@ -142,17 +142,18 @@ public class XmlDataProviderFactory {
 										// the current parsing from the XmlRow class ...
 			if (rowCollections.containsKey(category)) {
 				XmlRowCollection tempRowCollection = rowCollections.get(category);
-				tempRowCollection.setCategory(category);
 				tempRowCollection.addRow(tempRow);
 			} else {
 				// Create new rowcollection
-				XmlRowCollection tempRowCollection = XmlRowCollection.getInstance();
+				XmlRowCollection tempRowCollection = XmlRowCollection.getNewInstance();
 				tempRowCollection.setCategory(category);
 				tempRowCollection.addRow(tempRow);
 				rowCollections.put(category, tempRowCollection);
 			}
 		}
 		for (Map.Entry<String, XmlRowCollection> entry : rowCollections.entrySet()) {
+			String cat = entry.getKey();
+			System.out.println("Cat to add: " + cat);
 			XmlRowCollection tempRowCollection = entry.getValue();
 			getRowCollections().add(tempRowCollection);
 		}

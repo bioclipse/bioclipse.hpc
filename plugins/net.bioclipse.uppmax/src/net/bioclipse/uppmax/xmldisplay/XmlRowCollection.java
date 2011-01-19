@@ -9,13 +9,8 @@ public class XmlRowCollection {
 	private List<XmlRow> rowCollection = new ArrayList<XmlRow>();
 	private boolean fIsRootNode = false;
 	
-	public static synchronized XmlRowCollection getInstance() {
-		if (content != null) {
-			return content;
-		} else {
-			content = new XmlRowCollection();
-			return content;
-		}
+	public static synchronized XmlRowCollection getNewInstance() {
+		return new XmlRowCollection();
 	}
 
 	public List<XmlRow> getRowCollection() {

@@ -6,6 +6,7 @@ import java.util.List;
 import net.bioclipse.uppmax.business.UppmaxManager;
 import net.bioclipse.uppmax.xmldisplay.XmlContentProvider;
 import net.bioclipse.uppmax.xmldisplay.XmlDataProviderFactory;
+import net.bioclipse.uppmax.xmldisplay.XmlRootNode;
 import net.bioclipse.uppmax.xmldisplay.XmlRow;
 import net.bioclipse.uppmax.xmldisplay.XmlLabelProvider;
 import net.bioclipse.uppmax.xmldisplay.XmlRowCollection;
@@ -73,14 +74,13 @@ public class JobInfoView extends ViewPart {
 
 		treeViewer.setContentProvider(aXmlContentProvider);
 		treeViewer.setLabelProvider(aXmlLabelProvider);
-		treeViewer.refresh();
 
-		for (Iterator<XmlRowCollection> i = rowCollections.iterator(); i.hasNext(); ) {
-			XmlRowCollection rowCollection = i.next();
-			rowCollection.setIsRootNode(true);
-			treeViewer.setInput(rowCollection);
-		}
+		XmlRootNode rootNode = new XmlRootNode();
+		rootNode.setXmlRowCollections(rowCollections);
 		
+		treeViewer.setInput(rootNode);
+		
+		treeViewer.refresh();
 	}
 
 	/**

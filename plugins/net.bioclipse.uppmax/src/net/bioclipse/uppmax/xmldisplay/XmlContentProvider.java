@@ -10,40 +10,36 @@ import org.eclipse.jface.viewers.Viewer;
 public class XmlContentProvider implements ITreeContentProvider {
 	List<XmlRow> entityList = new ArrayList<XmlRow>();
 	XmlDataProviderFactory xmlDataProvider;
-		
+
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public Object[] getElements(Object inputElement) {
 		Object[] elements = null;
-		if (inputElement instanceof XmlRowCollection) {
-			if (((XmlRowCollection) inputElement).isRootNode()) {
-				List<XmlRowCollection> elementsLst = new ArrayList<XmlRowCollection>();
-				((XmlRowCollection) inputElement).setIsRootNode(false);
-				elementsLst.add((XmlRowCollection) inputElement);
-				elements = elementsLst.toArray();
-			} else {
-				return getChildren(inputElement);
-			}
-		} 
-		return elements;
-	}
+		if (inputElement instanceof XmlRootNode || inputElement instanceof XmlRowCollection) {
+			return getChildren(inputElement);
+		} else {
+			return null;
+		}
+	} 
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		Object[] children = null;
 		// TODO Auto-generated method stub
-		if (parentElement instanceof XmlRowCollection) {
+		if (parentElement instanceof XmlRootNode) {
+			return ((XmlRootNode) parentElement).getXmlRowCollections().toArray();
+		} else if (parentElement instanceof XmlRowCollection) {
 			children = ((XmlRowCollection) parentElement).getRowCollection().toArray();
 			return children;
 		} else {
