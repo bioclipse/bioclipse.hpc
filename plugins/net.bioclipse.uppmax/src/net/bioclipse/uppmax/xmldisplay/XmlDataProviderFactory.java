@@ -69,6 +69,7 @@ public class XmlDataProviderFactory {
 	private void createColumnLabelMappings(NodeList mappings) {
 			for ( int i = 0; i < mappings.getLength(); i++ ) {
 				Node tempNode = mappings.item(i);
+				String label = tempNode.getAttributes().getNamedItem("label").getTextContent();
 				if ( tempNode.getNodeType() != TEXT_NODE ) {
 					NamedNodeMap tempNodeAttrs = tempNode.getAttributes();
 					try {
@@ -162,10 +163,9 @@ public class XmlDataProviderFactory {
 		
 		Map<String, String> colLabelMappings = getColumnLabelMappings();
 		
-		for (Map.Entry<String, String> mapping : colLabelMappings.entrySet()) {
-			String colId = mapping.getKey();
-			String label = mapping.getValue();
-			
+		for (int i = 0; i < colLabelMappings.size(); i++ ) {
+			String label = colLabelMappings.get(Integer.toString(i));
+		
 			TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 			
 			TreeColumn aTreeColumn = treeViewerColumn.getColumn();
