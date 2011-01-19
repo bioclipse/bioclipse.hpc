@@ -76,7 +76,7 @@ public class XmlDataProviderFactory {
 						Node labelAttr = tempNodeAttrs.getNamedItem("label");
 						String colIdStr = colidAttr.getNodeValue();
 						String labelStr = labelAttr.getNodeValue();
-						System.out.println("Column ID: " +colIdStr + ", Label: " + labelStr); // TODO: Remove debug-code
+						System.out.println("Column ID: " + colIdStr + ", Label: " + labelStr); // TODO: Remove debug-code
 						fColumnLabelMappings.put(colIdStr, labelStr);
 					} catch (Exception e) {
 						System.out.println("Could not find attributes in columnlabelmappings/mapping!");
@@ -137,7 +137,8 @@ public class XmlDataProviderFactory {
 			Node tempNode = nodeList.item(i);
 			String category = tempNode.getAttributes().getNamedItem("category").getNodeValue();
 			XmlRow tempRow = new XmlRow();
-			tempRow.setNode(tempNode);
+			tempRow.setNode(tempNode); 	// TODO: Do some parsing of labels before this ... maybe move out
+										// the current parsing from the XmlRow class ...
 			if (rowCollections.containsKey(category)) {
 				XmlRowCollection tempRowCollection = rowCollections.get(category);
 				tempRowCollection.setCategory(category);

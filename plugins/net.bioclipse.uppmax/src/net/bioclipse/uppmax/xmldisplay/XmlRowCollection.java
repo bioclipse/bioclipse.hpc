@@ -7,7 +7,8 @@ public class XmlRowCollection {
 	private static XmlRowCollection content;
 	private String fCategory;
 	private List<XmlRow> rowCollection = new ArrayList<XmlRow>();
-
+	private boolean fIsRootNode = false;
+	
 	public static synchronized XmlRowCollection getInstance() {
 		if (content != null) {
 			return content;
@@ -26,6 +27,7 @@ public class XmlRowCollection {
 	}
 
 	public void addRow(XmlRow row) {
+		row.setParentRowCollection(this);
 		this.rowCollection.add(row);
 	}
 
@@ -37,4 +39,11 @@ public class XmlRowCollection {
 		fCategory = category;
 	}
 
+	public void setIsRootNode(boolean isRootNode) {
+		fIsRootNode = isRootNode;
+	}
+
+	public boolean isRootNode() {
+		return fIsRootNode;
+	}
 }

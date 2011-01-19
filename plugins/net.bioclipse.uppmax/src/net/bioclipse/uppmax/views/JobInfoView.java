@@ -77,6 +77,7 @@ public class JobInfoView extends ViewPart {
 
 		for (Iterator<XmlRowCollection> i = rowCollections.iterator(); i.hasNext(); ) {
 			XmlRowCollection rowCollection = i.next();
+			rowCollection.setIsRootNode(true);
 			treeViewer.setInput(rowCollection);
 		}
 		

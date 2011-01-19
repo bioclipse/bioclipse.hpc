@@ -43,6 +43,10 @@ public class XmlLabelProvider implements ITableLabelProvider {
 		if (element instanceof XmlRow) {
 			XmlRow xmlRowElem = (XmlRow) element;
 			columnText = xmlRowElem.getLabel(columnIndex);
+		} else if (element instanceof XmlRowCollection) {
+			if (columnIndex == 0) {
+				columnText = ((XmlRowCollection) element).getCategory();
+			}
 		}
 		return columnText;
 	}

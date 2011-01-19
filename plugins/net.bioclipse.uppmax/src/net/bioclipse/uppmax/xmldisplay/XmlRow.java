@@ -12,6 +12,7 @@ public class XmlRow {
 	 * 
 	 */
 
+	private XmlRowCollection fParentRowCollection = null;
 	private Node node = null;
 	private List<String> labels = new ArrayList<String>();
 
@@ -39,10 +40,18 @@ public class XmlRow {
 		for (int j = 0; j < subNodes.getLength(); j++) {
 			Node subNode = subNodes.item(j);
 			if (!"#text".equalsIgnoreCase(subNode.getNodeName())) {
-				String label = subNode.getTextContent();
+				String nodeName = subNode.getNodeName();
+				String label = subNode.getAttributes().getNamedItem("value").getTextContent();
 				labels.add(label);
 			}
 		}	
 	}
 
+	public void setParentRowCollection(XmlRowCollection xmlRowCollection) {
+		fParentRowCollection = xmlRowCollection;
+	}
+
+	public XmlRowCollection getParentRowCollection() {
+		return fParentRowCollection;
+	}
 }

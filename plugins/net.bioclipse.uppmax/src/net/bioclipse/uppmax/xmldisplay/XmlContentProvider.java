@@ -27,11 +27,16 @@ public class XmlContentProvider implements ITreeContentProvider {
 	public Object[] getElements(Object inputElement) {
 		Object[] elements = null;
 		if (inputElement instanceof XmlRowCollection) {
-			elements = ((XmlRowCollection) inputElement).getRowCollection().toArray();
-			return elements;
-		} else {
-			return null;
-		}
+			if (((XmlRowCollection) inputElement).isRootNode()) {
+				List<XmlRowCollection> elementsLst = new ArrayList<XmlRowCollection>();
+				((XmlRowCollection) inputElement).setIsRootNode(false);
+				elementsLst.add((XmlRowCollection) inputElement);
+				elements = elementsLst.toArray();
+			} else {
+				return getChildren(inputElement);
+			}
+		} 
+		return elements;
 	}
 
 	@Override
@@ -48,8 +53,11 @@ public class XmlContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
-		return null;
+		if (element instanceof XmlRow) {
+			return ((XmlRow) element).getParentRowCollection(); 
+		} else {
+			return null;
+		}
 	}
 
 	@Override
