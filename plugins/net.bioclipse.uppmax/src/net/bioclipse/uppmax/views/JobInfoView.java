@@ -8,6 +8,7 @@ import net.bioclipse.uppmax.xmldisplay.XmlContentProvider;
 import net.bioclipse.uppmax.xmldisplay.XmlDataProviderFactory;
 import net.bioclipse.uppmax.xmldisplay.XmlRow;
 import net.bioclipse.uppmax.xmldisplay.XmlLabelProvider;
+import net.bioclipse.uppmax.xmldisplay.XmlRowCollection;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -68,15 +69,15 @@ public class JobInfoView extends ViewPart {
 			xmlDataProvider.createColumnsForTreeViewer(treeViewer);
 		}
 		
-		List<XmlRow> rows = xmlDataProvider.getXmlRows();
+		List<XmlRowCollection> rowCollections = xmlDataProvider.getContent();
 
 		treeViewer.setContentProvider(aXmlContentProvider);
 		treeViewer.setLabelProvider(aXmlLabelProvider);
 		treeViewer.refresh();
 
-		for (Iterator<XmlRow> i = rows.iterator(); i.hasNext(); ) {
-			XmlRow row = i.next();
-			treeViewer.setInput(row);
+		for (Iterator<XmlRowCollection> i = rowCollections.iterator(); i.hasNext(); ) {
+			XmlRowCollection rowCollection = i.next();
+			treeViewer.setInput(rowCollection);
 		}
 		
 	}

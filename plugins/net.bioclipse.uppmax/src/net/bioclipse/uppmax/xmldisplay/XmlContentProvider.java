@@ -25,18 +25,25 @@ public class XmlContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
-		if (xmlDataProvider != null) {
-			return xmlDataProvider.getXmlRows().toArray();
+		Object[] elements = null;
+		if (inputElement instanceof XmlRowCollection) {
+			elements = ((XmlRowCollection) inputElement).getRowCollection().toArray();
+			return elements;
 		} else {
-			System.err.println("member field xmlDataProvider not set when executing getElements method in XMLContentProvider.java");
+			return null;
 		}
-		return null;
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
+		Object[] children = null;
 		// TODO Auto-generated method stub
-		return null;
+		if (parentElement instanceof XmlRowCollection) {
+			children = ((XmlRowCollection) parentElement).getRowCollection().toArray();
+			return children;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
@@ -48,7 +55,12 @@ public class XmlContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object element) {
 		// TODO Auto-generated method stub
-		return false;
+		if (element instanceof XmlRowCollection) {
+			boolean hasChildren = ((XmlRowCollection) element).getRowCollection().size() > 0;
+			return hasChildren;
+		} else {
+			return false;
+		}
 	}
 
 	private XmlDataProviderFactory getXmlDataProvider() {

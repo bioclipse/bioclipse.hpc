@@ -158,31 +158,20 @@ public class XmlDataProviderFactory {
 
 	public void createColumnsForTreeViewer(TreeViewer treeViewer) {
 		// Get all subnodes of the first item, for determining column labels
-		int nodeListLen = getNodeList().getLength();
-		if (getNodeList() != null && nodeListLen > 0) {
-			NodeList children = getNodeList().item(0).getChildNodes();
-			// Loop through all the children of the first item
-			for (int i=0; i<children.getLength(); i++) {
-				Node childNode = children.item(i);
-				// Skip skip the nodes consisting of just the actual text content of the nodes
-				// (themselves being nodes)
-				if (!"#text".equalsIgnoreCase(childNode.getNodeName())) {
-					TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
-					TreeColumn aTreeColumn = treeViewerColumn.getColumn();
-					aTreeColumn.setWidth(100);
-					// Use the XML Node name as column header label
-					// TODO: Define and use some custom label attribute instead
-					String colHeader = childNode.getNodeName();
-					if (colHeader == null) {
-						colHeader = "Untitled";
-					}
-					aTreeColumn.setText(colHeader);
-					getColumns().add(treeViewerColumn);
-				} else {
-					System.out.println("Skipping text node ..."); // TODO: Remove debug-code
-				}
-			}
-		} 
+		
+		Map<String, String> colLabelMappings = getColumnLabelMappings();
+		
+		for (Map.Entry<String, String> mapping : colLabelMappings.entrySet()) {
+			String colId = mapping.getKey();
+			String label = mapping.getValue();
+			
+			TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+			
+			TreeColumn aTreeColumn = treeViewerColumn.getColumn();
+			aTreeColumn.setWidth(100);
+			aTreeColumn.setText(label);
+			getColumns().add(treeViewerColumn);
+		}
 	}
 
 	public XmlContentProvider getContentProvider() {
@@ -210,15 +199,9 @@ public class XmlDataProviderFactory {
 		return fColumns;
 	}
 	
-	public List<XmlRow> getXmlRows() {
-		List<XmlRow> rows = new ArrayList<XmlRow>();
-		for (int i=0; i<fNodeList.getLength(); i++) {
-			XmlRow tempXmlRow = new XmlRow();
-			Node tempNode = fNodeList.item(i);
-			tempXmlRow.setNode(tempNode);
-			rows.add(tempXmlRow);
-		}
-		return rows;
+	public List<XmlRowCollection> getContent() {
+		List<XmlRowCollection> rowCollections = getRowCollections();
+		return rowCollections;
 	}
 	
 	private String getRawXmlContent() {
@@ -243,6 +226,14 @@ public class XmlDataProviderFactory {
 
 	private void setXmlDocument(Document xmlDocument) {
 		this.fXmlDocument = xmlDocument;
+	}
+
+	private Map<String, String> getColumnLabelMappings() {
+		return fColumnLabelMappings;
+	}
+
+	private void setColumnLabelMappings(Map<String, String> columnLabelMappings) {
+		this.fColumnLabelMappings = columnLabelMappings;
 	}
 
 }
