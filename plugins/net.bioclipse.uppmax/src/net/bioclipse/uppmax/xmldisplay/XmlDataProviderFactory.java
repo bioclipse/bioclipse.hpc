@@ -67,24 +67,24 @@ public class XmlDataProviderFactory {
 	}
 
 	private void createColumnLabelMappings(NodeList mappings) {
-			for ( int i = 0; i < mappings.getLength(); i++ ) {
-				Node tempNode = mappings.item(i);
-				String label = tempNode.getAttributes().getNamedItem("label").getTextContent();
-				if ( tempNode.getNodeType() != TEXT_NODE ) {
-					NamedNodeMap tempNodeAttrs = tempNode.getAttributes();
-					try {
-						Node colidAttr = tempNodeAttrs.getNamedItem("colid");
-						Node labelAttr = tempNodeAttrs.getNamedItem("label");
-						String colIdStr = colidAttr.getNodeValue();
-						String labelStr = labelAttr.getNodeValue();
-						System.out.println("Column ID: " + colIdStr + ", Label: " + labelStr); // TODO: Remove debug-code
-						fColumnLabelMappings.put(colIdStr, labelStr);
-					} catch (Exception e) {
-						System.out.println("Could not find attributes in columnlabelmappings/mapping!");
-						e.printStackTrace();
-					}
+		for ( int i = 0; i < mappings.getLength(); i++ ) {
+			Node tempNode = mappings.item(i);
+			String label = tempNode.getAttributes().getNamedItem("label").getTextContent();
+			if ( tempNode.getNodeType() != TEXT_NODE ) {
+				NamedNodeMap tempNodeAttrs = tempNode.getAttributes();
+				try {
+					Node colidAttr = tempNodeAttrs.getNamedItem("colid");
+					Node labelAttr = tempNodeAttrs.getNamedItem("label");
+					String colIdStr = colidAttr.getNodeValue();
+					String labelStr = labelAttr.getNodeValue();
+					System.out.println("Column ID: " + colIdStr + ", Label: " + labelStr); // TODO: Remove debug-code
+					fColumnLabelMappings.put(colIdStr, labelStr);
+				} catch (Exception e) {
+					System.out.println("Could not find attributes in columnlabelmappings/mapping!");
+					e.printStackTrace();
 				}
 			}
+		}
 	}
 
 	private Document parseRawXmlToXmlDocument(String rawXmlContent) {
@@ -170,7 +170,7 @@ public class XmlDataProviderFactory {
 			TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 			
 			TreeColumn aTreeColumn = treeViewerColumn.getColumn();
-			aTreeColumn.setWidth(100);
+			aTreeColumn.setWidth(80);
 			aTreeColumn.setText(label);
 			getColumns().add(treeViewerColumn);
 		}
