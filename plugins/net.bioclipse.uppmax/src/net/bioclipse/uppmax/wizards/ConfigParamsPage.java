@@ -14,9 +14,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 
-public class ConfigCommandPage extends WizardPage implements Listener {
+public class ConfigParamsPage extends WizardPage implements Listener {
 
-	public Combo cmbCommand;
+	public Text txtCommand;
+
 	
 	final static String[] commands = {
 		"jobinfo",
@@ -26,8 +27,8 @@ public class ConfigCommandPage extends WizardPage implements Listener {
 	IWorkbench workbench;
 	IStructuredSelection selection;
 
-	protected ConfigCommandPage(IWorkbench workbench, IStructuredSelection selection) {
-		super("Page 1");
+	protected ConfigParamsPage(IWorkbench workbench, IStructuredSelection selection) {
+		super("Page 2");
 		setTitle("Configure command");
 		setDescription("Configure a command that can then be executed on the command line on the remote system");
 		this.workbench = workbench;
@@ -35,7 +36,7 @@ public class ConfigCommandPage extends WizardPage implements Listener {
 	}
 	
 	public boolean canFlipToNextPage() {
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -51,12 +52,11 @@ public class ConfigCommandPage extends WizardPage implements Listener {
 		composite.setLayout(gl);
 		
 		new Label (composite, SWT.NONE).setText("Command to execute:");
-		cmbCommand = new Combo(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
-		cmbCommand.setLayoutData(gd);
-		cmbCommand.setItems(commands);
-		cmbCommand.setText(cmbCommand.getItem(0));
+		txtCommand = new Text(composite, SWT.BORDER);
+		txtCommand.setLayoutData(gd);
+		txtCommand.setText("Enter parameters here ...");
 		
 	    // set the composite as the control for this page
 		setControl(composite);		
