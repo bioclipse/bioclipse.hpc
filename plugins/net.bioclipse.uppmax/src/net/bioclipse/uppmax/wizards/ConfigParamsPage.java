@@ -1,5 +1,8 @@
 package net.bioclipse.uppmax.wizards;
 
+import net.bioclipse.uppmax.xmldisplay.GalaxyConfigReader;
+import net.bioclipse.uppmax.xmldisplay.XmlUtils;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -13,6 +16,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class ConfigParamsPage extends WizardPage implements Listener {
 
@@ -58,8 +64,13 @@ public class ConfigParamsPage extends WizardPage implements Listener {
 		txtCommand.setLayoutData(gd);
 		txtCommand.setText("Enter parameters here ...");
 		
+		// TODO: Some test code:
+		GalaxyConfigReader reader = new GalaxyConfigReader();
+		String exampleXml = reader.getExampleGalaxyXmlContent();
+		reader.read(exampleXml);
+		
 	    // set the composite as the control for this page
-		setControl(composite);		
+		setControl(composite);
 	}
 
 	@Override

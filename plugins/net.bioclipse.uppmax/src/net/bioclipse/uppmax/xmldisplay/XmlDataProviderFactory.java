@@ -57,12 +57,11 @@ public class XmlDataProviderFactory {
 		setRawXmlContent(newRawXmlContent);
 
 		String rawXmlContent = getRawXmlContent();
-		Document xmlDoc = parseRawXmlToXmlDocument(rawXmlContent);
+		Document xmlDoc = XmlUtils.parseXmlToDocument(rawXmlContent);
 		setXmlDocument(xmlDoc);
 		
-		// TODO: Make this into a recursive function instead
-		createColumnLabelMappings((NodeList) evaluateXPathExpr("infodocument/columnlabelmappings/mapping"));
-		setNodeList((NodeList) evaluateXPathExpr("infodocument/item"));
+		createColumnLabelMappings((NodeList) XmlUtils.evaluateXPathExprToNodeSet("infodocument/columnlabelmappings/mapping", getXmlDocument()));
+		setNodeList((NodeList) XmlUtils.evaluateXPathExprToNodeSet("infodocument/item", getXmlDocument()));
 		createRowCollectionsFromNodeList(getNodeList());
 	}
 
@@ -87,49 +86,6 @@ public class XmlDataProviderFactory {
 		}
 	}
 
-	private Document parseRawXmlToXmlDocument(String rawXmlContent) {
-		Document resultXmlDocument = null;
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		factory.setNamespaceAware(true); // never forget this!
-		DocumentBuilder builder = null;
-		
-		try {
-			builder = factory.newDocumentBuilder();
-		} catch (ParserConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		InputStream xmlContentIS = IOUtils.toInputStream(rawXmlContent);
-		
-		try {
-			resultXmlDocument = builder.parse(xmlContentIS);
-		} catch (SAXException e) {
-			System.out.println("SAX Exception:");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("IO Exception:");
-			e.printStackTrace();
-		}
-		
-		return resultXmlDocument;
-	}
-
-	private Object evaluateXPathExpr(String pathExpr) {
-		XPathFactory xPathFactory = XPathFactory.newInstance();
-		XPath xpathObj = xPathFactory.newXPath();
-		XPathExpression expr;
-		Object result = null;
-		try {
-			expr = xpathObj.compile(pathExpr);
-			result = expr.evaluate(getXmlDocument(), XPathConstants.NODESET);
-		} catch (XPathExpressionException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		return result;
-	}
-	
 	private void createRowCollectionsFromNodeList(NodeList nodeList) {
 		// We create a temporary hashmap so that we can easily check if a row collection
 		// for a certain category is already created or not ... 
