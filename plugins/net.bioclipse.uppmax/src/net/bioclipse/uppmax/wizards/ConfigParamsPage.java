@@ -67,7 +67,7 @@ public class ConfigParamsPage extends WizardPage implements Listener {
 		// TODO: Some test code:
 		GalaxyConfigReader reader = new GalaxyConfigReader();
 		String exampleXml = reader.getExampleGalaxyXmlContent();
-		reader.read(exampleXml);
+		reader.addToolConfig(exampleXml);
 		
 	    // set the composite as the control for this page
 		setControl(composite);

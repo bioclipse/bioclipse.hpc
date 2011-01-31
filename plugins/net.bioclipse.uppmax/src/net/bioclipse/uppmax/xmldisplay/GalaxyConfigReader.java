@@ -13,17 +13,17 @@ public class GalaxyConfigReader {
 	
 	private String interpreter;
 	
-	public void read(String galaxyToolConfigFileContent) {
+	public void addToolConfig(String galaxyToolConfigFileContent) {
 		setGalaxyRawXml(galaxyToolConfigFileContent);
 		setGalaxyXmlDocument(XmlUtils.parseXmlToDocument(galaxyToolConfigFileContent));
 		
 		// Retrieve
 		Document doc = getGalaxyXmlDocument();
+		
 		String xPathExpr1 = "tool/command/@interpreter";
 		String interpreter = (String) XmlUtils.evaluateXPathExpr(doc, xPathExpr1, XPathConstants.STRING);
 		if (interpreter != null) {
 			System.out.println("Interpreter: " + interpreter);
-			setInterpreter(interpreter);
 		}
 
 		String xPathExpr2 = "tool/command";

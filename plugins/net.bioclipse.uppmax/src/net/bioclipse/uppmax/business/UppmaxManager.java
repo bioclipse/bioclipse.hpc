@@ -36,6 +36,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
 import net.bioclipse.managers.business.IBioclipseManager;
+import net.bioclipse.uppmax.domain.PluginKernel;
 import net.bioclipse.uppmax.views.JobInfoView;
 import net.bioclipse.uppmax.views.ProjInfoView;
 
@@ -78,6 +79,12 @@ public class UppmaxManager implements IBioclipseManager {
 		} else {
 			MessageDialog.openError(getShell(), "No command subsystem", "Found no command subsystem");
 		}
+	}
+
+	public List<String> readToolConfigFiles(String folderPath) {
+		PluginKernel pluginKernel = PluginKernel.getPluginKernel();
+		List<String> files = pluginKernel.initToolConfigPrefs(folderPath);
+		return files;
 	}
 
 	public void updateProjectInfoView() {

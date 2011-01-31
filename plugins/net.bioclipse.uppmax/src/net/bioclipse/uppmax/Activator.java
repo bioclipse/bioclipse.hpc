@@ -13,10 +13,13 @@ package net.bioclipse.uppmax;
 import net.bioclipse.uppmax.business.IUppmaxManager;
 import net.bioclipse.uppmax.business.IJavaUppmaxManager;
 import net.bioclipse.uppmax.business.IJavaScriptUppmaxManager;
+import net.bioclipse.uppmax.domain.PluginKernel;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.prefs.PreferencesService;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -32,6 +35,8 @@ public class Activator extends AbstractUIPlugin {
     // Trackers for getting the managers
     private ServiceTracker javaFinderTracker;
     private ServiceTracker jsFinderTracker;
+    
+    private PluginKernel pluginKernel;
 
     public Activator() {
     }
@@ -51,6 +56,8 @@ public class Activator extends AbstractUIPlugin {
                                   null );
 
         jsFinderTracker.open();
+        
+        pluginKernel = PluginKernel.getPluginKernel();
     }
 
     public void stop(BundleContext context) throws Exception {
@@ -102,4 +109,9 @@ public class Activator extends AbstractUIPlugin {
         }
         return manager;
     }
+
+	public PluginKernel getPluginKernel() {
+		return pluginKernel;
+	}
+
 }
