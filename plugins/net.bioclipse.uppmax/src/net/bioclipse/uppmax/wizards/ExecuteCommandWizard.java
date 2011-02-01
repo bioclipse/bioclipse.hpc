@@ -8,6 +8,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.prefs.BackingStoreException;
+import org.osgi.service.prefs.Preferences;
+import org.osgi.service.prefs.PreferencesService;
 
 public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	
@@ -46,12 +52,43 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
+
 		ConfigCommandPage page1 = (ConfigCommandPage) this.getPage("Page 1");
 		ConfigParamsPage page2 = (ConfigParamsPage) this.getPage("Page 2");
 		String command = page1.cmbCommand.getText();
 		String params = page2.txtCommand.getText();
 		setResultingCommand(command + " " + params);
 		MessageDialog.openInformation(getShell(), "Resulting command", "Resulting command: " + getResultingCommand());
+		
+		// Testing to retrieve system prefs
+
+		BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
+		ServiceReference serviceref = context.getServiceReference(PreferencesService.class.getName());
+		PreferencesService service = (PreferencesService) context.getService(serviceref);
+		Preferences systemPrefs = service.getSystemPreferences();
+
+		Preferences toolConfigPrefs = systemPrefs.node("toolconfigs");
+		try {
+			String[] toolGroups = toolConfigPrefs.childrenNames();
+			for (String toolGroup : toolGroups) {
+				Preferences currentToolGroup = toolConfigPrefs.node(toolGroup);
+				System.out.println("\n\n--------------------------------------------\nTool Group: " + toolGroup);
+				String[] tools = currentToolGroup.childrenNames();
+				for (String name : tools) {
+					System.out.println("--------------------------------------------\nTool: " + name);
+					Preferences currentTool = currentToolGroup.node(name);
+					String prefDescription = currentTool.get("description", "");
+					String prefCommand = currentTool.get("command", "");
+						System.out.println("Description from prefs: " + prefDescription);
+						System.out.println("Command from prefs: " + prefCommand);
+				}
+				System.out.println("--------------------------------------------");
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
 		return true;
 	}
