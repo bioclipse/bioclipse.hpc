@@ -1,5 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
+import net.bioclipse.uppmax.business.PrefsUtils;
 import net.bioclipse.uppmax.xmldisplay.GalaxyConfigReader;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
@@ -20,9 +21,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class ConfigParamsPage extends WizardPage implements Listener {
+public class SelectToolPage extends WizardPage implements Listener {
 
-	public Text txtCommand;
+	public Combo cmbTool;
 
 	
 	final static String[] commands = {
@@ -33,10 +34,10 @@ public class ConfigParamsPage extends WizardPage implements Listener {
 	IWorkbench workbench;
 	IStructuredSelection selection;
 
-	protected ConfigParamsPage(IWorkbench workbench, IStructuredSelection selection) {
+	protected SelectToolPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 2");
-		setTitle("Configure command");
-		setDescription("Configure a command that can then be executed on the command line on the remote system");
+		setTitle("Select tool");
+		setDescription("Select a tool from the ones available in the tool group just selected ...");
 		this.workbench = workbench;
 		this.selection = selection;
 	}
@@ -57,20 +58,26 @@ public class ConfigParamsPage extends WizardPage implements Listener {
 		gl.numColumns = ncol;
 		composite.setLayout(gl);
 		
-		new Label (composite, SWT.NONE).setText("Command to execute:");
+		new Label (composite, SWT.NONE).setText("Select tool:");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
-		txtCommand = new Text(composite, SWT.BORDER);
-		txtCommand.setLayoutData(gd);
-		txtCommand.setText("Enter parameters here ...");
 		
-		// TODO: Some test code:
-		GalaxyConfigReader reader = new GalaxyConfigReader();
-		String exampleXml = reader.getExampleGalaxyXmlContent();
-		reader.addToolConfig(exampleXml);
+		cmbTool = new Combo(composite, SWT.BORDER);
+		gd = new GridData(GridData.FILL_HORIZONTAL);
+		gd.horizontalAlignment = GridData.BEGINNING;
+		cmbTool.setLayoutData(gd);
+		
+		String[] emptyStringArray = {"- no tool here -"};
+		cmbTool.setItems(emptyStringArray);
+		cmbTool.setText(cmbTool.getItem(0));
 		
 	    // set the composite as the control for this page
 		setControl(composite);
+	}
+
+	public void updateDroplist(String[] tools) {
+		cmbTool.removeAll();
+		cmbTool.setItems(tools);
 	}
 
 	@Override
@@ -78,5 +85,6 @@ public class ConfigParamsPage extends WizardPage implements Listener {
 		// TODO Auto-generated method stub
 
 	}
+
 
 }

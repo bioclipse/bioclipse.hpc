@@ -1,6 +1,11 @@
 package net.bioclipse.uppmax.wizards;
 
+import net.bioclipse.uppmax.business.PrefsUtils;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -14,28 +19,23 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 
-public class ConfigCommandPage extends WizardPage implements Listener {
+public class SelectToolGroupPage extends WizardPage implements Listener {
 
 	public Combo cmbCommand;
 	
-	final static String[] commands = {
-		"jobinfo",
-		"projinfo"
-	};
+	public String[] toolGroups;
 	
 	IWorkbench workbench;
 	IStructuredSelection selection;
+	IWizard wizard = this.getWizard(); 
+	String selectedToolGroup;
 
-	protected ConfigCommandPage(IWorkbench workbench, IStructuredSelection selection) {
+	protected SelectToolGroupPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 1");
-		setTitle("Configure command");
-		setDescription("Configure a command that can then be executed on the command line on the remote system");
+		setTitle("Configure command: Select tool group");
+		setDescription("Select the group of commands that you wish to execute");
 		this.workbench = workbench;
 		this.selection = selection;
-	}
-	
-	public boolean canFlipToNextPage() {
-		return true;
 	}
 	
 	@Override
@@ -50,22 +50,38 @@ public class ConfigCommandPage extends WizardPage implements Listener {
 		gl.numColumns = ncol;
 		composite.setLayout(gl);
 		
-		new Label (composite, SWT.NONE).setText("Command to execute:");
+		new Label (composite, SWT.NONE).setText("Tool group:");
+		
 		cmbCommand = new Combo(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
 		cmbCommand.setLayoutData(gd);
-		cmbCommand.setItems(commands);
+		
+		String[] toolGroups = PrefsUtils.getToolGroups();
+		cmbCommand.setItems(toolGroups);
 		cmbCommand.setText(cmbCommand.getItem(0));
 		
 	    // set the composite as the control for this page
 		setControl(composite);		
 	}
+	
+	@Override
+	public boolean canFlipToNextPage() {
+		return true;
+	}
+	
+//        selectedToolGroup = cmbCommand.getText();
+//        String[] tools = PrefsUtils.getToolsForGroup(selectedToolGroup);
+//        ((SelectToolPage) this.getWizard().getPage("Page 2")).updateDroplist(tools);
 
 	@Override
 	public void handleEvent(Event event) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public String getSelectedToolGroup() {
+		return selectedToolGroup;
 	}
 
 }

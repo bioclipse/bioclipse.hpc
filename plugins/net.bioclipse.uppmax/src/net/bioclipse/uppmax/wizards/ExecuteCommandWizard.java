@@ -1,5 +1,7 @@
 package net.bioclipse.uppmax.wizards;
 
+import net.bioclipse.uppmax.business.PrefsUtils;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -44,50 +46,25 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	public void addPages() {
 		System.out.println("Workbench: " + workbench.toString());
 		System.out.println("Selection: " + selection.toString());
-		ConfigCommandPage confCommandPage = new ConfigCommandPage(workbench, selection);
-		addPage(confCommandPage);
-		ConfigParamsPage confParamsPage = new ConfigParamsPage(workbench, selection);
-		addPage(confParamsPage);
+		SelectToolGroupPage toolGroupPage = new SelectToolGroupPage(workbench, selection);
+		addPage(toolGroupPage);
+		SelectToolPage toolPage = new SelectToolPage(workbench, selection);
+		addPage(toolPage);
 	}
 
 	@Override
 	public boolean performFinish() {
 
-		ConfigCommandPage page1 = (ConfigCommandPage) this.getPage("Page 1");
-		ConfigParamsPage page2 = (ConfigParamsPage) this.getPage("Page 2");
-		String command = page1.cmbCommand.getText();
-		String params = page2.txtCommand.getText();
-		setResultingCommand(command + " " + params);
-		MessageDialog.openInformation(getShell(), "Resulting command", "Resulting command: " + getResultingCommand());
+//		SelectToolGroupPage page1 = (SelectToolGroupPage) this.getPage("Page 1");
+//		SelectToolPage page2 = (SelectToolPage) this.getPage("Page 2");
+
+//		String command = page1.cmbCommand.getText();
+//		String params = page2.txtCommand.getText();
+//		setResultingCommand(command + " " + params);
+//		MessageDialog.openInformation(getShell(), "Resulting command", "Resulting command: " + getResultingCommand());
 		
-		// Testing to retrieve system prefs
-
-		BundleContext context = FrameworkUtil.getBundle(this.getClass()).getBundleContext();
-		ServiceReference serviceref = context.getServiceReference(PreferencesService.class.getName());
-		PreferencesService service = (PreferencesService) context.getService(serviceref);
-		Preferences systemPrefs = service.getSystemPreferences();
-
-		Preferences toolConfigPrefs = systemPrefs.node("toolconfigs");
-		try {
-			String[] toolGroups = toolConfigPrefs.childrenNames();
-			for (String toolGroup : toolGroups) {
-				Preferences currentToolGroup = toolConfigPrefs.node(toolGroup);
-				System.out.println("\n\n--------------------------------------------\nTool Group: " + toolGroup);
-				String[] tools = currentToolGroup.childrenNames();
-				for (String name : tools) {
-					System.out.println("--------------------------------------------\nTool: " + name);
-					Preferences currentTool = currentToolGroup.node(name);
-					String prefDescription = currentTool.get("description", "");
-					String prefCommand = currentTool.get("command", "");
-						System.out.println("Description from prefs: " + prefDescription);
-						System.out.println("Command from prefs: " + prefCommand);
-				}
-				System.out.println("--------------------------------------------");
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		// TODO: Remove this testing code
+//		PrefsUtils.testRetrievePreferences(this);
 		
 		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
 		return true;
@@ -104,6 +81,5 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	public void setResultingCommand(String resultingCommand) {
 		this.resultingCommand = resultingCommand;
 	}
-
 
 }

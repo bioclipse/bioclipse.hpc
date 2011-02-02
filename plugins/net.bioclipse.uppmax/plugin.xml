@@ -72,6 +72,20 @@
            </action>
        </objectContribution>       
     </extension>    
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+               objectClass="java.lang.Object"
+               id="actions.execCmdWizard2">
+           <action
+                   label="Execute Command through a Wizard"
+                   tooltip="TODO: Some description here..."
+                   class="net.bioclipse.uppmax.wizards.ExecuteCommandAction"
+                   menubarPath="additions"
+                   enablesFor="1"
+                   id="net.bioclipse.uppmax.wizards.action2">
+           </action>
+       </objectContribution>       
+    </extension>    
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension

@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rse.shells.ui.RemoteCommandHelpers;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileEmpty;
@@ -34,11 +35,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.Workbench;
 
 import net.bioclipse.managers.business.IBioclipseManager;
 import net.bioclipse.uppmax.domain.PluginKernel;
 import net.bioclipse.uppmax.views.JobInfoView;
 import net.bioclipse.uppmax.views.ProjInfoView;
+import net.bioclipse.uppmax.wizards.ExecuteCommandWizard;
 
 import org.apache.log4j.Logger;
 import org.eclipse.rse.core.*;
@@ -86,7 +89,7 @@ public class UppmaxManager implements IBioclipseManager {
 		List<String> files = pluginKernel.initToolConfigPrefs(folderPath);
 		return files;
 	}
-
+	
 	public void updateProjectInfoView() {
 		String commandOutput;
 		IHost uppmaxHost;
