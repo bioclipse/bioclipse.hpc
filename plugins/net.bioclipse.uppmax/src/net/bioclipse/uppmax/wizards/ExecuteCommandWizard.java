@@ -66,7 +66,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		// TODO: Remove this testing code
 //		PrefsUtils.testRetrievePreferences(this);
 		
-		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
+//		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
 		return true;
 	}
 	

@@ -21,7 +21,7 @@ import org.eclipse.ui.IWorkbench;
 
 public class SelectToolGroupPage extends WizardPage implements Listener {
 
-	public Combo cmbCommand;
+	public Combo comboToolGroup;
 	
 	public String[] toolGroups;
 	
@@ -52,15 +52,15 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		
 		new Label (composite, SWT.NONE).setText("Tool group:");
 		
-		cmbCommand = new Combo(composite, SWT.BORDER);
+		comboToolGroup = new Combo(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
-		cmbCommand.setLayoutData(gd);
-		cmbCommand.addListener(SWT.Selection, this);
+		comboToolGroup.setLayoutData(gd);
+		comboToolGroup.addListener(SWT.Selection, this);
 		
 		String[] toolGroups = GalaxyConfig.getToolGroups();
-		cmbCommand.setItems(toolGroups);
-		cmbCommand.setText(cmbCommand.getItem(0));
+		comboToolGroup.setItems(toolGroups);
+		comboToolGroup.setText(comboToolGroup.getItem(0));
 		
 	    // set the composite as the control for this page
 		setControl(composite);		
@@ -77,8 +77,8 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		if (event.widget == cmbCommand) {
-			String currentTool = cmbCommand.getText();
+		if (event.widget == comboToolGroup) {
+			String currentTool = comboToolGroup.getText();
 			String[] tools = GalaxyConfig.getToolsForGroup(currentTool);
 			((SelectToolPage) this.getWizard().getPage("Page 2")).updateDroplist(tools);
 		}

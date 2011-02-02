@@ -23,7 +23,7 @@ import org.w3c.dom.NodeList;
 
 public class SelectToolPage extends WizardPage implements Listener {
 
-	public Combo cmbTool;
+	public Combo comboTool;
 
 	IWorkbench workbench;
 	IStructuredSelection selection;
@@ -56,23 +56,23 @@ public class SelectToolPage extends WizardPage implements Listener {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
 		
-		cmbTool = new Combo(composite, SWT.BORDER);
+		comboTool = new Combo(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
-		cmbTool.setLayoutData(gd);
+		comboTool.setLayoutData(gd);
 		
-		String[] emptyStringArray = {"- no tool here -", "not here either ..."};
-		cmbTool.setItems(emptyStringArray);
-		cmbTool.setText(cmbTool.getItem(0));
+		String[] emptyStringArray = {"(No tools loaded)"};
+		comboTool.setItems(emptyStringArray);
+		comboTool.setText(comboTool.getItem(0));
 		
 	    // set the composite as the control for this page
 		setControl(composite);
 	}
 
 	public void updateDroplist(String[] tools) {
-		cmbTool.removeAll();
-		cmbTool.setItems(tools);
-		cmbTool.setText(cmbTool.getItem(0));
+		comboTool.removeAll();
+		comboTool.setItems(tools);
+		comboTool.setText(comboTool.getItem(0));
 	}
 
 	@Override
