@@ -25,12 +25,6 @@ public class SelectToolPage extends WizardPage implements Listener {
 
 	public Combo cmbTool;
 
-	
-	final static String[] commands = {
-		"jobinfo",
-		"projinfo"
-	};
-	
 	IWorkbench workbench;
 	IStructuredSelection selection;
 
@@ -67,7 +61,7 @@ public class SelectToolPage extends WizardPage implements Listener {
 		gd.horizontalAlignment = GridData.BEGINNING;
 		cmbTool.setLayoutData(gd);
 		
-		String[] emptyStringArray = {"- no tool here -"};
+		String[] emptyStringArray = {"- no tool here -", "not here either ..."};
 		cmbTool.setItems(emptyStringArray);
 		cmbTool.setText(cmbTool.getItem(0));
 		

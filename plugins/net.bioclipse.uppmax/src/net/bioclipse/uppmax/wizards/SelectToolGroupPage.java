@@ -70,18 +70,14 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		return true;
 	}
 	
-//        selectedToolGroup = cmbCommand.getText();
-//        String[] tools = PrefsUtils.getToolsForGroup(selectedToolGroup);
-//        ((SelectToolPage) this.getWizard().getPage("Page 2")).updateDroplist(tools);
+	public String getSelectedToolGroup() {
+		return selectedToolGroup;
+	}
 
 	@Override
 	public void handleEvent(Event event) {
 		// TODO Auto-generated method stub
-
-	}
-	
-	public String getSelectedToolGroup() {
-		return selectedToolGroup;
+		
 	}
 
 }
