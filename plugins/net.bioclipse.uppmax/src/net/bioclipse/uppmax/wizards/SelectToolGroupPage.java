@@ -1,6 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
-import net.bioclipse.uppmax.business.PrefsUtils;
+import net.bioclipse.uppmax.business.GalaxyConfig;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
@@ -56,8 +56,9 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
 		cmbCommand.setLayoutData(gd);
+		cmbCommand.addListener(SWT.Selection, this);
 		
-		String[] toolGroups = PrefsUtils.getToolGroups();
+		String[] toolGroups = GalaxyConfig.getToolGroups();
 		cmbCommand.setItems(toolGroups);
 		cmbCommand.setText(cmbCommand.getItem(0));
 		
@@ -76,8 +77,11 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		// TODO Auto-generated method stub
-		
+		if (event.widget == cmbCommand) {
+			String currentTool = cmbCommand.getText();
+			String[] tools = GalaxyConfig.getToolsForGroup(currentTool);
+			((SelectToolPage) this.getWizard().getPage("Page 2")).updateDroplist(tools);
+		}
 	}
 
 }

@@ -1,6 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
-import net.bioclipse.uppmax.business.PrefsUtils;
+import net.bioclipse.uppmax.business.GalaxyConfig;
 import net.bioclipse.uppmax.xmldisplay.GalaxyConfigReader;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
@@ -72,6 +72,7 @@ public class SelectToolPage extends WizardPage implements Listener {
 	public void updateDroplist(String[] tools) {
 		cmbTool.removeAll();
 		cmbTool.setItems(tools);
+		cmbTool.setText(cmbTool.getItem(0));
 	}
 
 	@Override
