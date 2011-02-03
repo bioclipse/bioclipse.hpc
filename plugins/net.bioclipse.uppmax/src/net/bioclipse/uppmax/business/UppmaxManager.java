@@ -84,10 +84,9 @@ public class UppmaxManager implements IBioclipseManager {
 		}
 	}
 
-	public List<String> readToolConfigFiles(String folderPath) {
+	public void readToolConfigFiles(String folderPath) {
 		PluginKernel pluginKernel = PluginKernel.getPluginKernel();
-		List<String> files = pluginKernel.initToolConfigPrefs(folderPath);
-		return files;
+		GalaxyConfig.initToolConfigPrefs(folderPath);
 	}
 	
 	public void updateProjectInfoView() {

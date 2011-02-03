@@ -36,6 +36,6 @@ public interface IUppmaxManager extends IBioclipseManager {
 			params="List<String> folderPath", 
 			methodSummary="Reads a directory with subdirectories containing Galaxy tool config files"
 	)
-	public List<String> readToolConfigFiles(String folderPath);
+	public void readToolConfigFiles(String folderPath);
 	
 }
