@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
+import net.bioclipse.uppmax.business.GalaxyConfig;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
 import org.eclipse.ui.internal.FolderLayout;
@@ -30,6 +31,9 @@ public class PluginKernel {
 	}
 
 	// This class is a singleton, so don't let anyone else instantiate it 
-	private PluginKernel() {}
+	private PluginKernel() {
+		// Initialize the Galaxy tool configs
+		GalaxyConfig.initToolConfigPrefs("/home/samuel/.galaxy/tools");
+	}
 
 }

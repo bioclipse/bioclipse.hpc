@@ -6,10 +6,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class UppmaxUtils {
+	
 	public static String[] readFileToStringArray(String filePath) {
 		File file = new File(filePath);
 		FileInputStream fis = null;
@@ -45,6 +48,10 @@ public class UppmaxUtils {
 		return result;
 	}
 
+    public static String currentTime() {
+    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+        return sdf.format(System.currentTimeMillis());
+    }
 
 	public static String arrayToString(String[] stringArray){
 		String str = " ";
