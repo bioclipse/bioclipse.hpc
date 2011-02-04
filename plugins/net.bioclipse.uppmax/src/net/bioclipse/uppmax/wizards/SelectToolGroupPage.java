@@ -59,9 +59,13 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		comboToolGroup.addListener(SWT.Selection, this);
 		
 		String[] toolGroups = GalaxyConfig.getToolGroups();
-		comboToolGroup.setItems(toolGroups);
-		comboToolGroup.setText(comboToolGroup.getItem(0));
 		
+		if (toolGroups.length > 0) {
+			comboToolGroup.setItems(toolGroups);
+			comboToolGroup.setText(comboToolGroup.getItem(0));
+		} else {
+			System.err.println("Error: No galaxy tool definitions loaded. Are the XML files in place?");
+		}
 	    // set the composite as the control for this page
 		setControl(composite);		
 	}
