@@ -88,4 +88,8 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		}
 	}
 
+	public Combo getComboToolGroup() {
+		return comboToolGroup;
+	}
+
 }

@@ -60,6 +60,7 @@ public class SelectToolPage extends WizardPage implements Listener {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
 		comboTool.setLayoutData(gd);
+		comboTool.addListener(SWT.Selection, this);
 		
 		String[] emptyStringArray = {"(No tools loaded)"};
 		comboTool.setItems(emptyStringArray);
@@ -77,8 +78,17 @@ public class SelectToolPage extends WizardPage implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		// TODO Auto-generated method stub
-
+		if (event.widget == comboTool) {
+			System.out.println("Caught selection!");
+			String currentTool = comboTool.getText();
+			// TODO: We can't use the getText() here, since it returns the human-readable name of the tool, which is not used
+			// as the identifier for the tool in the preferences service :(
+			String currentToolGroup = ((SelectToolGroupPage) this.getWizard().getPage("Page 1")).getComboToolGroup().getText();
+			String[] paramNames = GalaxyConfig.getParamNamesForTool(currentTool, currentToolGroup);
+			for (String paramName : paramNames) {
+				System.out.println("Param: " + paramName);
+			}
+		}
 	}
 
 

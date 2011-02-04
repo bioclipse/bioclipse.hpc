@@ -1,6 +1,7 @@
 package net.bioclipse.uppmax.business;
 
 import java.io.File;
+import java.text.AttributedCharacterIterator.Attribute;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,6 +18,9 @@ import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 import org.osgi.service.prefs.PreferencesService;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class GalaxyConfig {
 	private static GalaxyConfig instanceOfClass = new GalaxyConfig();
@@ -171,7 +175,36 @@ public class GalaxyConfig {
 								// Add to preferences service
 								currentToolPrefs.put("command", command);
 
-								currentToolPrefs.put("description", description);
+								Preferences currentToolParams = currentToolPrefs.node("params");
+								
+								////// The params //////
+								// Get the param nodes
+								NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
+								int nodesCnt = paramNodes.getLength();
+								for (int i=0; i<nodesCnt; i++) {
+									Node currentNode = paramNodes.item(i);
+									NamedNodeMap attrs = currentNode.getAttributes();
+
+									// Create a new pref node for the current parameter
+									String attrNodeName = attrs.getNamedItem("name").getNodeValue();
+									Preferences currentParamPrefs = currentToolParams.node(attrNodeName);
+									
+									int attrsCnt = attrs.getLength();
+									// Loop over all attributes for the current param, and add the name,value pair to the preferences service
+									// (if neither is null)
+									for (int j=0; j<attrsCnt; j++) {
+										Node currentAttr = attrs.item(j);
+										String currentAttrName = currentAttr.getNodeName();
+										String currentAttrValue = currentAttr.getNodeValue();
+										if ((currentAttrName != null) && (currentAttrValue != null)) {
+											currentParamPrefs.put(currentAttrName, currentAttrValue);
+										} else {
+											System.out.println("INFO: Attribute '" + currentAttrName + "' missing for attribute '" + attrNodeName + "' in tool '" + name + "'.");
+										}
+									}
+								}
+
+								
 							} catch (Exception e) {
 								System.err.println("Error: " + e.getMessage());
 							}
@@ -189,6 +222,20 @@ public class GalaxyConfig {
 	
 	public static GalaxyConfig getInstance() {
 		return instance;
+	}
+
+	public static String[] getParamNamesForTool(String currentTool, String currentToolGroup) {
+		initContext();
+		Preferences toolGroupNode = toolConfigPrefs.node(currentToolGroup);
+		try {
+			String[] paramNames = toolGroupNode.node(currentTool).node("params").childrenNames();
+			return paramNames;
+		} catch (BackingStoreException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
+
 	}
 
 }
