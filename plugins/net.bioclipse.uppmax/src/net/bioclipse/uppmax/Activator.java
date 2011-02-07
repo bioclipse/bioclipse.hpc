@@ -56,7 +56,7 @@ public class Activator extends AbstractUIPlugin {
         jsFinderTracker.open();
         
         // Activate Galaxy tool configuration
-		ToolConfigPool.initToolConfigPrefs("/home/samuel/.galaxy/tools");
+		ToolConfigPool.getInstance().initToolConfigPrefs("/home/samuel/.galaxy/tools");
     }
 
     public void stop(BundleContext context) throws Exception {
