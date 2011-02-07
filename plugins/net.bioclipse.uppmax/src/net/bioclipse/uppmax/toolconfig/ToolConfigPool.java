@@ -1,9 +1,7 @@
 package net.bioclipse.uppmax.toolconfig;
 
 import java.io.File;
-import java.text.AttributedCharacterIterator.Attribute;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +25,16 @@ import org.w3c.dom.NodeList;
 public class ToolConfigPool {
 	private static ToolConfigPool instanceOfClass = new ToolConfigPool();
 	
-	private BundleContext m_context;
-	private ServiceReference m_serviceref;
-	private PreferencesService m_service;
-	private Preferences m_systemPrefs;
-	private Preferences m_toolConfigPrefs;
+	private static BundleContext m_context;
+	private static ServiceReference m_serviceref;
+	private static PreferencesService m_service;
+	private static Preferences m_systemPrefs;
+	private static Preferences m_toolConfigPrefs;
 	private ArrayList<ToolGroup> m_toolGroups;
 	
 	private static ToolConfigPool instance = new ToolConfigPool(); 
 
-	public String[] getToolGroupNames() {
+	public static String[] getToolGroupNames() {
 		initContext();
 		try {
 			String[] toolGroupNames = m_toolConfigPrefs.childrenNames();
@@ -75,7 +73,7 @@ public class ToolConfigPool {
 
 	}
 
-	public void initContext() {
+	public static void initContext() {
 		m_context = FrameworkUtil.getBundle(instanceOfClass.getClass()).getBundleContext();
 		m_serviceref = m_context.getServiceReference(PreferencesService.class.getName());
 		m_service = (PreferencesService) m_context.getService(m_serviceref);
@@ -83,7 +81,7 @@ public class ToolConfigPool {
 		m_toolConfigPrefs = m_systemPrefs.node("toolconfigs");
 	}
 
-	public String[] getToolsForGroup(String selectedToolGroup) {
+	public static String[] getToolsForGroup(String selectedToolGroup) {
 		initContext();
 		Preferences toolGroupNode = m_toolConfigPrefs.node(selectedToolGroup);
 		try {
@@ -199,7 +197,7 @@ public class ToolConfigPool {
 		m_toolGroups.add(toolGroup);
 	}
 
-	public void initToolConfigPrefs(String folderPath) {
+	public static void initToolConfigPrefs(String folderPath) {
 		File folder = new File(folderPath);
 
 		if (!folder.isDirectory()) {
@@ -324,7 +322,7 @@ public class ToolConfigPool {
 		return instance;
 	}
 
-	public String[] getParamNamesForTool(String currentTool, String currentToolGroup) {
+	public static String[] getParamNamesForTool(String currentTool, String currentToolGroup) {
 		initContext();
 		Preferences toolGroupNode = m_toolConfigPrefs.node(currentToolGroup);
 		try {
