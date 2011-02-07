@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.xml.xpath.XPathConstants;
 
-import net.bioclipse.uppmax.domain.PluginKernel;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
 import org.osgi.framework.BundleContext;
