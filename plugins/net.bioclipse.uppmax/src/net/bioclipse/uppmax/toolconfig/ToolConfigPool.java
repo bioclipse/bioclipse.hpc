@@ -30,22 +30,23 @@ public class ToolConfigPool {
 	private static PreferencesService m_service;
 	private static Preferences m_systemPrefs;
 	private static Preferences m_toolConfigPrefs;
-	private ArrayList<ToolGroup> m_toolGroups;
+	private Map<String,ToolGroup> m_toolGroups;
 	
 	private static ToolConfigPool instance = new ToolConfigPool(); 
 
-	public static String[] getToolGroupNames() {
-		initContext();
-		try {
-			String[] toolGroupNames = m_toolConfigPrefs.childrenNames();
-			return toolGroupNames;
-		} catch (BackingStoreException e) {
-			System.err.println("DEBUG: Could not get childrenNames of toolConfigPrefs object");
-			e.printStackTrace();
+	public String[] getToolGroupNames() {
+		List<String> toolGroupNames = new ArrayList<String>();
+		for (ToolGroup toolGroup : getToolGroups().values()) {
+			toolGroupNames.add(toolGroup.getToolGroupName());
 		}
-		return null;
+		String[] toolGroupNamesArray = UppmaxUtils.stringListToStringArray(toolGroupNames);
+		return toolGroupNamesArray;
 	}
 	
+	public Map<String,ToolGroup> getToolGroups() {
+		return m_toolGroups;
+	}
+
 	// TODO: Remove test-code
 	public void testRetrievePreferences(Object currentObject) {
 		initContext();
@@ -81,23 +82,21 @@ public class ToolConfigPool {
 		m_toolConfigPrefs = m_systemPrefs.node("toolconfigs");
 	}
 
-	public static String[] getToolsForGroup(String selectedToolGroup) {
-		initContext();
-		Preferences toolGroupNode = m_toolConfigPrefs.node(selectedToolGroup);
-		try {
-			String[] tools = toolGroupNode.childrenNames(); 
-			List<String> toolNames = new ArrayList<String>();
-			for (String tool : tools) {
-				Preferences toolNode = toolGroupNode.node(tool);
-				String toolName = toolNode.get("name", "");
-				toolNames.add(toolName);
-			}
-			String[] toolNamesArray = toolNames.toArray(new String[] {});
-			return toolNamesArray;
-		} catch (Exception e) {
-			e.printStackTrace();
+	public String[] getToolNamesForGroupName(String selectedToolGroupName) {
+		ToolGroup toolGroup = getToolGroups().get(selectedToolGroupName);
+		List<Tool> tools = toolGroup.getTools();
+		List<String> toolNames = new ArrayList<String>(); 
+		for (Tool tool : tools) {
+			toolNames.add(tool.getName());
 		}
-		return null;
+		String[] toolNamesArray = UppmaxUtils.stringListToStringArray(toolNames);
+		return toolNamesArray;
+	}
+
+	public List<Tool> getToolNamesForGroup(String selectedToolGroupName) {
+		ToolGroup toolGroup = getToolGroups().get(selectedToolGroupName);
+		List<Tool> tools = toolGroup.getTools();
+		return tools;
 	}
 
 	public void initToolConfigPrefsNG(String folderPath) {
@@ -192,9 +191,9 @@ public class ToolConfigPool {
 
 	public void addToolGroup(ToolGroup toolGroup) {
 		if (m_toolGroups == null) {
-			m_toolGroups = new ArrayList<ToolGroup>();
+			m_toolGroups = new HashMap<String,ToolGroup>();
 		}
-		m_toolGroups.add(toolGroup);
+		m_toolGroups.put(toolGroup.getToolGroupName(),toolGroup);
 	}
 
 	public static void initToolConfigPrefs(String folderPath) {

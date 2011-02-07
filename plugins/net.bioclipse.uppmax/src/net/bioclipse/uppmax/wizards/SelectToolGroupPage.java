@@ -58,7 +58,7 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		comboToolGroup.setLayoutData(gd);
 		comboToolGroup.addListener(SWT.Selection, this);
 		
-		String[] toolGroups = ToolConfigPool.getToolGroupNames();
+		String[] toolGroups = ToolConfigPool.getInstance().getToolGroupNames();
 		
 		if (toolGroups.length > 0) {
 			comboToolGroup.setItems(toolGroups);
@@ -82,9 +82,9 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 	@Override
 	public void handleEvent(Event event) {
 		if (event.widget == comboToolGroup) {
-			String currentTool = comboToolGroup.getText();
-			String[] tools = ToolConfigPool.getToolsForGroup(currentTool);
-			((SelectToolPage) this.getWizard().getPage("Page 2")).updateDroplist(tools);
+			String currentToolGroupName = comboToolGroup.getText();
+			String[] toolNames = ToolConfigPool.getInstance().getToolNamesForGroupName(currentToolGroupName);
+			((SelectToolPage) this.getWizard().getPage("Page 2")).updateDroplist(toolNames);
 		}
 	}
 

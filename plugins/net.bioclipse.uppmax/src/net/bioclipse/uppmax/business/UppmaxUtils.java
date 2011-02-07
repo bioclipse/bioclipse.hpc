@@ -66,4 +66,9 @@ public class UppmaxUtils {
 		fileContentLines[0] = fileContentLines[0].replaceFirst("<\\?xml.*\\?>", ""); 
 		return fileContentLines;
 	}
+
+	public static String[] stringListToStringArray(List<String> stringList) {
+		String[] stringArray = stringList.toArray(new String[stringList.size()]);  
+		return stringArray;
+	}
 }

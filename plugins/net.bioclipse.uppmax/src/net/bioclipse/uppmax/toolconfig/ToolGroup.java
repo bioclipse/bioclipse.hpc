@@ -5,10 +5,10 @@ import java.util.List;
 
 public class ToolGroup {
 	private String m_toolGroupName;
-	private List<Tool> tools;
+	private List<Tool> m_tools;
 
 	public ToolGroup(String toolGroupName) {
-		tools = new ArrayList<Tool>();
+		m_tools = new ArrayList<Tool>();
 		setToolGroupName(toolGroupName);
 	}
 
@@ -17,11 +17,15 @@ public class ToolGroup {
 	}
 
 	public void addTool(Tool tool) {
-		tools.add(tool);
+		m_tools.add(tool);
 	}
 
 	public String getToolGroupName() {
 		return m_toolGroupName;
+	}
+
+	public List<Tool> getTools() {
+		return m_tools;
 	}
 
 }
