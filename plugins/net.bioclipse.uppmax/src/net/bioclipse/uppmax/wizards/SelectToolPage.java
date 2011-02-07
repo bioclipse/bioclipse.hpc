@@ -1,7 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
-import net.bioclipse.uppmax.business.GalaxyConfig;
-import net.bioclipse.uppmax.xmldisplay.GalaxyConfigReader;
+import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -84,7 +83,7 @@ public class SelectToolPage extends WizardPage implements Listener {
 			// TODO: We can't use the getText() here, since it returns the human-readable name of the tool, which is not used
 			// as the identifier for the tool in the preferences service :(
 			String currentToolGroup = ((SelectToolGroupPage) this.getWizard().getPage("Page 1")).getComboToolGroup().getText();
-			String[] paramNames = GalaxyConfig.getParamNamesForTool(currentTool, currentToolGroup);
+			String[] paramNames = ToolConfigPool.getParamNamesForTool(currentTool, currentToolGroup);
 			for (String paramName : paramNames) {
 				System.out.println("Param: " + paramName);
 			}

@@ -1,6 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
-import net.bioclipse.uppmax.business.GalaxyConfig;
+import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;

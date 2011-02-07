@@ -38,6 +38,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.internal.Workbench;
 
 import net.bioclipse.managers.business.IBioclipseManager;
+import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import net.bioclipse.uppmax.views.JobInfoView;
 import net.bioclipse.uppmax.views.ProjInfoView;
 import net.bioclipse.uppmax.wizards.ExecuteCommandWizard;
@@ -84,7 +85,7 @@ public class UppmaxManager implements IBioclipseManager {
 	}
 
 	public void readToolConfigFiles(String folderPath) {
-		GalaxyConfig.initToolConfigPrefs(folderPath);
+		ToolConfigPool.initToolConfigPrefs(folderPath);
 	}
 	
 	public void updateProjectInfoView() {

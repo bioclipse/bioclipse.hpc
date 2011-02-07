@@ -10,10 +10,10 @@
  ******************************************************************************/
 package net.bioclipse.uppmax;
 
-import net.bioclipse.uppmax.business.GalaxyConfig;
 import net.bioclipse.uppmax.business.IUppmaxManager;
 import net.bioclipse.uppmax.business.IJavaUppmaxManager;
 import net.bioclipse.uppmax.business.IJavaScriptUppmaxManager;
+import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -56,7 +56,7 @@ public class Activator extends AbstractUIPlugin {
         jsFinderTracker.open();
         
         // Activate Galaxy tool configuration
-		GalaxyConfig.initToolConfigPrefs("/home/samuel/.galaxy/tools");
+		ToolConfigPool.initToolConfigPrefs("/home/samuel/.galaxy/tools");
     }
 
     public void stop(BundleContext context) throws Exception {
