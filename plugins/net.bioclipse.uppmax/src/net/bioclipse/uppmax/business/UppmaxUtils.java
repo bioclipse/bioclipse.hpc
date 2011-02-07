@@ -60,4 +60,10 @@ public class UppmaxUtils {
 		}
 		return str;
 	}
+
+	public static String[] removeXmlDefinitionLine(String[] fileContentLines) {
+		// Remove the initial XML header, if existing, since it messes up the SAX parser
+		fileContentLines[0] = fileContentLines[0].replaceFirst("<\\?xml.*\\?>", ""); 
+		return fileContentLines;
+	}
 }

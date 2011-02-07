@@ -4,7 +4,9 @@ import java.io.File;
 import java.text.AttributedCharacterIterator.Attribute;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.xpath.XPathConstants;
 
@@ -24,20 +26,21 @@ import org.w3c.dom.NodeList;
 
 public class ToolConfigPool {
 	private static ToolConfigPool instanceOfClass = new ToolConfigPool();
-	private static BundleContext context;
-	private static ServiceReference serviceref;
-	private static PreferencesService service;
-	private static Preferences systemPrefs;
-	private static Preferences toolConfigPrefs;
-	private static String[] toolGroups;
+	
+	private BundleContext m_context;
+	private ServiceReference m_serviceref;
+	private PreferencesService m_service;
+	private Preferences m_systemPrefs;
+	private Preferences m_toolConfigPrefs;
+	private ArrayList<ToolGroup> m_toolGroups;
 	
 	private static ToolConfigPool instance = new ToolConfigPool(); 
 
-	public static String[] getToolGroups() {
+	public String[] getToolGroupNames() {
 		initContext();
 		try {
-			toolGroups = toolConfigPrefs.childrenNames();
-			return toolGroups;
+			String[] toolGroupNames = m_toolConfigPrefs.childrenNames();
+			return toolGroupNames;
 		} catch (BackingStoreException e) {
 			System.err.println("DEBUG: Could not get childrenNames of toolConfigPrefs object");
 			e.printStackTrace();
@@ -46,13 +49,13 @@ public class ToolConfigPool {
 	}
 	
 	// TODO: Remove test-code
-	public static void testRetrievePreferences(Object currentObject) {
+	public void testRetrievePreferences(Object currentObject) {
 		initContext();
 
 		try {
-			String[] toolGroups = toolConfigPrefs.childrenNames();
+			String[] toolGroups = m_toolConfigPrefs.childrenNames();
 			for (String toolGroup : toolGroups) {
-				Preferences currentToolGroup = toolConfigPrefs.node(toolGroup);
+				Preferences currentToolGroup = m_toolConfigPrefs.node(toolGroup);
 				System.out.println("\n\n--------------------------------------------\nTool Group: " + toolGroup);
 				String[] tools = currentToolGroup.childrenNames();
 				for (String name : tools) {
@@ -72,17 +75,17 @@ public class ToolConfigPool {
 
 	}
 
-	public static void initContext() {
-		context = FrameworkUtil.getBundle(instanceOfClass.getClass()).getBundleContext();
-		serviceref = context.getServiceReference(PreferencesService.class.getName());
-		service = (PreferencesService) context.getService(serviceref);
-		systemPrefs = service.getSystemPreferences();
-		toolConfigPrefs = systemPrefs.node("toolconfigs");
+	public void initContext() {
+		m_context = FrameworkUtil.getBundle(instanceOfClass.getClass()).getBundleContext();
+		m_serviceref = m_context.getServiceReference(PreferencesService.class.getName());
+		m_service = (PreferencesService) m_context.getService(m_serviceref);
+		m_systemPrefs = m_service.getSystemPreferences();
+		m_toolConfigPrefs = m_systemPrefs.node("toolconfigs");
 	}
 
-	public static String[] getToolsForGroup(String selectedToolGroup) {
+	public String[] getToolsForGroup(String selectedToolGroup) {
 		initContext();
-		Preferences toolGroupNode = toolConfigPrefs.node(selectedToolGroup);
+		Preferences toolGroupNode = m_toolConfigPrefs.node(selectedToolGroup);
 		try {
 			String[] tools = toolGroupNode.childrenNames(); 
 			List<String> toolNames = new ArrayList<String>();
@@ -98,8 +101,105 @@ public class ToolConfigPool {
 		}
 		return null;
 	}
+
+	public void initToolConfigPrefsNG(String folderPath) {
+		File folder = new File(folderPath);
+		int xmlFilesCount = 0;
+
+		if (!folder.isDirectory()) {
+			System.out.println("Not a directory: " + folderPath);
+		} 
+
+		File[] toolFolders = folder.listFiles();
+
+		for (File toolFolder : toolFolders) {
+			String toolFolderName = toolFolder.getName();
+			if (toolFolder.isDirectory()) {
+				ToolGroup toolGroup = new ToolGroup(toolFolderName);
+				this.addToolGroup(toolGroup);
+				
+				File[] toolFiles = toolFolder.listFiles();
+				for (File toolFile : toolFiles) {
+					String toolName = toolFile.getName();
+					if (toolName.endsWith(".xml")) {
+						String folderFilePath = toolFile.getAbsolutePath();
+						String[] fileContentLines = UppmaxUtils.readFileToStringArray(folderFilePath);
+						
+						// Remove the XML Definition line
+						fileContentLines = UppmaxUtils.removeXmlDefinitionLine(fileContentLines);
+						// Convert to String
+						String fileContent = UppmaxUtils.arrayToString(fileContentLines); 
+						// Parse to Xml Document
+						Document xmlDoc = XmlUtils.parseXmlToDocument(fileContent);
+						Tool tool = initializeToolFromXmlDoc(xmlDoc);
+
+						toolGroup.addTool(tool);
+						xmlFilesCount++;
+					}
+				}
+			} else {
+				System.out.println("Current tool folder is not a directory: " + toolFolder.getName());
+			}
+		}
+		String timeStamp = UppmaxUtils.currentTime(); 
+		System.out.println(timeStamp + " INFO  [net.bioclipse.uppmax.business.GalaxyConfig] Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");
+	}
 	
-	public static void initToolConfigPrefs(String folderPath) {
+	private Tool initializeToolFromXmlDoc(Document xmlDoc) {
+		Tool tool = new Tool();
+		try {
+			// XPath Expressions
+			String name = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/@name", XPathConstants.STRING);
+			String description = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/description", XPathConstants.STRING);
+			String command = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/command", XPathConstants.STRING);
+			command = command.trim();
+			command = command.replaceAll("[\\ ]+", " ");
+
+			tool.setName(name);
+			tool.setDescription(description);
+			tool.setCommand(command);
+			
+			NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
+			Map<String,String> attributes = new HashMap<String,String>(); 
+
+			for (int i=0; i<paramNodes.getLength(); i++) {
+				Node currentNode = paramNodes.item(i);
+				NamedNodeMap attrs = currentNode.getAttributes();
+
+				// Create a new pref node for the current parameter
+				String attrNodeName = attrs.getNamedItem("name").getNodeValue();
+
+				int attrsCnt = attrs.getLength();
+				// Loop over all attributes for the current param, and add the name,value pair to the preferences service
+				// (if neither is null)
+				for (int j=0; j<attrsCnt; j++) {
+					Node currentAttr = attrs.item(j);
+					String currentAttrName = currentAttr.getNodeName();
+					String currentAttrValue = currentAttr.getNodeValue();
+					if ((currentAttrName != null) && (currentAttrValue != null)) {
+						attributes.put(currentAttrName, currentAttrValue);
+					} else {
+						System.out.println("INFO: Attribute '" + currentAttrName + "' missing for attribute '" + attrNodeName + "' in tool '" + name + "'.");
+					}
+				}
+			}
+			
+			tool.setAttributes(attributes);
+
+		} catch (Exception e) {
+			System.err.println("Error: " + e.getMessage());
+		}
+		return tool;
+	}
+
+	public void addToolGroup(ToolGroup toolGroup) {
+		if (m_toolGroups == null) {
+			m_toolGroups = new ArrayList<ToolGroup>();
+		}
+		m_toolGroups.add(toolGroup);
+	}
+
+	public void initToolConfigPrefs(String folderPath) {
 		File folder = new File(folderPath);
 
 		if (!folder.isDirectory()) {
@@ -224,9 +324,9 @@ public class ToolConfigPool {
 		return instance;
 	}
 
-	public static String[] getParamNamesForTool(String currentTool, String currentToolGroup) {
+	public String[] getParamNamesForTool(String currentTool, String currentToolGroup) {
 		initContext();
-		Preferences toolGroupNode = toolConfigPrefs.node(currentToolGroup);
+		Preferences toolGroupNode = m_toolConfigPrefs.node(currentToolGroup);
 		try {
 			String[] paramNames = toolGroupNode.node(currentTool).node("params").childrenNames();
 			return paramNames;

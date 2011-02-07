@@ -58,7 +58,7 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		comboToolGroup.setLayoutData(gd);
 		comboToolGroup.addListener(SWT.Selection, this);
 		
-		String[] toolGroups = ToolConfigPool.getToolGroups();
+		String[] toolGroups = ToolConfigPool.getToolGroupNames();
 		
 		if (toolGroups.length > 0) {
 			comboToolGroup.setItems(toolGroups);
