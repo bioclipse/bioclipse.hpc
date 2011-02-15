@@ -61,25 +61,37 @@ public class ToolConfigPool {
 		return tools;
 	}
 
-	public void initToolConfigPrefs(String folderPath) {
-		File folder = new File(folderPath);
+	/**
+	 * The main method for parsing Galaxy XML Data into the object structure
+	 * used internally by the UPPMAX plugin, given a path to the Galaxy tools
+	 * folder
+	 * @param toolsFolderPath
+	 */
+	public void initToolConfigPrefs(String toolsFolderPath) {
+		File toolsFolder = new File(toolsFolderPath);
 		int xmlFilesCount = 0;
 
-		if (!folder.isDirectory()) {
-			System.out.println("Not a directory: " + folderPath);
+		if (!toolsFolder.isDirectory()) {
+			System.out.println("Not a directory: " + toolsFolderPath);
 		} 
 
-		File[] toolFolders = folder.listFiles();
+		// Get a list of the individual tool folders, from the over-arching
+		// tools folder (located under Galaxy's root rolder)
+		File[] toolFolders = toolsFolder.listFiles();
 
 		for (File toolFolder : toolFolders) {
 			String toolFolderName = toolFolder.getName();
 			if (toolFolder.isDirectory()) {
+				// Create a tool group object for each tool folder
+				// (Since there are most often more than one tool XML file in each folder
+				// (though they are closely related))
 				ToolGroup toolGroup = new ToolGroup(toolFolderName);
 				this.addToolGroup(toolGroup);
 				
 				File[] toolFiles = toolFolder.listFiles();
 				for (File toolFile : toolFiles) {
 					String toolName = toolFile.getName();
+					// The actual tool configurations are stored in XML-files, so do read these
 					if (toolName.endsWith(".xml")) {
 						String folderFilePath = toolFile.getAbsolutePath();
 						String[] fileContentLines = UppmaxUtils.readFileToStringArray(folderFilePath);
