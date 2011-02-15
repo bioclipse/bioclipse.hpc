@@ -140,9 +140,16 @@ public class ToolConfigPool {
 				NamedNodeMap attrs = currentNode.getAttributes();
 
 				// Get details of a parameter
-				Node nameAttr = attrs.getNamedItem("name");
-				String paramName = nameAttr.getNodeValue();
+				Node paramNameAttr = attrs.getNamedItem("name");
+				String paramName = paramNameAttr.getNodeValue();
 				param.setName(paramName);
+
+				Node paramLabelAttr = attrs.getNamedItem("label");
+				if (paramLabelAttr != null) {
+					String paramLabel = paramLabelAttr.getNodeValue();
+					param.setLabel(paramLabel);
+				}
+
 				tool.addParameter(param);
 			}
 			

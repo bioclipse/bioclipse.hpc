@@ -3,6 +3,7 @@ package net.bioclipse.uppmax.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bioclipse.uppmax.toolconfig.Parameter;
 import net.bioclipse.uppmax.toolconfig.Tool;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
@@ -89,15 +90,19 @@ public class SelectToolPage extends WizardPage implements Listener {
 			Tool currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
 			if (currentTool != null) {
 				System.out.println("Current tool name: " + currentTool.getName());
-				String[] paramNames = currentTool.getParamNames();
-				if (paramNames != null) {
-					System.out.println("Paramnames is not null ...");
-					for (String paramName : paramNames) {
-						System.out.println("Param: " + paramName);
-					}
-				} else {
-					System.out.println("Tool found, but no parameters!");
+				List<Parameter> parameters = currentTool.getParameters();
+				List<String> parameterNames = new ArrayList<String>();
+				List<String> parameterLabels = new ArrayList<String>();
+				for (Parameter parameter : parameters) {
+					parameterNames.add(parameter.getName());
+					parameterLabels.add(parameter.getLabel());
 				}
+				if (parameterNames != null) {
+					System.out.println("Paramnames is not null ...");
+					for (String labelName : parameterLabels) {
+						System.out.println("Label: " + labelName);
+					}
+				} 
 			} else {
 				System.out.println("Tool not found, with name. " + selectedToolName);
 			}

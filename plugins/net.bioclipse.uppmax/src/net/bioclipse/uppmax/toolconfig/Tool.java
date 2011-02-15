@@ -69,7 +69,7 @@ public class Tool {
 		m_parameters.add(newParameter);
 	}
 	
-	public List<Parameter> getParameterList() {
+	public List<Parameter> getParameters() {
 		return m_parameters;
 	}
 
