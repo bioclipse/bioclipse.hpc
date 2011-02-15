@@ -133,26 +133,17 @@ public class ToolConfigPool {
 			NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
 			Map<String,String> attributes = new HashMap<String,String>(); 
 
+			// Loop over all parameters for the current tool
 			for (int i=0; i<paramNodes.getLength(); i++) {
+				Parameter param = new Parameter();
 				Node currentNode = paramNodes.item(i);
 				NamedNodeMap attrs = currentNode.getAttributes();
 
-				// Create a new pref node for the current parameter
-				String attrNodeName = attrs.getNamedItem("name").getNodeValue();
-
-				int attrsCnt = attrs.getLength();
-				// Loop over all attributes for the current param, and add the name,value pair to the preferences service
-				// (if neither is null)
-				for (int j=0; j<attrsCnt; j++) {
-					Node currentAttr = attrs.item(j);
-					String currentAttrName = currentAttr.getNodeName();
-					String currentAttrValue = currentAttr.getNodeValue();
-					if ((currentAttrName != null) && (currentAttrValue != null)) {
-						attributes.put(currentAttrName, currentAttrValue);
-					} else {
-						System.out.println("INFO: Attribute '" + currentAttrName + "' missing for attribute '" + attrNodeName + "' in tool '" + name + "'.");
-					}
-				}
+				// Get details of a parameter
+				Node nameAttr = attrs.getNamedItem("name");
+				String paramName = nameAttr.getNodeValue();
+				param.setName(paramName);
+				tool.addParameter(param);
 			}
 			
 			tool.setAttributes(attributes);

@@ -14,11 +14,12 @@ public class Tool {
 	private Map<String,String> m_attributes;
 	private List<Parameter> m_parameters; 
 
-	public void Tool() {
+	public Tool() {
 		m_name = "";
 		m_description = "";
 		m_command = "";
 		m_attributes = new HashMap<String,String>();
+		m_parameters = new ArrayList<Parameter>();
 	}
 	
 	public String getName() {
@@ -55,9 +56,11 @@ public class Tool {
 
 	public String[] getParamNames() {
 		List<String> paramNames = new ArrayList<String>();
-		for (Parameter param : m_parameters) {
-			String paramName = param.getLabel();
-			paramNames.add(paramName);
+		if (m_parameters != null) {
+			for (Parameter param : m_parameters) {
+				String paramName = param.getName();
+				paramNames.add(paramName);
+			}
 		}
 		return UppmaxUtils.stringListToStringArray(paramNames);
 	}

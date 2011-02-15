@@ -85,16 +85,21 @@ public class SelectToolPage extends WizardPage implements Listener {
 	public void handleEvent(Event event) {
 		if (event.widget == comboTool) {
 			System.out.println("Caught selection!");
-			String currentToolName = comboTool.getText();
-			Tool currentTool = ToolConfigPool.getInstance().getToolByName(currentToolName);
-			System.out.println("Current tool name : " + currentTool.getName());
-			String[] paramNames = currentTool.getParamNames();
-			if (paramNames != null) {
-				for (String paramName : paramNames) {
-					System.out.println("Param: " + paramName);
+			String selectedToolName = comboTool.getText();
+			Tool currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
+			if (currentTool != null) {
+				System.out.println("Current tool name: " + currentTool.getName());
+				String[] paramNames = currentTool.getParamNames();
+				if (paramNames != null) {
+					System.out.println("Paramnames is not null ...");
+					for (String paramName : paramNames) {
+						System.out.println("Param: " + paramName);
+					}
+				} else {
+					System.out.println("Tool found, but no parameters!");
 				}
 			} else {
-				System.out.println("No parameters found!");
+				System.out.println("Tool not found, with name. " + selectedToolName);
 			}
 		}
 	}
