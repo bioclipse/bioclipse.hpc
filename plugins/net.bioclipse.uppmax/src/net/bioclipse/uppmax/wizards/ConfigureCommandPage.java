@@ -52,8 +52,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	    // create the desired layout for this wizard page
 		GridLayout gl = new GridLayout();
-		int ncol = 2;
-		gl.numColumns = ncol;
+		gl.numColumns = 2;
 		composite.setLayout(gl);
 
 
@@ -83,15 +82,15 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				for (String labelName : parameterLabels) {
 					Label fieldLabel = new Label(this.composite, SWT.NONE);
 					fieldLabel.setText(labelName + ":");
-					fieldLabel.setSize(320, 24);
 					GridData labelGridData = new GridData(GridData.FILL_HORIZONTAL);
-					labelGridData.horizontalAlignment = GridData.END;
+					labelGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_END;
+					labelGridData.widthHint = 120;
 					fieldLabel.setLayoutData(labelGridData);
 					
 					Text textField = new Text(this.composite, SWT.BORDER);
-					textField.setSize(240, 24);
-					GridData textGridData = new GridData(GridData.VERTICAL_ALIGN_END);
-					// textGridData.horizontalAlignment = GridData.BEGINNING;
+					GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
+					textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
+					textGridData.widthHint = 180;
 					textField.setLayoutData(textGridData);
 				}
 				((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);
