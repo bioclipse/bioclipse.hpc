@@ -23,8 +23,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class ToolConfigPool {
-	private static ToolConfigPool instanceOfClass = new ToolConfigPool();
-	
 	private Map<String,ToolGroup> m_toolGroups;
 	
 	private static ToolConfigPool instance = new ToolConfigPool();
@@ -176,6 +174,21 @@ public class ToolConfigPool {
 //		}
 		return null;
 
+	}
+
+	public Tool getToolByName(String toolNameToGet) {
+		System.out.println("Tool name to get: " + toolNameToGet);
+		Map<String,ToolGroup> toolGroups = getToolGroups();
+		for (Map.Entry<String,ToolGroup> entry : toolGroups.entrySet()) {
+			ToolGroup toolGroup = entry.getValue();
+			List<Tool> tools = toolGroup.getTools();
+			for (Tool tool : tools) {
+				if (tool.getName().equals(toolNameToGet)) {
+					return tool;
+				}
+			}
+		}
+		return null;
 	}
 
 }

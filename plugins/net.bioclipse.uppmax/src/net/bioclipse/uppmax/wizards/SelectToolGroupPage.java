@@ -50,6 +50,7 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		gl.numColumns = ncol;
 		composite.setLayout(gl);
 		
+		// Create label
 		new Label (composite, SWT.NONE).setText("Tool group:");
 		
 		comboToolGroup = new Combo(composite, SWT.BORDER);
@@ -58,15 +59,16 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		comboToolGroup.setLayoutData(gd);
 		comboToolGroup.addListener(SWT.Selection, this);
 		
+		// Get the tool groups from Galaxy XML Data
 		String[] toolGroups = ToolConfigPool.getInstance().getToolGroupNames();
-		
 		if (toolGroups.length > 0) {
 			comboToolGroup.setItems(toolGroups);
 			comboToolGroup.setText(comboToolGroup.getItem(0));
 		} else {
 			System.err.println("Error: No galaxy tool definitions loaded. Are the XML files in place?");
 		}
-	    // set the composite as the control for this page
+
+		// set the composite as the control for this page
 		setControl(composite);		
 	}
 	

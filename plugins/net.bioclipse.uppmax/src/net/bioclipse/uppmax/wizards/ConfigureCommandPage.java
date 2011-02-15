@@ -28,7 +28,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	IStructuredSelection selection;
 
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
-		super("Page 2");
+		super("Page 3");
 		setTitle("Select tool");
 		setDescription("Select a tool from the ones available in the tool group just selected ...");
 		this.workbench = workbench;

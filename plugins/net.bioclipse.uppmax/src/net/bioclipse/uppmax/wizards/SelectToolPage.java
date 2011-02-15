@@ -1,5 +1,9 @@
 package net.bioclipse.uppmax.wizards;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.bioclipse.uppmax.toolconfig.Tool;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
@@ -35,8 +39,10 @@ public class SelectToolPage extends WizardPage implements Listener {
 		this.selection = selection;
 	}
 	
+	@Override
 	public boolean canFlipToNextPage() {
-		return false;
+		// TODO: Don't allow to flip unless a proper tool is selected
+		return true;
 	}
 	
 	@Override
@@ -79,13 +85,16 @@ public class SelectToolPage extends WizardPage implements Listener {
 	public void handleEvent(Event event) {
 		if (event.widget == comboTool) {
 			System.out.println("Caught selection!");
-			String currentTool = comboTool.getText();
-			// TODO: We can't use the getText() here, since it returns the human-readable name of the tool, which is not used
-			// as the identifier for the tool in the preferences service :(
-			String currentToolGroup = ((SelectToolGroupPage) this.getWizard().getPage("Page 1")).getComboToolGroup().getText();
-			String[] paramNames = ToolConfigPool.getParamNamesForTool(currentTool, currentToolGroup);
-			for (String paramName : paramNames) {
-				System.out.println("Param: " + paramName);
+			String currentToolName = comboTool.getText();
+			Tool currentTool = ToolConfigPool.getInstance().getToolByName(currentToolName);
+			System.out.println("Current tool name : " + currentTool.getName());
+			String[] paramNames = currentTool.getParamNames();
+			if (paramNames != null) {
+				for (String paramName : paramNames) {
+					System.out.println("Param: " + paramName);
+				}
+			} else {
+				System.out.println("No parameters found!");
 			}
 		}
 	}

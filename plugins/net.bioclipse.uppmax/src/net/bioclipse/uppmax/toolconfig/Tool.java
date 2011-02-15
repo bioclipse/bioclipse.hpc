@@ -1,13 +1,18 @@
 package net.bioclipse.uppmax.toolconfig;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import net.bioclipse.uppmax.business.UppmaxUtils;
 
 public class Tool {
 	private String m_name;
 	private String m_description;
 	private String m_command;
 	private Map<String,String> m_attributes;
+	private List<Parameter> m_parameters; 
 
 	public void Tool() {
 		m_name = "";
@@ -46,6 +51,23 @@ public class Tool {
 
 	public void setAttributes(Map<String, String> attributes) {
 		m_attributes = attributes;
+	}
+
+	public String[] getParamNames() {
+		List<String> paramNames = new ArrayList<String>();
+		for (Parameter param : m_parameters) {
+			String paramName = param.getLabel();
+			paramNames.add(paramName);
+		}
+		return UppmaxUtils.stringListToStringArray(paramNames);
+	}
+	
+	public void addParameter(Parameter newParameter) {
+		m_parameters.add(newParameter);
+	}
+	
+	public List<Parameter> getParameterList() {
+		return m_parameters;
 	}
 
 }
