@@ -1,5 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -103,12 +105,19 @@ public class SelectToolPage extends WizardPage implements Listener {
 					for (String labelName : parameterLabels) {
 						System.out.println("Label: " + labelName);
 					}
-					((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);
+					// ((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);
 				} 
 			} else {
 				System.out.println("Tool not found, with name. " + selectedToolName);
 			}
 		}
+	}
+	
+	@Override
+	public IWizardPage getNextPage() {
+		ConfigureCommandPage configCommandPage = ((ConfigureCommandPage) this.getWizard().getPage("Page 3"));
+		configCommandPage.onEnterPage();
+		return configCommandPage;
 	}
 
 }

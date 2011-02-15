@@ -1,7 +1,10 @@
 package net.bioclipse.uppmax.wizards;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import net.bioclipse.uppmax.toolconfig.Parameter;
+import net.bioclipse.uppmax.toolconfig.Tool;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
@@ -24,10 +27,10 @@ import org.w3c.dom.NodeList;
 
 public class ConfigureCommandPage extends WizardPage implements Listener {
 
-	public Combo comboTool;
-
 	IWorkbench workbench;
 	IStructuredSelection selection;
+	Composite parentComposite;
+	Composite composite;
 
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 3");
@@ -43,29 +46,63 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	
 	@Override
 	public void createControl(Composite parent) {
+		parentComposite = parent;
 	    // create the composite to hold the widgets
-		GridData gd;
-		Composite composite =  new Composite(parent, SWT.NULL);
+		composite =  new Composite(parent, SWT.NULL);
 
 	    // create the desired layout for this wizard page
 		GridLayout gl = new GridLayout();
 		int ncol = 2;
 		gl.numColumns = ncol;
 		composite.setLayout(gl);
-		
-		new Label (composite, SWT.NONE).setText("Configure param:");
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalAlignment = GridData.BEGINNING;
-		
+
+
 	    // set the composite as the control for this page
 		setControl(composite);
 	}
-
-	public void updateDroplist(String[] tools) {
-		comboTool.removeAll();
-		comboTool.setItems(tools);
-		comboTool.setText(comboTool.getItem(0));
+	
+	void onEnterPage() {
+		
+		createControl(parentComposite);
+		
+		System.out.println("Entered page!");
+		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
+		
+		String selectedToolName = comboTool.getText();
+		Tool currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
+		if (currentTool != null) {
+			System.out.println("Current tool name: " + currentTool.getName());
+			List<Parameter> parameters = currentTool.getParameters();
+			List<String> parameterNames = new ArrayList<String>();
+			List<String> parameterLabels = new ArrayList<String>();
+			for (Parameter parameter : parameters) {
+				parameterNames.add(parameter.getName());
+				parameterLabels.add(parameter.getLabel());
+			}
+			if (parameterNames != null) {
+				for (String labelName : parameterLabels) {
+					Label fieldLabel = new Label(this.composite, SWT.NONE);
+					fieldLabel.setText(labelName + ":");
+					fieldLabel.setSize(320, 24);
+					GridData labelGridData = new GridData(GridData.FILL_HORIZONTAL);
+					labelGridData.horizontalAlignment = GridData.END;
+					fieldLabel.setLayoutData(labelGridData);
+					
+					Text textField = new Text(this.composite, SWT.BORDER);
+					textField.setSize(240, 24);
+					GridData textGridData = new GridData(GridData.VERTICAL_ALIGN_END);
+					// textGridData.horizontalAlignment = GridData.BEGINNING;
+					textField.setLayoutData(textGridData);
+				}
+				((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);
+			} 
+		} else {
+			System.out.println("Tool not found, with name. " + selectedToolName);
+		}
+		
+	    this.composite.pack();
 	}
+
 
 	@Override
 	public void handleEvent(Event event) {
