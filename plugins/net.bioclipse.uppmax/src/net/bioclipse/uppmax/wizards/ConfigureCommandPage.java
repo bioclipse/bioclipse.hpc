@@ -1,5 +1,7 @@
 package net.bioclipse.uppmax.wizards;
 
+import java.util.List;
+
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
@@ -51,18 +53,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		gl.numColumns = ncol;
 		composite.setLayout(gl);
 		
-		new Label (composite, SWT.NONE).setText("Select tool:");
+		new Label (composite, SWT.NONE).setText("Configure param:");
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
-		
-		comboTool = new Combo(composite, SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalAlignment = GridData.BEGINNING;
-		comboTool.setLayoutData(gd);
-		
-		String[] emptyStringArray = {"(No tools loaded)"};
-		comboTool.setItems(emptyStringArray);
-		comboTool.setText(comboTool.getItem(0));
 		
 	    // set the composite as the control for this page
 		setControl(composite);
@@ -80,5 +73,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	}
 
+	public void createWidgetsForParams(List<String> parameterLabels) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

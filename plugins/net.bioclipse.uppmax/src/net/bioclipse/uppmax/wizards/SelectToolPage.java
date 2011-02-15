@@ -99,15 +99,16 @@ public class SelectToolPage extends WizardPage implements Listener {
 				}
 				if (parameterNames != null) {
 					System.out.println("Paramnames is not null ...");
+					// TODO: Remove this debug-code
 					for (String labelName : parameterLabels) {
 						System.out.println("Label: " + labelName);
 					}
+					((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);
 				} 
 			} else {
 				System.out.println("Tool not found, with name. " + selectedToolName);
 			}
 		}
 	}
-
 
 }

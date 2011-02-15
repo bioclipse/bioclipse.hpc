@@ -50,6 +50,8 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		addPage(toolGroupPage);
 		SelectToolPage toolPage = new SelectToolPage(workbench, selection);
 		addPage(toolPage);
+		ConfigureCommandPage configCommandPage = new ConfigureCommandPage(workbench, selection);
+		addPage(configCommandPage);
 	}
 
 	@Override
