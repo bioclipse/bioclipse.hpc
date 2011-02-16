@@ -61,7 +61,7 @@ public class ToolConfigPool {
 	 * folder
 	 * @param toolsFolderPath
 	 */
-	public void initToolConfigPrefs(String toolsFolderPath) {
+	public void readToolConfigsFromXmlFiles(String toolsFolderPath) {
 		File toolsFolder = new File(toolsFolderPath);
 		int xmlFilesCount = 0;
 
@@ -134,15 +134,10 @@ public class ToolConfigPool {
 				NamedNodeMap attrs = currentNode.getAttributes();
 
 				// Get details of a parameter
-				Node paramNameAttr = attrs.getNamedItem("name");
-				String paramName = paramNameAttr.getNodeValue();
-				param.setName(paramName);
-
-				Node paramLabelAttr = attrs.getNamedItem("label");
-				if (paramLabelAttr != null) {
-					String paramLabel = paramLabelAttr.getNodeValue();
-					param.setLabel(paramLabel);
-				}
+				String attrName = getAttributeValue(attrs, "name");
+				param.setName(attrName);
+				String attrLabel = getAttributeValue(attrs, "label");
+				param.setLabel(attrLabel);
 
 				tool.addParameter(param);
 			}
@@ -155,6 +150,15 @@ public class ToolConfigPool {
 		return tool;
 	}
 
+	private String getAttributeValue(NamedNodeMap attrs, String attributeName) {
+		String paramValue  = "";
+		Node paramAttributeNode = attrs.getNamedItem(attributeName);
+		if (paramAttributeNode != null) {
+			paramValue = paramAttributeNode.getNodeValue();
+		}
+		return paramValue;
+	}
+
 	public void addToolGroup(ToolGroup toolGroup) {
 		if (m_toolGroups == null) {
 			m_toolGroups = new HashMap<String,ToolGroup>();
@@ -164,20 +168,6 @@ public class ToolConfigPool {
 
 	public static ToolConfigPool getInstance() {
 		return instance;
-	}
-
-	public static String[] getParamNamesForTool(String currentTool, String currentToolGroup) {
-		// TODO: Refactor to new Object Oriented config system
-//		Preferences toolGroupNode = m_toolConfigPrefs.node(currentToolGroup);
-//		try {
-//			String[] paramNames = toolGroupNode.node(currentTool).node("params").childrenNames();
-//			return paramNames;
-//		} catch (BackingStoreException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		return null;
-
 	}
 
 	public Tool getToolByName(String toolNameToGet) {

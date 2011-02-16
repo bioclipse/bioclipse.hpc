@@ -85,7 +85,7 @@ public class UppmaxManager implements IBioclipseManager {
 	}
 
 	public void readToolConfigFiles(String folderPath) {
-		ToolConfigPool.getInstance().initToolConfigPrefs(folderPath);
+		ToolConfigPool.getInstance().readToolConfigsFromXmlFiles(folderPath);
 	}
 	
 	public void updateProjectInfoView() {

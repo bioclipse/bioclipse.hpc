@@ -11,6 +11,10 @@ import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.custom.StyledTextPrintOptions;
+import org.eclipse.swt.internal.gtk.GdkColor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -80,8 +84,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private void createLabel(String labelText) {
-		Label fieldLabel = new Label(this.composite, SWT.RIGHT | SWT.WRAP | SWT.BORDER );
+		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP );
 		labelText = UppmaxUtils.ensureEndsWithColon(labelText);
+		fieldLabel.setBackground(new Color(null, 240, 240, 240));
 		fieldLabel.setText(labelText);
 		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		labelGridData.widthHint = 160;
