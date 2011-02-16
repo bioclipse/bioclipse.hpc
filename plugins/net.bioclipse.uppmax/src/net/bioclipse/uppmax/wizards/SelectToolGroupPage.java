@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 
-public class SelectToolGroupPage extends WizardPage implements Listener {
+public class SelectToolGroupPage extends WizardPage {
 
 	public Combo comboToolGroup;
 	
@@ -57,7 +57,6 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
 		comboToolGroup.setLayoutData(gd);
-		comboToolGroup.addListener(SWT.Selection, this);
 		
 		// Get the tool groups from Galaxy XML Data
 		String[] toolGroups = ToolConfigPool.getInstance().getToolGroupNames();
@@ -81,17 +80,15 @@ public class SelectToolGroupPage extends WizardPage implements Listener {
 		return selectedToolGroup;
 	}
 
-	@Override
-	public void handleEvent(Event event) {
-		if (event.widget == comboToolGroup) {
-			String currentToolGroupName = comboToolGroup.getText();
-			String[] toolNames = ToolConfigPool.getInstance().getToolNamesForGroupName(currentToolGroupName);
-			((SelectToolPage) this.getWizard().getPage("Page 2")).updateDroplist(toolNames);
-		}
-	}
-
 	public Combo getComboToolGroup() {
 		return comboToolGroup;
+	}
+	
+	@Override
+	public IWizardPage getNextPage() {
+		SelectToolPage selectToolPage = ((SelectToolPage) this.getWizard().getPage("Page 2"));
+		selectToolPage.onEnterPage();
+		return selectToolPage;
 	}
 
 }

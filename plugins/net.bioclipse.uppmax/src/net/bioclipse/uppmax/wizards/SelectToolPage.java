@@ -27,7 +27,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class SelectToolPage extends WizardPage implements Listener {
+public class SelectToolPage extends WizardPage {
 
 	public Combo comboTool;
 
@@ -68,7 +68,6 @@ public class SelectToolPage extends WizardPage implements Listener {
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
 		comboTool.setLayoutData(gd);
-		comboTool.addListener(SWT.Selection, this);
 		
 		String[] emptyStringArray = {"(No tools loaded)"};
 		comboTool.setItems(emptyStringArray);
@@ -78,41 +77,19 @@ public class SelectToolPage extends WizardPage implements Listener {
 		setControl(composite);
 	}
 
+	public void onEnterPage() {
+		SelectToolGroupPage selectToolGroupPage = ((SelectToolGroupPage) this.getWizard().getPage("Page 1"));
+		String currentToolGroupName = selectToolGroupPage.comboToolGroup.getText();
+		String[] toolNames = ToolConfigPool.getInstance().getToolNamesForGroupName(currentToolGroupName);
+		updateDroplist(toolNames);
+	}
+	
 	public void updateDroplist(String[] tools) {
 		comboTool.removeAll();
 		comboTool.setItems(tools);
 		comboTool.setText(comboTool.getItem(0));
 	}
 
-	@Override
-	public void handleEvent(Event event) {
-		if (event.widget == comboTool) {
-			System.out.println("Caught selection!");
-			String selectedToolName = comboTool.getText();
-			Tool currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
-			if (currentTool != null) {
-				System.out.println("Current tool name: " + currentTool.getName());
-				List<Parameter> parameters = currentTool.getParameters();
-				List<String> parameterNames = new ArrayList<String>();
-				List<String> parameterLabels = new ArrayList<String>();
-				for (Parameter parameter : parameters) {
-					parameterNames.add(parameter.getName());
-					parameterLabels.add(parameter.getLabel());
-				}
-				if (parameterNames != null) {
-					System.out.println("Paramnames is not null ...");
-					// TODO: Remove this debug-code
-					for (String labelName : parameterLabels) {
-						System.out.println("Label: " + labelName);
-					}
-					// ((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);
-				} 
-			} else {
-				System.out.println("Tool not found, with name. " + selectedToolName);
-			}
-		}
-	}
-	
 	@Override
 	public IWizardPage getNextPage() {
 		ConfigureCommandPage configCommandPage = ((ConfigureCommandPage) this.getWizard().getPage("Page 3"));

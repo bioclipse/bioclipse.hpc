@@ -3,6 +3,7 @@ package net.bioclipse.uppmax.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bioclipse.uppmax.business.UppmaxUtils;
 import net.bioclipse.uppmax.toolconfig.Parameter;
 import net.bioclipse.uppmax.toolconfig.Tool;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
@@ -55,7 +56,6 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		gl.numColumns = 2;
 		composite.setLayout(gl);
 
-
 	    // set the composite as the control for this page
 		setControl(composite);
 	}
@@ -79,18 +79,18 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				parameterLabels.add(parameter.getLabel());
 			}
 			if (parameterNames != null) {
-				for (String labelName : parameterLabels) {
-					Label fieldLabel = new Label(this.composite, SWT.NONE);
-					fieldLabel.setText(labelName + ":");
-					GridData labelGridData = new GridData(GridData.FILL_HORIZONTAL);
-					labelGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_END;
-					labelGridData.widthHint = 120;
+				for (String labelText : parameterLabels) {
+					Label fieldLabel = new Label(this.composite, SWT.RIGHT | SWT.WRAP | SWT.BORDER );
+					labelText = UppmaxUtils.ensureEndsWithColon(labelText);
+					fieldLabel.setText(labelText);
+					GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
+					labelGridData.widthHint = 160;
 					fieldLabel.setLayoutData(labelGridData);
 					
 					Text textField = new Text(this.composite, SWT.BORDER);
 					GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
 					textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
-					textGridData.widthHint = 180;
+					textGridData.widthHint = 248;
 					textField.setLayoutData(textGridData);
 				}
 				((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);

@@ -71,4 +71,11 @@ public class UppmaxUtils {
 		String[] stringArray = stringList.toArray(new String[stringList.size()]);  
 		return stringArray;
 	}
+
+	public static String ensureEndsWithColon(String labelName) {
+		if (!labelName.endsWith(":")) {
+			labelName = labelName + ":";
+		}
+		return labelName;
+	}
 }
