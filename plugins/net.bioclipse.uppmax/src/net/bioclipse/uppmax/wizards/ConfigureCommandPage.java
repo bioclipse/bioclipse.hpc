@@ -61,26 +61,26 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 		if (currentTool != null) {
 			System.out.println("Current tool name: " + currentTool.getName());
-			List<String> parameterNames = new ArrayList<String>();
-			List<String> parameterLabels = new ArrayList<String>();
-
 			List<Parameter> parameters = currentTool.getParameters();
-			for (Parameter parameter : parameters) {
-				parameterNames.add(parameter.getName());
-				parameterLabels.add(parameter.getLabel());
-			}
-			if (parameterNames != null) {
-				for (String labelText : parameterLabels) {
-					createLabel(labelText);
-					createTextField();
-				}
-				((ConfigureCommandPage) this.getWizard().getPage("Page 3")).createWidgetsForParams(parameterLabels);
-			} 
+			createWidgetsForParams(parameters);
 		} else {
-			System.out.println("Tool not found, with name. " + selectedToolName);
+			System.out.println("Tool with name '" + selectedToolName + "' not found.");
 		}
 		
 	    this.composite.pack();
+	}
+
+	private void createWidgetsForParams(List<Parameter> parameters) {
+		for (Parameter parameter : parameters) {
+			String paramLabel = parameter.getLabel();
+			String paramName = parameter.getName();
+			if (paramLabel != "" && paramLabel != null) {
+				createLabel(paramLabel);
+			} else if (paramName != "" && paramName != null) {
+				createLabel(paramLabel);
+			}
+			createTextField();
+		}
 	}
 
 	private void createLabel(String labelText) {
@@ -105,11 +105,6 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	public void handleEvent(Event event) {
 		// TODO Auto-generated method stub
 
-	}
-
-	public void createWidgetsForParams(List<String> parameterLabels) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
