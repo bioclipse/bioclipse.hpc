@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bioclipse.uppmax.business.UppmaxUtils;
+import net.bioclipse.uppmax.toolconfig.Option;
 import net.bioclipse.uppmax.toolconfig.Parameter;
 import net.bioclipse.uppmax.toolconfig.Tool;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
@@ -60,7 +61,6 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		Tool currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
 
 		if (currentTool != null) {
-			System.out.println("Current tool name: " + currentTool.getName());
 			List<Parameter> parameters = currentTool.getParameters();
 			createWidgetsForParams(parameters);
 		} else {
@@ -74,13 +74,36 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		for (Parameter parameter : parameters) {
 			String paramLabel = parameter.getLabel();
 			String paramName = parameter.getName();
+			String paramType = parameter.getType();
+			System.out.println("Paramtype: " + paramType);
 			if (paramLabel != "" && paramLabel != null) {
 				createLabel(paramLabel);
-			} else if (paramName != "" && paramName != null) {
+			} else if (!paramName.equals("") && paramName != null) {
 				createLabel(paramLabel);
 			}
-			createTextField();
+			String paramValue = parameter.getValue();
+			if (paramValue == null) {
+				paramValue = "";
+			}
+			if (paramType.equals("select")) {
+				List<String> selectOptions = parameter.getSelectOptionValues();
+				Combo currentCombo = UppmaxUtils.createCombo(composite);
+				String[] selectOptionsArr = UppmaxUtils.stringListToArray(selectOptions);
+				currentCombo.setItems(selectOptionsArr);
+				Option selectedOption = parameter.getSelectedOption();
+				if (selectedOption != null) {
+					String selectedOptionValue = selectedOption.getValue();
+					currentCombo.setText(selectedOptionValue);
+				}
+			} else {
+				createTextField(paramValue);
+			} 
 		}
+	}
+
+	private void createCombo(List<String> selectOptions) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void createLabel(String labelText) {
@@ -93,8 +116,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		fieldLabel.setLayoutData(labelGridData);
 	}
 
-	private void createTextField() {
+	private void createTextField(String defaultText) {
 		Text textField = new Text(this.composite, SWT.BORDER);
+		textField.setText(defaultText);
 		GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
 		textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
 		textGridData.widthHint = 248;

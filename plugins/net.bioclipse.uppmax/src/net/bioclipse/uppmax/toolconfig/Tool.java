@@ -62,7 +62,7 @@ public class Tool {
 				paramNames.add(paramName);
 			}
 		}
-		return UppmaxUtils.stringListToStringArray(paramNames);
+		return UppmaxUtils.stringListToArray(paramNames);
 	}
 	
 	public void addParameter(Parameter newParameter) {

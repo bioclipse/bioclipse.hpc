@@ -1,5 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
+import net.bioclipse.uppmax.business.UppmaxUtils;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -41,7 +42,7 @@ public class SelectToolGroupPage extends WizardPage {
 		initializeGridLayout(composite);
 		String labelText = "Tool group:";
 		createLabelWithText(composite, labelText);
-		createCombo(composite);
+		comboToolGroup = UppmaxUtils.createCombo(composite);
 		
 		String[] toolGroups = ToolConfigPool.getInstance().getToolGroupNames();
 		if (toolGroups.length > 0) {
@@ -70,14 +71,6 @@ public class SelectToolGroupPage extends WizardPage {
 		composite.setLayout(gridLayout);
 	}
 
-	private void createCombo(Composite composite) {
-		GridData gridData;
-		comboToolGroup = new Combo(composite, SWT.BORDER);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = GridData.BEGINNING;
-		comboToolGroup.setLayoutData(gridData);
-	}
-	
 	@Override
 	public boolean canFlipToNextPage() {
 		return true;

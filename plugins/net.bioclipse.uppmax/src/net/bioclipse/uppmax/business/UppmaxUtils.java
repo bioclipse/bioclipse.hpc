@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 public class UppmaxUtils {
@@ -70,7 +73,7 @@ public class UppmaxUtils {
 		return fileContentLines;
 	}
 
-	public static String[] stringListToStringArray(List<String> stringList) {
+	public static String[] stringListToArray(List<String> stringList) {
 		String[] stringArray = stringList.toArray(new String[stringList.size()]);  
 		return stringArray;
 	}
@@ -87,5 +90,14 @@ public class UppmaxUtils {
 		GridLayout gl = new GridLayout();
 		gl.numColumns = columnsCount;
 		composite.setLayout(gl);
+	}
+
+	public static Combo createCombo(Composite composite) {
+		GridData gridData;
+		Combo combo = new Combo(composite, SWT.BORDER);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		combo.setLayoutData(gridData);
+		return combo;
 	}
 }

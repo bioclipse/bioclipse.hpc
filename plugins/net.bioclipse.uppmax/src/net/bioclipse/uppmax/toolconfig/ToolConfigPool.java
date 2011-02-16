@@ -30,7 +30,7 @@ public class ToolConfigPool {
 		for (ToolGroup toolGroup : getToolGroups().values()) {
 			toolGroupNames.add(toolGroup.getToolGroupName());
 		}
-		String[] toolGroupNamesArray = UppmaxUtils.stringListToStringArray(toolGroupNames);
+		String[] toolGroupNamesArray = UppmaxUtils.stringListToArray(toolGroupNames);
 		return toolGroupNamesArray;
 	}
 	
@@ -45,7 +45,7 @@ public class ToolConfigPool {
 		for (Tool tool : tools) {
 			toolNames.add(tool.getName());
 		}
-		String[] toolNamesArray = UppmaxUtils.stringListToStringArray(toolNames);
+		String[] toolNamesArray = UppmaxUtils.stringListToArray(toolNames);
 		return toolNamesArray;
 	}
 
@@ -136,8 +136,16 @@ public class ToolConfigPool {
 				// Get details of a parameter
 				String attrName = getAttributeValue(attrs, "name");
 				param.setName(attrName);
+				String attrType = getAttributeValue(attrs, "type");
+				param.setType(attrType);
+				if (attrType.equals("select")) {
+					List<Option> selectOptions = getSelectOptionsForNode(currentNode);
+					param.setSelectOptions(selectOptions);
+				}
 				String attrLabel = getAttributeValue(attrs, "label");
 				param.setLabel(attrLabel);
+				String attrValue = getAttributeValue(attrs, "value");
+				param.setValue(attrValue);
 
 				tool.addParameter(param);
 			}
@@ -148,6 +156,32 @@ public class ToolConfigPool {
 			System.err.println("Error: " + e.getMessage());
 		}
 		return tool;
+	}
+
+	private List<Option> getSelectOptionsForNode(Node currentNode) {
+		List<Option> selectOptions = new ArrayList<Option>();
+		NodeList childNodes = currentNode.getChildNodes();
+		for (int i=0; i<childNodes.getLength(); i++) {
+			Node currentChildNode = childNodes.item(i);
+			if (currentChildNode.getNodeName().equals("option")) {
+				Option newOption = new Option();
+				NamedNodeMap optionAttrs = currentChildNode.getAttributes();
+
+				String optionValue = getAttributeValue(optionAttrs, "value");
+				if (optionValue != null) {
+					newOption.setValue(optionValue);
+				}
+
+				String optionSelected = getAttributeValue(optionAttrs, "selected");
+				if (optionSelected != null) {
+					boolean selected = Boolean.parseBoolean(optionSelected);
+					newOption.setSelected(selected);
+				}
+				selectOptions.add(newOption);
+			}
+		}
+
+		return selectOptions;
 	}
 
 	private String getAttributeValue(NamedNodeMap attrs, String attributeName) {
@@ -170,8 +204,12 @@ public class ToolConfigPool {
 		return instance;
 	}
 
+	/** 
+	 * Get a Tool object, with attribute 'name' equal to the specified one.
+	 * @param toolNameToGet
+	 * @return
+	 */
 	public Tool getToolByName(String toolNameToGet) {
-		System.out.println("Tool name to get: " + toolNameToGet);
 		Map<String,ToolGroup> toolGroups = getToolGroups();
 		for (Map.Entry<String,ToolGroup> entry : toolGroups.entrySet()) {
 			ToolGroup toolGroup = entry.getValue();
