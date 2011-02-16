@@ -117,8 +117,12 @@ public class ToolConfigPool {
 			String name = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/@name", XPathConstants.STRING);
 			String description = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/description", XPathConstants.STRING);
 			String command = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/command", XPathConstants.STRING);
+			String interpreter = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/command/@interpreter", XPathConstants.STRING);
 			command = command.trim();
 			command = command.replaceAll("[\\ ]+", " ");
+			if (interpreter != null) {
+				tool.setInterpreter(interpreter);
+			}
 
 			tool.setName(name);
 			tool.setDescription(description);

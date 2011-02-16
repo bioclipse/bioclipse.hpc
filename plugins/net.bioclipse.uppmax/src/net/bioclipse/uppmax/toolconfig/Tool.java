@@ -13,13 +13,15 @@ public class Tool {
 	private String m_command;
 	private Map<String,String> m_attributes;
 	private List<Parameter> m_parameters; 
-
+	private String m_interpreter;
+	
 	public Tool() {
 		m_name = "";
 		m_description = "";
 		m_command = "";
 		m_attributes = new HashMap<String,String>();
 		m_parameters = new ArrayList<Parameter>();
+		m_interpreter = "";
 	}
 	
 	public String getName() {
@@ -32,6 +34,11 @@ public class Tool {
 
 	public String getCommand() {
 		return m_command;
+	}
+
+	public String getCompleteCommand() {
+		String completeCommand = getInterpreter() + " " + getCommand();
+		return completeCommand;
 	}
 
 	public Map<String, String> getAttributes() {
@@ -71,6 +78,14 @@ public class Tool {
 	
 	public List<Parameter> getParameters() {
 		return m_parameters;
+	}
+
+	public void setInterpreter(String interpreter) {
+		m_interpreter = interpreter;
+	}
+	
+	public String getInterpreter() {
+		return m_interpreter;
 	}
 
 }

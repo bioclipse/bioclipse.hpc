@@ -31,6 +31,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	IStructuredSelection selection;
 	Composite parentComposite;
 	Composite composite;
+	List<Parameter> parameters;
 
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 3");
@@ -38,6 +39,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		setDescription("Select a tool from the ones available in the tool group just selected ...");
 		this.workbench = workbench;
 		this.selection = selection;
+		this.parameters = new ArrayList<Parameter>();
 	}
 	
 	public boolean canFlipToNextPage() {
@@ -61,8 +63,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		Tool currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
 
 		if (currentTool != null) {
-			List<Parameter> parameters = currentTool.getParameters();
-			createWidgetsForParams(parameters);
+			parameters = currentTool.getParameters();
+			for (Parameter parameter : parameters) {
+				createWidgetsForParam(parameter);
+			}
+			String commandString = currentTool.getCompleteCommand();
+			createCommandTextbox(commandString);
 		} else {
 			System.out.println("Tool with name '" + selectedToolName + "' not found.");
 		}
@@ -70,40 +76,40 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	    this.composite.pack();
 	}
 
-	private void createWidgetsForParams(List<Parameter> parameters) {
-		for (Parameter parameter : parameters) {
-			String paramLabel = parameter.getLabel();
-			String paramName = parameter.getName();
-			String paramType = parameter.getType();
-			System.out.println("Paramtype: " + paramType);
-			if (paramLabel != "" && paramLabel != null) {
-				createLabel(paramLabel);
-			} else if (!paramName.equals("") && paramName != null) {
-				createLabel(paramLabel);
-			}
-			String paramValue = parameter.getValue();
-			if (paramValue == null) {
-				paramValue = "";
-			}
-			if (paramType.equals("select")) {
-				List<String> selectOptions = parameter.getSelectOptionValues();
-				Combo currentCombo = UppmaxUtils.createCombo(composite);
-				String[] selectOptionsArr = UppmaxUtils.stringListToArray(selectOptions);
-				currentCombo.setItems(selectOptionsArr);
-				Option selectedOption = parameter.getSelectedOption();
-				if (selectedOption != null) {
-					String selectedOptionValue = selectedOption.getValue();
-					currentCombo.setText(selectedOptionValue);
-				}
-			} else {
-				createTextField(paramValue);
-			} 
-		}
+	private void createCommandTextbox(String commandString) {
+		StyledText commandText = new StyledText(composite, SWT.BORDER);
+		commandText.setText(commandString);
+		GridData gridLayoutData = new GridData( SWT.NONE );
+		gridLayoutData.horizontalSpan = 2;
+		commandText.setLayoutData(gridLayoutData);
 	}
 
-	private void createCombo(List<String> selectOptions) {
-		// TODO Auto-generated method stub
-		
+	private void createWidgetsForParam(Parameter parameter) {
+		String paramLabel = parameter.getLabel();
+		String paramName = parameter.getName();
+		String paramType = parameter.getType();
+		if (paramLabel != "" && paramLabel != null) {
+			createLabel(paramLabel);
+		} else if (!paramName.equals("") && paramName != null) {
+			createLabel(paramLabel);
+		}
+		String paramValue = parameter.getValue();
+		if (paramValue == null) {
+			paramValue = "";
+		}
+		if (paramType.equals("select")) {
+			List<String> selectOptions = parameter.getSelectOptionValues();
+			Combo currentCombo = UppmaxUtils.createCombo(composite);
+			String[] selectOptionsArr = UppmaxUtils.stringListToArray(selectOptions);
+			currentCombo.setItems(selectOptionsArr);
+			Option selectedOption = parameter.getSelectedOption();
+			if (selectedOption != null) {
+				String selectedOptionValue = selectedOption.getValue();
+				currentCombo.setText(selectedOptionValue);
+			}
+		} else {
+			createTextField(paramValue);
+		} 
 	}
 
 	private void createLabel(String labelText) {
