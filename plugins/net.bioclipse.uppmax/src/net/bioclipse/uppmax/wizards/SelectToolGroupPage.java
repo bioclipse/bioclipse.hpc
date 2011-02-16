@@ -5,18 +5,13 @@ import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 
 public class SelectToolGroupPage extends WizardPage {
@@ -41,34 +36,46 @@ public class SelectToolGroupPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 	    // create the composite to hold the widgets
-		GridData gd;
 		Composite composite =  new Composite(parent, SWT.NULL);
 
-	    // create the desired layout for this wizard page
-		GridLayout gl = new GridLayout();
-		int ncol = 2;
-		gl.numColumns = ncol;
-		composite.setLayout(gl);
+		initializeGridLayout(composite);
+		String labelText = "Tool group:";
+		createLabelWithText(composite, labelText);
+		createCombo(composite);
 		
-		// Create label
-		new Label (composite, SWT.NONE).setText("Tool group:");
-		
-		comboToolGroup = new Combo(composite, SWT.BORDER);
-		gd = new GridData(GridData.FILL_HORIZONTAL);
-		gd.horizontalAlignment = GridData.BEGINNING;
-		comboToolGroup.setLayoutData(gd);
-		
-		// Get the tool groups from Galaxy XML Data
 		String[] toolGroups = ToolConfigPool.getInstance().getToolGroupNames();
 		if (toolGroups.length > 0) {
-			comboToolGroup.setItems(toolGroups);
-			comboToolGroup.setText(comboToolGroup.getItem(0));
+			setItemsOfCombo(toolGroups);
 		} else {
 			System.err.println("Error: No galaxy tool definitions loaded. Are the XML files in place?");
 		}
 
 		// set the composite as the control for this page
 		setControl(composite);		
+	}
+
+	private void setItemsOfCombo(String[] toolGroups) {
+		comboToolGroup.setItems(toolGroups);
+		comboToolGroup.setText(comboToolGroup.getItem(0));
+	}
+
+	private void createLabelWithText(Composite composite, String labelText) {
+		new Label (composite, SWT.NONE).setText(labelText);
+	}
+
+	private void initializeGridLayout(Composite composite) {
+		GridLayout gridLayout = new GridLayout();
+		int ncol = 2;
+		gridLayout.numColumns = ncol;
+		composite.setLayout(gridLayout);
+	}
+
+	private void createCombo(Composite composite) {
+		GridData gridData;
+		comboToolGroup = new Combo(composite, SWT.BORDER);
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = GridData.BEGINNING;
+		comboToolGroup.setLayoutData(gridData);
 	}
 	
 	@Override

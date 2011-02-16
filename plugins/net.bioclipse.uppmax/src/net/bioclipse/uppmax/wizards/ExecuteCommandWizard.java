@@ -1,21 +1,10 @@
 package net.bioclipse.uppmax.wizards;
 
-import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
-
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
-import org.osgi.service.prefs.PreferencesService;
 
 public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	

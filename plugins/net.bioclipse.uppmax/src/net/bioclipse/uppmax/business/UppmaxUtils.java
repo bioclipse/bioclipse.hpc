@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+
 public class UppmaxUtils {
 	
 	public static String[] readFileToStringArray(String filePath) {
@@ -77,5 +80,12 @@ public class UppmaxUtils {
 			labelName = labelName + ":";
 		}
 		return labelName;
+	}
+
+	public static void createGridLayout(Composite composite, int columnsCount) {
+		// create the desired layout for this wizard page
+		GridLayout gl = new GridLayout();
+		gl.numColumns = columnsCount;
+		composite.setLayout(gl);
 	}
 }

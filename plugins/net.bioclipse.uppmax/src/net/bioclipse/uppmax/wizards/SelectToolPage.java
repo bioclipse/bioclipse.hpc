@@ -1,31 +1,17 @@
 package net.bioclipse.uppmax.wizards;
 
-import java.io.ObjectInputStream.GetField;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.bioclipse.uppmax.toolconfig.Parameter;
-import net.bioclipse.uppmax.toolconfig.Tool;
+import net.bioclipse.uppmax.business.UppmaxUtils;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
-import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class SelectToolPage extends WizardPage {
 
@@ -51,19 +37,26 @@ public class SelectToolPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 	    // create the composite to hold the widgets
-		GridData gd;
 		Composite composite =  new Composite(parent, SWT.NULL);
+	    UppmaxUtils.createGridLayout(composite, 2);
 
-	    // create the desired layout for this wizard page
-		GridLayout gl = new GridLayout();
-		int ncol = 2;
-		gl.numColumns = ncol;
-		composite.setLayout(gl);
-		
-		new Label (composite, SWT.NONE).setText("Select tool:");
+	    String labelText = "Select tool:";
+		createLabel(composite, labelText);
+		createCombo(composite);
+	    
+		// set the composite as the control for this page
+		setControl(composite);
+	}
+
+	private void createLabel(Composite composite, String labelText) {
+		GridData gd;
+		new Label (composite, SWT.NONE).setText(labelText);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
-		
+	}
+
+	private void createCombo(Composite composite) {
+		GridData gd;
 		comboTool = new Combo(composite, SWT.BORDER);
 		gd = new GridData(GridData.FILL_HORIZONTAL);
 		gd.horizontalAlignment = GridData.BEGINNING;
@@ -72,9 +65,6 @@ public class SelectToolPage extends WizardPage {
 		String[] emptyStringArray = {"(No tools loaded)"};
 		comboTool.setItems(emptyStringArray);
 		comboTool.setText(comboTool.getItem(0));
-		
-	    // set the composite as the control for this page
-		setControl(composite);
 	}
 
 	public void onEnterPage() {

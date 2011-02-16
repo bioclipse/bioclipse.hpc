@@ -10,9 +10,6 @@
  ******************************************************************************/
 package net.bioclipse.uppmax.business;
 
-import java.util.List;
-
-import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import net.bioclipse.core.PublishedClass;
 import net.bioclipse.core.PublishedMethod;
 import net.bioclipse.core.Recorded;

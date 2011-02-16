@@ -11,12 +11,6 @@ import javax.xml.xpath.XPathConstants;
 import net.bioclipse.uppmax.business.UppmaxUtils;
 import net.bioclipse.uppmax.xmldisplay.XmlUtils;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
-import org.osgi.service.prefs.PreferencesService;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
