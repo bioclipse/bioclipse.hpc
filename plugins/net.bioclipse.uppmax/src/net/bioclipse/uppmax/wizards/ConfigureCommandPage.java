@@ -113,9 +113,8 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private void createLabel(String labelText) {
-		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP );
+		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
 		labelText = UppmaxUtils.ensureEndsWithColon(labelText);
-		fieldLabel.setBackground(new Color(null, 240, 240, 240));
 		fieldLabel.setText(labelText);
 		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		labelGridData.widthHint = 160;
