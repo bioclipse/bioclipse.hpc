@@ -75,6 +75,7 @@ public class UppmaxManager implements IBioclipseManager {
 	/* Main methods */
 
 	public void executeCommand(String command) {
+		// TODO: This code should probably not be stored here, but in a more centrally stored place
 		IRemoteCmdSubSystem cmdss = getRemoteCmdSubSystem();
 		if (cmdss != null && cmdss.isConnected()) {
 			// Run the command in a visible shell
@@ -98,8 +99,7 @@ public class UppmaxManager implements IBioclipseManager {
 		if (projInfoView!=null) {
 			System.out.println("Found jobInfoView: " + projInfoView);
 
-			uppmaxHost = getUppmaxHost();
-			commandOutput = executeRemoteCommand(uppmaxHost, "showprojinfo");
+			commandOutput = executeRemoteCommand("showprojinfo");
 			
 			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
 			if (projInfoXml != null) {
@@ -114,7 +114,6 @@ public class UppmaxManager implements IBioclipseManager {
 	
 	public void updateJobInfoView() {
 		String commandOutput;
-		IHost uppmaxHost;
 
 		System.out.println("Update JobInfo-Button was clicked!");
 		// find the right view
@@ -122,26 +121,30 @@ public class UppmaxManager implements IBioclipseManager {
 		if (jobInfoView!=null) {
 			System.out.println("Found jobInfoView: " + jobInfoView);
 
-			uppmaxHost = getUppmaxHost();
-			String rawContent = executeRemoteCommand(uppmaxHost, "/home/samuel/projects/bioclipseclient/output_squeue_as_xml.sh mattiasj" /* "clusterproxy -t jobinfo" */ );
+//			String rawContent = executeRemoteCommand("python /home/samuel/projects/bioclipseclient/clusterproxy.py -t jobinfo nimar" /* "clusterproxy -t jobinfo" */ );
+			String rawContent = executeRemoteCommand("/home/samuel/projects/bioclipseclient/output_squeue_as_xml.sh andersb" /* "clusterproxy -t jobinfo" */ );
 			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
-				System.out.println("Could not extract XML for jobinfo!");
+				System.out.println("Could not extract XML for jobinfo! Are you logged in?!");
 			}
 		} else {
 			System.out.println("No View found!");
 		}
 	}
 	
-	protected String executeRemoteCommand(IHost host, String command) {
+	public String executeRemoteCommand(String command) {
+		IHost uppmaxHost;
 		String temp = "";
 		String allOutput = "";
-		if (host == null) {
+		
+		uppmaxHost = getUppmaxHost();
+		
+		if (uppmaxHost == null) {
 			System.out.println("No active UPPMAX host!");
 		} else {
-			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(host);
+			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(uppmaxHost);
 			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
 			try {
 				allOutput = "";

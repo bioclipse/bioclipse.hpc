@@ -1,8 +1,11 @@
 package net.bioclipse.uppmax.wizards;
 
+import net.bioclipse.uppmax.business.UppmaxManager;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
@@ -46,18 +49,11 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 
-//		SelectToolGroupPage page1 = (SelectToolGroupPage) this.getPage("Page 1");
-//		SelectToolPage page2 = (SelectToolPage) this.getPage("Page 2");
-
-//		String command = page1.cmbCommand.getText();
-//		String params = page2.txtCommand.getText();
-//		setResultingCommand(command + " " + params);
-//		MessageDialog.openInformation(getShell(), "Resulting command", "Resulting command: " + getResultingCommand());
+		ConfigureCommandPage page = (ConfigureCommandPage) this.getPage("Page 3");
+		String command = page.getCommandText();
 		
-		// TODO: Remove this testing code
-//		PrefsUtils.testRetrievePreferences(this);
-		
-//		Shell shell = workbench.getActiveWorkbenchWindow().getShell();
+		UppmaxManager uppmaxManagerObj = new UppmaxManager();
+		uppmaxManagerObj.executeRemoteCommand(command);
 		return true;
 	}
 	

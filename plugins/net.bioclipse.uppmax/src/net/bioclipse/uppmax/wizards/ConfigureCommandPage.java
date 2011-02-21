@@ -180,4 +180,8 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 	}
 
+	public String getCommandText() {
+		return commandText.getText();
+	}
+
 }
