@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
 
 public class ConfigureCommandPage extends WizardPage implements Listener {
@@ -32,7 +33,10 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	Composite parentComposite;
 	Composite composite;
 	List<Parameter> parameters;
-
+	StyledText commandText;
+	Tool currentTool;
+	List<Widget> widgets;
+	
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 3");
 		setTitle("Select tool");
@@ -40,6 +44,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		this.workbench = workbench;
 		this.selection = selection;
 		this.parameters = new ArrayList<Parameter>();
+		this.widgets = new ArrayList<Widget>();
 	}
 	
 	public boolean canFlipToNextPage() {
@@ -60,7 +65,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		
 		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
 		String selectedToolName = comboTool.getText();
-		Tool currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
+		currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
 
 		if (currentTool != null) {
 			parameters = currentTool.getParameters();
@@ -77,10 +82,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private void createCommandTextbox(String commandString) {
-		StyledText commandText = new StyledText(composite, SWT.BORDER);
+		createLabel("Resulting command");
+		commandText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP );
 		commandText.setText(commandString);
 		GridData gridLayoutData = new GridData( SWT.NONE );
 		gridLayoutData.horizontalSpan = 2;
+		gridLayoutData.grabExcessHorizontalSpace = true;
 		commandText.setLayoutData(gridLayoutData);
 	}
 
@@ -88,42 +95,59 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		String paramLabel = parameter.getLabel();
 		String paramName = parameter.getName();
 		String paramType = parameter.getType();
+		
 		if (paramLabel != "" && paramLabel != null) {
 			createLabel(paramLabel);
 		} else if (!paramName.equals("") && paramName != null) {
 			createLabel(paramLabel);
 		}
+		
 		String paramValue = parameter.getValue();
 		if (paramValue == null) {
 			paramValue = "";
 		}
+		
 		if (paramType.equals("select")) {
-			List<String> selectOptions = parameter.getSelectOptionValues();
-			Combo currentCombo = UppmaxUtils.createCombo(composite);
-			String[] selectOptionsArr = UppmaxUtils.stringListToArray(selectOptions);
-			currentCombo.setItems(selectOptionsArr);
-			Option selectedOption = parameter.getSelectedOption();
-			if (selectedOption != null) {
-				String selectedOptionValue = selectedOption.getValue();
-				currentCombo.setText(selectedOptionValue);
-			}
+			createComboBox(parameter);
 		} else {
-			createTextField(paramValue);
+			createTextField(parameter);
 		} 
 	}
 
 	private void createLabel(String labelText) {
 		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
 		labelText = UppmaxUtils.ensureEndsWithColon(labelText);
+		fieldLabel.setBackground (composite.getBackground());
 		fieldLabel.setText(labelText);
 		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		labelGridData.widthHint = 160;
 		fieldLabel.setLayoutData(labelGridData);
 	}
+	
+	private void createComboBox(Parameter parameter) {
+		List<String> selectOptions = parameter.getSelectOptionValues();
+		Combo currentCombo = UppmaxUtils.createCombo(composite);
+		// Connect the widget to it's corresponding parameter
+		currentCombo.setData(parameter);
+		currentCombo.addListener(SWT.Selection, this);
+		widgets.add((Widget) currentCombo);
+		String[] selectOptionsArr = UppmaxUtils.stringListToArray(selectOptions);
+		currentCombo.setItems(selectOptionsArr);
+		Option selectedOption = parameter.getSelectedOption();
+		if (selectedOption != null) {
+			String selectedOptionValue = selectedOption.getValue();
+			currentCombo.setText(selectedOptionValue);
+		}
+	}
 
-	private void createTextField(String defaultText) {
+	private void createTextField(Parameter parameter) {
+		String defaultText = parameter.getValue(); 
 		Text textField = new Text(this.composite, SWT.BORDER);
 		textField.setText(defaultText);
+		// Connect the widget to it's corresponding parameter
+		textField.setData(parameter);
+		textField.addListener(SWT.KeyUp, this);
+		widgets.add((Widget) textField);
 		GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
 		textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
 		textGridData.widthHint = 248;
@@ -132,8 +156,28 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		// TODO Auto-generated method stub
+		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
+			String tempCommand = currentTool.getCompleteCommand();
+			for (Widget widget : this.widgets) {
+				// Get the new value from the widget
+				String newValue = null;
+				if (widget instanceof Combo) {
+					newValue = ((Combo) widget).getText();
+				} else if (widget instanceof Text) {
+					newValue = ((Text) widget).getText();
+				} else {
+					System.out.println("Could not set newValue");
+				}
 
+				Parameter parameter = (Parameter) widget.getData();
+				if (parameter != null && newValue != null && !newValue.equals("")) {
+					tempCommand = tempCommand.replace("$" + parameter.getName(), newValue);
+					commandText.setText(tempCommand);
+				} else {
+					System.out.println("ERROR: Parameter or widget value was null");
+				}
+			}
+		}
 	}
 
 }

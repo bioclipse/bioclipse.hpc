@@ -128,38 +128,49 @@ public class ToolConfigPool {
 			tool.setDescription(description);
 			tool.setCommand(command);
 			
-			NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
 			Map<String,String> attributes = new HashMap<String,String>(); 
 
+			NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
 			// Loop over all parameters for the current tool
 			for (int i=0; i<paramNodes.getLength(); i++) {
-				Parameter param = new Parameter();
 				Node currentNode = paramNodes.item(i);
-				NamedNodeMap attrs = currentNode.getAttributes();
-
-				// Get details of a parameter
-				String attrName = getAttributeValue(attrs, "name");
-				param.setName(attrName);
-				String attrType = getAttributeValue(attrs, "type");
-				param.setType(attrType);
-				if (attrType.equals("select")) {
-					List<Option> selectOptions = getSelectOptionsForNode(currentNode);
-					param.setSelectOptions(selectOptions);
-				}
-				String attrLabel = getAttributeValue(attrs, "label");
-				param.setLabel(attrLabel);
-				String attrValue = getAttributeValue(attrs, "value");
-				param.setValue(attrValue);
-
-				tool.addParameter(param);
+				configureNewParamAndAddToTool(tool, currentNode);
 			}
-			
+
+			NodeList outputNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/outputs/data", xmlDoc);
+			// Loop over all parameters for the current tool
+			for (int i=0; i<outputNodes.getLength(); i++) {
+				Node currentNode = outputNodes.item(i);
+				configureNewParamAndAddToTool(tool, currentNode);
+			}
+
 			tool.setAttributes(attributes);
 
 		} catch (Exception e) {
 			System.err.println("Error: " + e.getMessage());
 		}
 		return tool;
+	}
+
+	private void configureNewParamAndAddToTool(Tool tool, Node currentNode) {
+		Parameter param = new Parameter();
+		NamedNodeMap attrs = currentNode.getAttributes();
+
+		// Get details of a parameter
+		String attrName = getAttributeValue(attrs, "name");
+		param.setName(attrName);
+		String attrType = getAttributeValue(attrs, "type");
+		param.setType(attrType);
+		if (attrType.equals("select")) {
+			List<Option> selectOptions = getSelectOptionsForNode(currentNode);
+			param.setSelectOptions(selectOptions);
+		}
+		String attrLabel = getAttributeValue(attrs, "label");
+		param.setLabel(attrLabel);
+		String attrValue = getAttributeValue(attrs, "value");
+		param.setValue(attrValue);
+
+		tool.addParameter(param);
 	}
 
 	private List<Option> getSelectOptionsForNode(Node currentNode) {
