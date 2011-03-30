@@ -107,7 +107,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 			paramValue = "";
 		}
 		
-		if (paramType.equals("select")) {
+		if (paramType.equals("data") && paramName.equals("input")) {
+			createSelectRemoteFile(parameter);
+		} else if (paramType.equals("select")) {
 			createComboBox(parameter);
 		} else {
 			createTextField(parameter);
@@ -122,6 +124,10 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		labelGridData.widthHint = 160;
 		fieldLabel.setLayoutData(labelGridData);
+	}
+	
+	private void createSelectRemoteFile(Parameter parameter) {
+		// org.eclipse.rse.files.ui.widgets.SystemSelectRemoteFilesForm
 	}
 	
 	private void createComboBox(Parameter parameter) {

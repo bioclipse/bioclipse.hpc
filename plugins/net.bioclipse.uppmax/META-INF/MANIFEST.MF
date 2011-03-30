@@ -16,11 +16,12 @@ Require-Bundle: org.eclipse.ui,
  net.sf.cglib,
  org.springframework.osgi.aopalliance.osgi,
  org.eclipse.rse.subsystems.shells.core;bundle-version="3.1.100",
- org.eclipse.rse.core;bundle-version="3.1.101"
+ org.eclipse.rse.core;bundle-version="3.1.101",
+ org.eclipse.rse.files.ui;bundle-version="3.1.101",
+ org.eclipse.rse.shells.ui;bundle-version="3.0.200",
+ org.eclipse.rse.ui;bundle-version="3.1.101",
+ org.eclipse.rse.subsystems.files.core;bundle-version="3.2.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.log4j,
- org.eclipse.jface.databinding.viewers,
- org.eclipse.rse.shells.ui,
- org.eclipse.rse.subsystems.files.core.subsystems,
- org.eclipse.rse.ui
+ org.eclipse.jface.databinding.viewers
 Bundle-ActivationPolicy: lazy

@@ -158,7 +158,7 @@ public class UppmaxManager implements IBioclipseManager {
 						System.out.println("Output from : " + temp);
 					}
 					try {
-						Thread.sleep(25);
+						Thread.sleep(15);
 					} catch (Exception sleepError) {
 						sleepError.printStackTrace();
 					}

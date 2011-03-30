@@ -14,7 +14,7 @@
    </configIni>
 
    <launcherArgs>
-      <programArgs>-consolelog -data &quot;@nodefault&quot;</programArgs>
+      <programArgs>-consolelog -data -noupdate &quot;@nodefault&quot;</programArgs>
       <vmArgs>-ea  -Xmx512M -XX:MaxPermSize=128m</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
@@ -135,6 +135,7 @@
    <features>
       <feature id="net.bioclipse.core_feature" version="2.4.0.20100709"/>
       <feature id="net.bioclipse.uppmax_feature" version="2.4.0.20100709"/>
+      <feature id="net.bioclipse.igv_feature" version="1.0.0.qualifier"/>
    </features>
 
 

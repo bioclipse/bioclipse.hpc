@@ -51,6 +51,8 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
 		ConfigureCommandPage page = (ConfigureCommandPage) this.getPage("Page 3");
 		String command = page.getCommandText();
+
+		// Save SBATCH file here instead ...
 		
 		UppmaxManager uppmaxManagerObj = new UppmaxManager();
 		uppmaxManagerObj.executeRemoteCommand(command);
