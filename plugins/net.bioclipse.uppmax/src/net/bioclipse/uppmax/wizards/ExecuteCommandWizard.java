@@ -53,6 +53,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		String command = page.getCommandText();
 
 		// Save SBATCH file here instead ...
+		command = "echo '" + command + "' > temp-command-file.sh";
 		
 		UppmaxManager uppmaxManagerObj = new UppmaxManager();
 		uppmaxManagerObj.executeRemoteCommand(command);

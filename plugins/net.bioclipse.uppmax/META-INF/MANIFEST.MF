@@ -6,8 +6,13 @@ Bundle-Version: 1.0.0.v20101007
 Bundle-Activator: net.bioclipse.uppmax.Activator
 Bundle-Vendor: The Bioclipse project
 Bundle-ClassPath: .,
- lib/commons-io-2.0.1.jar
-Export-Package: net.bioclipse.uppmax, net.bioclipse.uppmax.business
+ jars/commons-io-2.0.1.jar
+Export-Package: net.bioclipse.uppmax,
+ net.bioclipse.uppmax.business,
+ net.bioclipse.uppmax.toolconfig,
+ net.bioclipse.uppmax.views,
+ net.bioclipse.uppmax.wizards,
+ net.bioclipse.uppmax.xmldisplay
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  net.bioclipse.core,

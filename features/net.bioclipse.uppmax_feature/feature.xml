@@ -48,13 +48,6 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
    </requires>
 
    <plugin
-         id="net.bioclipse.uppmax"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.hp.hpl.jena"
          download-size="0"
          install-size="0"
@@ -118,6 +111,13 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
 
    <plugin
          id="com.hp.hpl.jena.tdb"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="net.bioclipse.uppmax"
          download-size="0"
          install-size="0"
          version="0.0.0"
