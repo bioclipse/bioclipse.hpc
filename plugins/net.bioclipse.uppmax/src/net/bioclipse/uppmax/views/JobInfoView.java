@@ -13,6 +13,18 @@ import net.bioclipse.uppmax.xmldisplay.XmlRowCollection;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.rse.core.RSECorePlugin;
+import org.eclipse.rse.core.SystemResourceHelpers;
+import org.eclipse.rse.core.model.IHost;
+import org.eclipse.rse.core.model.ISystemRegistry;
+import org.eclipse.rse.core.subsystems.IConnectorService;
+import org.eclipse.rse.core.subsystems.ISubSystem;
+import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileServiceSubSystem;
+import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileSubSystemInputStream;
+import org.eclipse.rse.subsystems.files.core.servicesubsystem.IFileServiceSubSystem;
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFileSubSystem;
+import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileSubSystem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -51,6 +63,41 @@ public class JobInfoView extends ViewPart {
 		});
 		btnUpdate.setText("Update");
 
+		////////////////////////////////////////////////////////
+		// TEST CODE ///////////////////////////////////////////
+		////////////////////////////////////////////////////////
+		// Button to test executing a RSE file selection dialog
+		
+
+		Button btnFileSelectDialog = new Button(container, SWT.NONE);
+		btnFileSelectDialog.setText("Test show File selection wizard");
+		btnFileSelectDialog.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IHost uppmaxHost = (new UppmaxManager()).getUppmaxHost();
+				
+				ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
+
+				// IConnectorService connSvc = sysReg.getConnectorServices(uppmaxHost)[0];
+				// RemoteFileSubSystem rfss = new RemoteFileSubSystem(uppmaxHost, connSvc);
+				
+				ISubSystem[] subSystems = sysReg.getSubsystems(uppmaxHost, IFileServiceSubSystem.class);
+				
+				if (subSystems.length == 0 || !(subSystems[0] instanceof FileServiceSubSystem)) {
+				    System.out.println("Warning ...");
+				    return;
+				}
+				
+				FileServiceSubSystem fsss = (FileServiceSubSystem) subSystems[0];
+				
+				// TODO: Do stuff with the fsss now. 
+				// TODO: Look at the Widgets API for how to do: 
+				// http://help.eclipse.org/helios/index.jsp?topic=/org.eclipse.rse.doc.isv/guide/api/widgets/uiWidgetsAPI.html
+			}
+		});
+		/////////////////////////////////////////////////////////
+
+		
 		treeViewer = new TreeViewer(container, SWT.BORDER);
 		Tree tree = treeViewer.getTree();
 		tree.setHeaderVisible(true);

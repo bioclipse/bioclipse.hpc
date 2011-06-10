@@ -122,7 +122,7 @@ public class UppmaxManager implements IBioclipseManager {
 			System.out.println("Found jobInfoView: " + jobInfoView);
 
 //			String rawContent = executeRemoteCommand("python /home/samuel/projects/bioclipseclient/clusterproxy.py -t jobinfo nimar" /* "clusterproxy -t jobinfo" */ );
-			String rawContent = executeRemoteCommand("/home/samuel/projects/bioclipseclient/output_squeue_as_xml.sh afer" /* "clusterproxy -t jobinfo" */ );
+			String rawContent = executeRemoteCommand("/home/samuel/projects/bioclipseclient/output_squeue_as_xml.sh pontuss" /* "clusterproxy -t jobinfo" */ );
 			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
@@ -192,7 +192,7 @@ public class UppmaxManager implements IBioclipseManager {
 	 * the kalkyl cluster, by checking the hostname of each host
 	 * @return
 	 */
-	protected IHost getUppmaxHost() {
+	public IHost getUppmaxHost() {
 		IHost uppmaxHost = null;
 		ISystemRegistry reg = SystemStartHere.getSystemRegistry();
 		IHost[] hosts = reg.getHosts();
