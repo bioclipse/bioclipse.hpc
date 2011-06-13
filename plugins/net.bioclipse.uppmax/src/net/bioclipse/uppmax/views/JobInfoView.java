@@ -23,7 +23,9 @@ import org.eclipse.rse.core.subsystems.ISubSystem;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileServiceSubSystem;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileSubSystemInputStream;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.IFileServiceSubSystem;
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFileSubSystem;
+import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFile;
 import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileSubSystem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -89,6 +91,17 @@ public class JobInfoView extends ViewPart {
 				}
 				
 				FileServiceSubSystem fsss = (FileServiceSubSystem) subSystems[0];
+
+				try {
+					IRemoteFile[] rootRemoteFolders = fsss.listRoots(null);
+					for (IRemoteFile folder : rootRemoteFolders) {
+						System.out.println("Remote root folder: " + folder.getAbsolutePath());
+					}
+				
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 				// TODO: Do stuff with the fsss now. 
 				// TODO: Look at the Widgets API for how to do: 
