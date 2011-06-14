@@ -14,6 +14,10 @@ import net.bioclipse.uppmax.xmldisplay.XmlRowCollection;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.rse.core.IRSECoreRegistry;
+import org.eclipse.rse.core.IRSESystemType;
+import org.eclipse.rse.core.IRSESystemTypeConstants;
+import org.eclipse.rse.core.IRSESystemTypeProvider;
 import org.eclipse.rse.core.RSECorePlugin;
 import org.eclipse.rse.core.SystemResourceHelpers;
 import org.eclipse.rse.core.model.IHost;
@@ -76,38 +80,27 @@ public class JobInfoView extends ViewPart {
 		////////////////////////////////////////////////////////
 		// Button to test executing a RSE file selection dialog
 		
-
+		ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
+		final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
+		
 		Button btnFileSelectDialog = new Button(container, SWT.NONE);
 		btnFileSelectDialog.setText("Test show File selection wizard");
 		btnFileSelectDialog.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				IHost uppmaxHost = (new UppmaxManager()).getUppmaxHost();
-				
-//				ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
-//				ISubSystem[] subSystems = sysReg.getSubsystems(uppmaxHost, IFileServiceSubSystem.class);
-//				
-//				if (subSystems.length == 0 || !(subSystems[0] instanceof FileServiceSubSystem)) {
-//				    System.out.println("Warning ...");
-//				    return;
-//				}
-//				
-//				FileServiceSubSystem fsss = (FileServiceSubSystem) subSystems[0];
-//				try {
-//					IRemoteFile[] rootRemoteFolders = fsss.listRoots(null);
-//					for (IRemoteFile folder : rootRemoteFolders) {
-//						System.out.println("Remote root folder: " + folder.getAbsolutePath());
-//					}
-//				} catch (InterruptedException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-				
+
 				SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
+				dialog.setSystemTypes(coreReg.getSystemTypes());
 				dialog.open();
 				
-				IRemoteFile file = (IRemoteFile) dialog.getSelectedObject();
-				System.out.println("Selected file's abs path...: " + file.getAbsolutePath());
+				Object o = dialog.getSelectedObject();
+				if (o instanceof IRemoteFile) {
+					IRemoteFile file = (IRemoteFile) o; 
+					System.out.println("Selected file's abs path: " + file.getAbsolutePath());
+				} else {
+					System.out.println("No valid file selected!");
+				}
 			}
 		});
 		/////////////////////////////////////////////////////////
