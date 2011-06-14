@@ -88,12 +88,8 @@ public class JobInfoView extends ViewPart {
 		btnFileSelectDialog.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IHost uppmaxHost = (new UppmaxManager()).getUppmaxHost();
-
 				SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
-				dialog.setSystemTypes(coreReg.getSystemTypes());
 				dialog.open();
-				
 				Object o = dialog.getSelectedObject();
 				if (o instanceof IRemoteFile) {
 					IRemoteFile file = (IRemoteFile) o; 

@@ -4,6 +4,7 @@ import net.bioclipse.uppmax.business.UppmaxManager;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
@@ -36,8 +37,18 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	}
 	
 	public void addPages() {
+		
+		// TODO: Clean up test code
+		Object selObj = selection.getFirstElement();
+		if (selObj instanceof IRemoteFile){
+			IRemoteFile remFile = (IRemoteFile) selObj;
+			System.out.println("Selected remote file path: " + remFile.getAbsolutePath());
+		}
+		
+		// TODO: Clean up test code
 		System.out.println("Workbench: " + workbench.toString());
 		System.out.println("Selection: " + selection.toString());
+
 		SelectToolGroupPage toolGroupPage = new SelectToolGroupPage(workbench, selection);
 		addPage(toolGroupPage);
 		SelectToolPage toolPage = new SelectToolPage(workbench, selection);
