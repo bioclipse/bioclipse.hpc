@@ -20,6 +20,7 @@ import org.eclipse.rse.core.model.IHost;
 import org.eclipse.rse.core.model.ISystemRegistry;
 import org.eclipse.rse.core.subsystems.IConnectorService;
 import org.eclipse.rse.core.subsystems.ISubSystem;
+import org.eclipse.rse.files.ui.dialogs.SystemRemoteFileDialog;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileServiceSubSystem;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileSubSystemInputStream;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.IFileServiceSubSystem;
@@ -27,10 +28,13 @@ import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFileSubSystem;
 import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFile;
 import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileSubSystem;
+import org.eclipse.rse.ui.SystemBasePlugin;
+import org.eclipse.rse.ui.dialogs.ISystemPromptDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -52,7 +56,7 @@ public class JobInfoView extends ViewPart {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.V_SCROLL);
+		final Composite container = new Composite(parent, SWT.V_SCROLL);
 		container.setLayout(new GridLayout(1, false));
 
 		Button btnUpdate = new Button(container, SWT.NONE);
@@ -91,7 +95,6 @@ public class JobInfoView extends ViewPart {
 				}
 				
 				FileServiceSubSystem fsss = (FileServiceSubSystem) subSystems[0];
-
 				try {
 					IRemoteFile[] rootRemoteFolders = fsss.listRoots(null);
 					for (IRemoteFile folder : rootRemoteFolders) {
@@ -102,6 +105,14 @@ public class JobInfoView extends ViewPart {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				
+				
+				SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
+				dialog.open();
+				
+				Object o = dialog.getSelectedObject();
+				System.out.println("Selected object: " + o.toString());
+
 				
 				// TODO: Do stuff with the fsss now. 
 				// TODO: Look at the Widgets API for how to do: 
@@ -183,4 +194,5 @@ public class JobInfoView extends ViewPart {
 	public void setContentModel(XmlDataProviderFactory newXmlDataProvider) {
 		this.xmlDataProvider = newXmlDataProvider;
 	}
+
 }
