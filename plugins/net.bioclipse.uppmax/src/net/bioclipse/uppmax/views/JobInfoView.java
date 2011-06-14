@@ -106,9 +106,8 @@ public class JobInfoView extends ViewPart {
 				SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
 				dialog.open();
 				
-				@SuppressWarnings("restriction")
-				SftpRemoteFile o = (SftpRemoteFile) dialog.getSelectedObject();
-				System.out.println("Selected file's abs path: " + o.getAbsolutePath());
+				IRemoteFile file = (IRemoteFile) dialog.getSelectedObject();
+				System.out.println("Selected file's abs path...: " + file.getAbsolutePath());
 			}
 		});
 		/////////////////////////////////////////////////////////
