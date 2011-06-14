@@ -72,7 +72,7 @@
            </action>
        </objectContribution>       
     </extension>    
-   <extension point="org.eclipse.ui.popupMenus">
+   <!-- extension point="org.eclipse.ui.popupMenus">
       <objectContribution
                objectClass="java.lang.Object"
                id="actions.execCmdWizard2">
@@ -85,7 +85,7 @@
                    id="net.bioclipse.uppmax.wizards.action2">
            </action>
        </objectContribution>       
-    </extension>    
+    </extension -->    
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
