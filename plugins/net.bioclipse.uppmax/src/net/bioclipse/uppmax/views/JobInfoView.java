@@ -21,6 +21,8 @@ import org.eclipse.rse.core.model.ISystemRegistry;
 import org.eclipse.rse.core.subsystems.IConnectorService;
 import org.eclipse.rse.core.subsystems.ISubSystem;
 import org.eclipse.rse.files.ui.dialogs.SystemRemoteFileDialog;
+import org.eclipse.rse.files.ui.resources.ISystemRemoteResource;
+import org.eclipse.rse.internal.subsystems.files.ssh.SftpRemoteFile;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileServiceSubSystem;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileSubSystemInputStream;
 import org.eclipse.rse.subsystems.files.core.servicesubsystem.IFileServiceSubSystem;
@@ -82,41 +84,31 @@ public class JobInfoView extends ViewPart {
 			public void widgetSelected(SelectionEvent e) {
 				IHost uppmaxHost = (new UppmaxManager()).getUppmaxHost();
 				
-				ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
-
-				// IConnectorService connSvc = sysReg.getConnectorServices(uppmaxHost)[0];
-				// RemoteFileSubSystem rfss = new RemoteFileSubSystem(uppmaxHost, connSvc);
-				
-				ISubSystem[] subSystems = sysReg.getSubsystems(uppmaxHost, IFileServiceSubSystem.class);
-				
-				if (subSystems.length == 0 || !(subSystems[0] instanceof FileServiceSubSystem)) {
-				    System.out.println("Warning ...");
-				    return;
-				}
-				
-				FileServiceSubSystem fsss = (FileServiceSubSystem) subSystems[0];
-				try {
-					IRemoteFile[] rootRemoteFolders = fsss.listRoots(null);
-					for (IRemoteFile folder : rootRemoteFolders) {
-						System.out.println("Remote root folder: " + folder.getAbsolutePath());
-					}
-				
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
+//				ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
+//				ISubSystem[] subSystems = sysReg.getSubsystems(uppmaxHost, IFileServiceSubSystem.class);
+//				
+//				if (subSystems.length == 0 || !(subSystems[0] instanceof FileServiceSubSystem)) {
+//				    System.out.println("Warning ...");
+//				    return;
+//				}
+//				
+//				FileServiceSubSystem fsss = (FileServiceSubSystem) subSystems[0];
+//				try {
+//					IRemoteFile[] rootRemoteFolders = fsss.listRoots(null);
+//					for (IRemoteFile folder : rootRemoteFolders) {
+//						System.out.println("Remote root folder: " + folder.getAbsolutePath());
+//					}
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
 				
 				SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
 				dialog.open();
 				
-				Object o = dialog.getSelectedObject();
-				System.out.println("Selected object: " + o.toString());
-
-				
-				// TODO: Do stuff with the fsss now. 
-				// TODO: Look at the Widgets API for how to do: 
-				// http://help.eclipse.org/helios/index.jsp?topic=/org.eclipse.rse.doc.isv/guide/api/widgets/uiWidgetsAPI.html
+				@SuppressWarnings("restriction")
+				SftpRemoteFile o = (SftpRemoteFile) dialog.getSelectedObject();
+				System.out.println("Selected file's abs path: " + o.getAbsolutePath());
 			}
 		});
 		/////////////////////////////////////////////////////////
