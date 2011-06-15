@@ -88,14 +88,24 @@ public class JobInfoView extends ViewPart {
 		btnFileSelectDialog.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
-				dialog.open();
-				Object o = dialog.getSelectedObject();
-				if (o instanceof IRemoteFile) {
-					IRemoteFile file = (IRemoteFile) o; 
-					System.out.println("Selected file's abs path: " + file.getAbsolutePath());
+				UppmaxManager uppmaxMgr = new UppmaxManager();
+				IHost uppmaxHost = uppmaxMgr.getUppmaxHost();
+				
+				if (uppmaxHost == null) {
+					MessageDialog.openWarning(SystemBasePlugin.getActiveWorkbenchShell(), "uppmaxHost was null!", "uppmaxHost was null!");
 				} else {
-					System.out.println("No valid file selected!");
+					SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
+
+					dialog.setDefaultSystemConnection(uppmaxHost, true);
+					
+					dialog.open();
+					Object o = dialog.getSelectedObject();
+					if (o instanceof IRemoteFile) {
+						IRemoteFile file = (IRemoteFile) o; 
+						System.out.println("Selected file's abs path: " + file.getAbsolutePath());
+					} else {
+						System.out.println("No valid file selected!");
+					}
 				}
 			}
 		});
