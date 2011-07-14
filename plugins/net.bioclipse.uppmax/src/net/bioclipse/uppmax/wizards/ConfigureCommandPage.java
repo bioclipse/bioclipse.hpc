@@ -139,17 +139,15 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 	
 	private void createSelectRemoteFile(Parameter parameter) {
-		// TODO: Create button and file selection wizard
-		
-		// There are not used, no?
+		// These are not used, no?
 		ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
 		final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
 		
 		final Text textField = createTextField(parameter, 1);
 		
-		Button btnFileSelectDialog = new Button(composite, SWT.NONE);
-		btnFileSelectDialog.setText("Browse...");
-		btnFileSelectDialog.addSelectionListener(new SelectionAdapter() {
+		Button btnBrowseRemoteFiles = new Button(composite, SWT.NONE);
+		btnBrowseRemoteFiles.setText("Browse...");
+		btnBrowseRemoteFiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				UppmaxManager uppmaxMgr = new UppmaxManager();
@@ -167,7 +165,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					if (o instanceof IRemoteFile) {
 						IRemoteFile file = (IRemoteFile) o; 
 						textField.setText(file.getAbsolutePath());
-						System.out.println("Selected file's abs path: " + file.getAbsolutePath());
+						textField.notifyListeners(SWT.KeyUp, new Event());
 					} else {
 						System.out.println("No valid file selected!");
 					}
