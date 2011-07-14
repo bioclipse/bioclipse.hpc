@@ -95,11 +95,14 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	private void createResultingCommandTextbox(String commandString) {
 		createLabel("Resulting command");
-		commandText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP );
+		
+		commandText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
 		commandText.setText(commandString);
-		GridData gridLayoutData = new GridData( SWT.NONE );
-		gridLayoutData.horizontalSpan = 3;
+		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
+		gridLayoutData.horizontalSpan = 2;
 		gridLayoutData.grabExcessHorizontalSpace = true;
+		gridLayoutData.heightHint = 48;
+		gridLayoutData.widthHint = 200;
 		commandText.setLayoutData(gridLayoutData);
 	}
 
