@@ -3,20 +3,32 @@ package net.bioclipse.uppmax.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bioclipse.uppmax.business.UppmaxManager;
 import net.bioclipse.uppmax.business.UppmaxUtils;
 import net.bioclipse.uppmax.toolconfig.Option;
 import net.bioclipse.uppmax.toolconfig.Parameter;
 import net.bioclipse.uppmax.toolconfig.Tool;
 import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.rse.core.IRSECoreRegistry;
+import org.eclipse.rse.core.RSECorePlugin;
+import org.eclipse.rse.core.model.IHost;
+import org.eclipse.rse.core.model.ISystemRegistry;
+import org.eclipse.rse.files.ui.dialogs.SystemRemoteFileDialog;
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
+import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.StyledTextPrintOptions;
 import org.eclipse.swt.internal.gtk.GdkColor;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -55,7 +67,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	public void createControl(Composite parent) {
 		parentComposite = parent;
 		composite =  new Composite(parent, SWT.NULL);
-		UppmaxUtils.createGridLayout(composite, 2);
+		UppmaxUtils.createGridLayout(composite, 3);
 		setControl(composite);
 	}
 	
@@ -73,7 +85,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				createWidgetsForParam(parameter);
 			}
 			String commandString = currentTool.getCompleteCommand();
-			createCommandTextbox(commandString);
+			createResultingCommandTextbox(commandString);
 		} else {
 			System.out.println("Tool with name '" + selectedToolName + "' not found.");
 		}
@@ -81,12 +93,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	    this.composite.pack();
 	}
 
-	private void createCommandTextbox(String commandString) {
+	private void createResultingCommandTextbox(String commandString) {
 		createLabel("Resulting command");
 		commandText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP );
 		commandText.setText(commandString);
 		GridData gridLayoutData = new GridData( SWT.NONE );
-		gridLayoutData.horizontalSpan = 2;
+		gridLayoutData.horizontalSpan = 3;
 		gridLayoutData.grabExcessHorizontalSpace = true;
 		commandText.setLayoutData(gridLayoutData);
 	}
@@ -99,7 +111,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		if (paramLabel != "" && paramLabel != null) {
 			createLabel(paramLabel);
 		} else if (!paramName.equals("") && paramName != null) {
-			createLabel(paramLabel);
+			createLabel(paramName);
 		}
 		
 		String paramValue = parameter.getValue();
@@ -107,12 +119,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 			paramValue = "";
 		}
 		
-		if (paramType.equals("data") && paramName.equals("input")) {
+		if (paramType.equals("data")) {
 			createSelectRemoteFile(parameter);
 		} else if (paramType.equals("select")) {
 			createComboBox(parameter);
 		} else {
-			createTextField(parameter);
+			createTextField(parameter, 2);
 		} 
 	}
 
@@ -127,7 +139,41 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 	
 	private void createSelectRemoteFile(Parameter parameter) {
-		// org.eclipse.rse.files.ui.widgets.SystemSelectRemoteFilesForm
+		// TODO: Create button and file selection wizard
+		
+		// There are not used, no?
+		ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
+		final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
+		
+		final Text textField = createTextField(parameter, 1);
+		
+		Button btnFileSelectDialog = new Button(composite, SWT.NONE);
+		btnFileSelectDialog.setText("Browse...");
+		btnFileSelectDialog.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				UppmaxManager uppmaxMgr = new UppmaxManager();
+				IHost uppmaxHost = uppmaxMgr.getUppmaxHost();
+				
+				if (uppmaxHost == null) {
+					MessageDialog.openWarning(SystemBasePlugin.getActiveWorkbenchShell(), "uppmaxHost was null!", "uppmaxHost was null!");
+				} else {
+					SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
+
+					dialog.setDefaultSystemConnection(uppmaxHost, true);
+					
+					dialog.open();
+					Object o = dialog.getSelectedObject();
+					if (o instanceof IRemoteFile) {
+						IRemoteFile file = (IRemoteFile) o; 
+						textField.setText(file.getAbsolutePath());
+						System.out.println("Selected file's abs path: " + file.getAbsolutePath());
+					} else {
+						System.out.println("No valid file selected!");
+					}
+				}
+			}
+		});
 	}
 	
 	private void createComboBox(Parameter parameter) {
@@ -146,7 +192,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 	}
 
-	private void createTextField(Parameter parameter) {
+	private Text createTextField(Parameter parameter, int horizontalSpan) {
 		String defaultText = parameter.getValue(); 
 		Text textField = new Text(this.composite, SWT.BORDER);
 		textField.setText(defaultText);
@@ -156,8 +202,10 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		widgets.add((Widget) textField);
 		GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
 		textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
+		textGridData.horizontalSpan = horizontalSpan;
 		textGridData.widthHint = 248;
 		textField.setLayoutData(textGridData);
+		return textField;
 	}
 
 	@Override
