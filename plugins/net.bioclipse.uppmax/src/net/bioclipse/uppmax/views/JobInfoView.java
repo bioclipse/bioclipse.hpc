@@ -74,43 +74,6 @@ public class JobInfoView extends ViewPart {
 			}
 		});
 		btnUpdate.setText("Update");
-
-		////////////////////////////////////////////////////////
-		// TEST CODE ///////////////////////////////////////////
-		////////////////////////////////////////////////////////
-		// Button to test executing a RSE file selection dialog
-		
-		ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
-		final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
-		
-		Button btnFileSelectDialog = new Button(container, SWT.NONE);
-		btnFileSelectDialog.setText("Test show File selection wizard");
-		btnFileSelectDialog.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				UppmaxManager uppmaxMgr = new UppmaxManager();
-				IHost uppmaxHost = uppmaxMgr.getUppmaxHost();
-				
-				if (uppmaxHost == null) {
-					MessageDialog.openWarning(SystemBasePlugin.getActiveWorkbenchShell(), "uppmaxHost was null!", "uppmaxHost was null!");
-				} else {
-					SystemRemoteFileDialog dialog = new SystemRemoteFileDialog(SystemBasePlugin.getActiveWorkbenchShell());
-
-					dialog.setDefaultSystemConnection(uppmaxHost, true);
-					
-					dialog.open();
-					Object o = dialog.getSelectedObject();
-					if (o instanceof IRemoteFile) {
-						IRemoteFile file = (IRemoteFile) o; 
-						System.out.println("Selected file's abs path: " + file.getAbsolutePath());
-					} else {
-						System.out.println("No valid file selected!");
-					}
-				}
-			}
-		});
-		/////////////////////////////////////////////////////////
-
 		
 		treeViewer = new TreeViewer(container, SWT.BORDER);
 		Tree tree = treeViewer.getTree();
