@@ -118,16 +118,18 @@ public class ToolConfigDomain {
 			String description = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/description", XPathConstants.STRING);
 			String command = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/command", XPathConstants.STRING);
 			String interpreter = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/command/@interpreter", XPathConstants.STRING);
-			command = command.trim();
-			command = command.replaceAll("[\\ ]+", " ");
+
+			tool.setName(name);
+			tool.setDescription(description);
 			if (interpreter != null) {
 				tool.setInterpreter(interpreter);
 			}
 
-			tool.setName(name);
-			tool.setDescription(description);
+			command = command.trim();
+			command = command.replaceAll("[\\ ]+", " ");
+			// TODO: Do more parsing here, such as taking care of galaxy #if/else syntax.
 			tool.setCommand(command);
-			
+
 			Map<String,String> attributes = new HashMap<String,String>(); 
 
 			NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
