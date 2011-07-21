@@ -8,7 +8,7 @@ import net.bioclipse.uppmax.business.UppmaxUtils;
 import net.bioclipse.uppmax.toolconfig.Option;
 import net.bioclipse.uppmax.toolconfig.Parameter;
 import net.bioclipse.uppmax.toolconfig.Tool;
-import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
+import net.bioclipse.uppmax.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -77,7 +77,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		
 		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
 		String selectedToolName = comboTool.getText();
-		currentTool = ToolConfigPool.getInstance().getToolByName(selectedToolName);
+		currentTool = ToolConfigDomain.getInstance().getToolByName(selectedToolName);
 
 		if (currentTool != null) {
 			parameters = currentTool.getParameters();
@@ -125,7 +125,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		if (paramType.equals("data")) {
 			createSelectRemoteFile(parameter);
 		} else if (paramType.equals("select")) {
-			createComboBox(parameter);
+			createComboBox(parameter, 2);
 		} else {
 			createTextField(parameter, 2);
 		} 
@@ -177,13 +177,21 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		});
 	}
 	
-	private void createComboBox(Parameter parameter) {
+	private void createComboBox(Parameter parameter, int horizontalSpan) {
 		List<String> selectOptions = parameter.getSelectOptionValues();
 		Combo currentCombo = UppmaxUtils.createCombo(composite);
-		// Connect the widget to it's corresponding parameter
-		currentCombo.setData(parameter);
+
+		// Layout stuff
+		GridData comboLayoutData = new GridData();
+		comboLayoutData.horizontalSpan = horizontalSpan;
+		currentCombo.setLayoutData(comboLayoutData);
+
+		// Misc stuff
 		currentCombo.addListener(SWT.Selection, this);
 		widgets.add((Widget) currentCombo);
+
+		// Populate
+		currentCombo.setData(parameter);
 		String[] selectOptionsArr = UppmaxUtils.stringListToArray(selectOptions);
 		currentCombo.setItems(selectOptionsArr);
 		Option selectedOption = parameter.getSelectedOption();

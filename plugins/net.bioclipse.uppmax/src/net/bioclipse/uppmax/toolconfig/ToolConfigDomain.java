@@ -16,12 +16,12 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class ToolConfigPool {
+public class ToolConfigDomain {
 	private Map<String,ToolGroup> m_toolGroups;
 	
-	private static ToolConfigPool instance = new ToolConfigPool();
+	private static ToolConfigDomain instance = new ToolConfigDomain();
 	
-	public ToolConfigPool() {
+	public ToolConfigDomain() {
 		m_toolGroups  = new HashMap<String,ToolGroup>();
 	} 
 
@@ -215,7 +215,7 @@ public class ToolConfigPool {
 		m_toolGroups.put(toolGroup.getToolGroupName(),toolGroup);
 	}
 
-	public static ToolConfigPool getInstance() {
+	public static ToolConfigDomain getInstance() {
 		return instance;
 	}
 

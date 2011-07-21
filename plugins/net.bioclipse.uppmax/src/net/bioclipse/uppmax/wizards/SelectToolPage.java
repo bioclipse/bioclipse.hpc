@@ -1,7 +1,7 @@
 package net.bioclipse.uppmax.wizards;
 
 import net.bioclipse.uppmax.business.UppmaxUtils;
-import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
+import net.bioclipse.uppmax.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -70,7 +70,7 @@ public class SelectToolPage extends WizardPage {
 	public void onEnterPage() {
 		SelectToolGroupPage selectToolGroupPage = ((SelectToolGroupPage) this.getWizard().getPage("Page 1"));
 		String currentToolGroupName = selectToolGroupPage.comboToolGroup.getText();
-		String[] toolNames = ToolConfigPool.getInstance().getToolNamesForGroupName(currentToolGroupName);
+		String[] toolNames = ToolConfigDomain.getInstance().getToolNamesForGroupName(currentToolGroupName);
 		updateDroplist(toolNames);
 	}
 	

@@ -1,7 +1,7 @@
 package net.bioclipse.uppmax.wizards;
 
 import net.bioclipse.uppmax.business.UppmaxUtils;
-import net.bioclipse.uppmax.toolconfig.ToolConfigPool;
+import net.bioclipse.uppmax.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
@@ -44,7 +44,7 @@ public class SelectToolGroupPage extends WizardPage {
 		createLabelWithText(composite, labelText);
 		comboToolGroup = UppmaxUtils.createCombo(composite);
 		
-		String[] toolGroups = ToolConfigPool.getInstance().getToolGroupNames();
+		String[] toolGroups = ToolConfigDomain.getInstance().getToolGroupNames();
 		if (toolGroups.length > 0) {
 			setItemsOfCombo(toolGroups);
 		} else {
