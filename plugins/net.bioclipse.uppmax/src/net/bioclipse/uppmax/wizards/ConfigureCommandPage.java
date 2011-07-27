@@ -185,7 +185,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		GridData comboLayoutData = new GridData();
 		comboLayoutData.horizontalSpan = horizontalSpan;
 		currentCombo.setLayoutData(comboLayoutData);
-
+		
 		// Misc stuff
 		currentCombo.addListener(SWT.Selection, this);
 		widgets.add((Widget) currentCombo);

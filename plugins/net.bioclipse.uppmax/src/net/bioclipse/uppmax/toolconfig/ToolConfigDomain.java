@@ -127,15 +127,20 @@ public class ToolConfigDomain {
 
 			command = command.trim();
 			command = command.replaceAll("[\\ ]+", " ");
+
 			// TODO: Do more parsing here, such as taking care of galaxy #if/else syntax.
+			
 			tool.setCommand(command);
 
+			// Create empty hashmap
 			Map<String,String> attributes = new HashMap<String,String>(); 
 
 			NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
+			
 			// Loop over all parameters for the current tool
 			for (int i=0; i<paramNodes.getLength(); i++) {
 				Node currentNode = paramNodes.item(i);
+				// Create new Parameter objects for each node, and connect to Tool object 
 				configureNewParamAndAddToTool(tool, currentNode);
 			}
 
@@ -143,6 +148,7 @@ public class ToolConfigDomain {
 			// Loop over all parameters for the current tool
 			for (int i=0; i<outputNodes.getLength(); i++) {
 				Node currentNode = outputNodes.item(i);
+				// Create new Parameter objects for each node, and connect to Tool object 
 				configureNewParamAndAddToTool(tool, currentNode);
 			}
 

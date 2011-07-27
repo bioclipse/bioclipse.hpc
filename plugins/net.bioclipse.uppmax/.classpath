@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="jars/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="jars/antlr-3.3-complete.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
