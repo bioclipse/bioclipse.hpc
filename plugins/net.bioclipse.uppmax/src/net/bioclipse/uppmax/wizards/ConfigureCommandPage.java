@@ -60,7 +60,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 	
 	public boolean canFlipToNextPage() {
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -142,9 +142,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 	
 	private void createSelectRemoteFile(Parameter parameter) {
-		// These are not used, no?
-		ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
-		final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
+		// TODO: These are not used, no?
+		// ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
+		// final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
 		
 		final Text textField = createTextField(parameter, 1);
 		

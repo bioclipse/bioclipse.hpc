@@ -38,7 +38,6 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	}
 	
 	public void addPages() {
-		
 		// TODO: Clean up test code
 		Object selObj = selection.getFirstElement();
 		if (selObj instanceof IRemoteFile){
@@ -52,10 +51,15 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
 		SelectToolGroupPage toolGroupPage = new SelectToolGroupPage(workbench, selection);
 		addPage(toolGroupPage);
+		
 		SelectToolPage toolPage = new SelectToolPage(workbench, selection);
 		addPage(toolPage);
+		
 		ConfigureCommandPage configCommandPage = new ConfigureCommandPage(workbench, selection);
 		addPage(configCommandPage);
+		
+		ConfigureSbatchCommands configSbatchPage = new ConfigureSbatchCommands(workbench, selection);
+		addPage(configSbatchPage);
 	}
 
 	@Override
@@ -65,17 +69,28 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		String command = page.getCommandText();
 		String dateTimeStamp = UppmaxUtils.dateTimeStamp();
 		String fileName = "temp-command-file." + dateTimeStamp + ".sh";
-		String resultCommand = "";
+		String scriptString = "";
 
 		// Save SBATCH file here instead ...
-		resultCommand = "echo '#!/bin/bash' > " + fileName + "; ";
-		resultCommand += "echo '" + command + "' >> " + fileName + ";";
+		scriptString = addLineToScript("#!/bin/bash", scriptString, fileName);
+		scriptString = addLineToScript(command, scriptString, fileName);
 		
 		UppmaxManager uppmaxManagerObj = new UppmaxManager();
-		uppmaxManagerObj.executeRemoteCommand(resultCommand);
+		uppmaxManagerObj.executeRemoteCommand(scriptString);
 		return true;
 	}
 	
+	public String addLineToScript(String line, String scriptString, String scriptFileName) {
+		line = escapeDoubleQuotes(line);
+		scriptString += "echo '" + line + "' >> " + scriptFileName + ";";
+		return scriptString;
+	}
+	
+	private String escapeDoubleQuotes(String line) {
+		line = line.replace("\"", "\\\"");
+		return line;
+	}
+
 	public boolean canFinish() {
 		return true;
 	}
