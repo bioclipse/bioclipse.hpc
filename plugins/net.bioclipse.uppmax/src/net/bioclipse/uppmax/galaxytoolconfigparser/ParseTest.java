@@ -51,23 +51,7 @@ public class ParseTest {
 		CommonTree tree = (CommonTree)parser.command().getTree();
 		System.out.println("Done parsing ...");
 		
-		ArrayList<Tree> ifCondition = new ArrayList<Tree>();
-		boolean isInsideIfCond = false;
-		
-		int i = 0;
-		while (i<tree.getChildCount()) {
-			Tree subTree = tree.getChild(i);
-			if (isInsideIfCond) {
-				ifCondition.add(subTree);
-			}
-			if (subTree.getType() == IF) {
-				isInsideIfCond = true;
-			} else if (subTree.getType() == ELSE || subTree.getType() == ENDIF) {
-				isInsideIfCond = false;
-			}
-		    // System.out.println("Tree child: " + subTree.getText() + ", (Token type: " + subTree.getType() + ")");
-		    i++;
-	    }
+		ArrayList<Tree> ifCondition = extractIfCondition(tree);
 		
 		if (ifCondition.size() > 0) {
 			System.out.println("Inside IF statement:");
@@ -85,5 +69,25 @@ public class ParseTest {
 	    //System.out.println("Tree: \n" + st);
 
 		System.out.println("Done!");
+	}
+
+	private static ArrayList<Tree> extractIfCondition(CommonTree tree) {
+		ArrayList<Tree> ifCondition = new ArrayList<Tree>();
+		boolean isInsideIfCond = false;
+		int i = 0;
+		while (i<tree.getChildCount()) {
+			Tree subTree = tree.getChild(i);
+			if (isInsideIfCond) {
+				ifCondition.add(subTree);
+			}
+			if (subTree.getType() == IF) {
+				isInsideIfCond = true;
+			} else if (tree.getChild(i+1) != null && (tree.getChild(i+1).getType() == COLON || tree.getChild(i+1).getType() == ENDIF)) {
+				isInsideIfCond = false;
+			}
+		    // System.out.println("Tree child: " + subTree.getText() + ", (Token type: " + subTree.getType() + ")");
+		    i++;
+	    }
+		return ifCondition;
 	}
 }
