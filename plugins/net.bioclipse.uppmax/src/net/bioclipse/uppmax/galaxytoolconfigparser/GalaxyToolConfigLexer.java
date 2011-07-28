@@ -1,6 +1,5 @@
-// $ANTLR 3.3 Nov 30, 2010 12:45:30 /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g 2011-07-27 19:01:00
-
 package net.bioclipse.uppmax.galaxytoolconfigparser;
+// $ANTLR 3.3 Nov 30, 2010 12:45:30 /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g 2011-07-28 10:14:42
 
 import org.antlr.runtime.*;
 import java.util.Stack;
@@ -39,8 +38,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = WORD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:20:6: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '0' .. '9' )* )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:20:8: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '0' .. '9' )*
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:17:6: ( ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '0' .. '9' )* )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:17:8: ( 'a' .. 'z' | 'A' .. 'Z' ) ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '0' .. '9' )*
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
                 input.consume();
@@ -51,7 +50,7 @@ public class GalaxyToolConfigLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:20:27: ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '0' .. '9' )*
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:17:27: ( 'a' .. 'z' | 'A' .. 'Z' | '.' | '_' | '0' .. '9' )*
             loop1:
             do {
                 int alt1=2;
@@ -100,11 +99,11 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = VARIABLE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:2: ( '$' ( '{' )? WORD ( '}' )? )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:4: '$' ( '{' )? WORD ( '}' )?
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:21:2: ( '$' ( '{' )? WORD ( '}' )? )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:21:4: '$' ( '{' )? WORD ( '}' )?
             {
             match('$'); 
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:7: ( '{' )?
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:21:7: ( '{' )?
             int alt2=2;
             int LA2_0 = input.LA(1);
 
@@ -113,7 +112,7 @@ public class GalaxyToolConfigLexer extends Lexer {
             }
             switch (alt2) {
                 case 1 :
-                    // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:8: '{'
+                    // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:21:8: '{'
                     {
                     match('{'); 
 
@@ -123,7 +122,7 @@ public class GalaxyToolConfigLexer extends Lexer {
             }
 
             mWORD(); 
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:17: ( '}' )?
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:21:17: ( '}' )?
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -132,7 +131,7 @@ public class GalaxyToolConfigLexer extends Lexer {
             }
             switch (alt3) {
                 case 1 :
-                    // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:18: '}'
+                    // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:21:18: '}'
                     {
                     match('}'); 
 
@@ -157,11 +156,11 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:27:8: ( '\"' ( 'a' .. 'z' | 'A' .. 'Z' )+ '\"' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:27:10: '\"' ( 'a' .. 'z' | 'A' .. 'Z' )+ '\"'
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:8: ( '\"' ( 'a' .. 'z' | 'A' .. 'Z' )+ '\"' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:10: '\"' ( 'a' .. 'z' | 'A' .. 'Z' )+ '\"'
             {
             match('\"'); 
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:27:13: ( 'a' .. 'z' | 'A' .. 'Z' )+
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:24:13: ( 'a' .. 'z' | 'A' .. 'Z' )+
             int cnt4=0;
             loop4:
             do {
@@ -216,8 +215,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = IF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:30:4: ( '#if' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:30:6: '#if'
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:27:4: ( '#if' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:27:6: '#if'
             {
             match("#if"); 
 
@@ -237,8 +236,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = ELSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:33:6: ( '#else' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:33:8: '#else'
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:30:6: ( '#else' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:30:8: '#else'
             {
             match("#else"); 
 
@@ -258,8 +257,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = ENDIF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:36:8: ( '#end if' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:36:10: '#end if'
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:33:8: ( '#end if' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:33:10: '#end if'
             {
             match("#end if"); 
 
@@ -279,8 +278,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = EQ;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:39:4: ( '=' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:39:6: '='
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:36:4: ( '=' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:36:6: '='
             {
             match('='); 
 
@@ -299,8 +298,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = EQTEST;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:42:9: ( '==' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:42:11: '=='
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:39:9: ( '==' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:39:11: '=='
             {
             match("=="); 
 
@@ -320,8 +319,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = DBLDASH;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:45:9: ( '--' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:45:11: '--'
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:42:9: ( '--' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:42:11: '--'
             {
             match("--"); 
 
@@ -341,8 +340,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = COLON;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:48:8: ( ':' )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:48:10: ':'
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:45:8: ( ':' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:45:10: ':'
             {
             match(':'); 
 
@@ -361,8 +360,8 @@ public class GalaxyToolConfigLexer extends Lexer {
         try {
             int _type = WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:51:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
-            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:51:9: ( ' ' | '\\t' | '\\r' | '\\n' )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:48:5: ( ( ' ' | '\\t' | '\\r' | '\\n' ) )
+            // /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g:48:9: ( ' ' | '\\t' | '\\r' | '\\n' )
             {
             if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||input.LA(1)=='\r'||input.LA(1)==' ' ) {
                 input.consume();
