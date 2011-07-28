@@ -59,7 +59,17 @@ public class UppmaxUtils {
         return sdf.format(System.currentTimeMillis());
     }
 
-	public static String arrayToString(String[] stringArray){
+    public static String dateTimeStamp() {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmm");
+        return sdf.format(System.currentTimeMillis());
+    }
+
+    public static String dateStamp() {
+    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(System.currentTimeMillis());
+    }
+
+    public static String arrayToString(String[] stringArray){
 		String str = " ";
 		for (int i = 0; i < stringArray.length; i++) {
 			str = str + stringArray[i];

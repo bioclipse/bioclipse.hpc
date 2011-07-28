@@ -1,6 +1,7 @@
 package net.bioclipse.uppmax.wizards;
 
 import net.bioclipse.uppmax.business.UppmaxManager;
+import net.bioclipse.uppmax.business.UppmaxUtils;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -62,12 +63,16 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
 		ConfigureCommandPage page = (ConfigureCommandPage) this.getPage("Page 3");
 		String command = page.getCommandText();
+		String dateTimeStamp = UppmaxUtils.dateTimeStamp();
+		String fileName = "temp-command-file." + dateTimeStamp + ".sh";
+		String resultCommand = "";
 
 		// Save SBATCH file here instead ...
-		command = "echo '" + command + "' > temp-command-file.sh";
+		resultCommand = "echo '#!/bin/bash' > " + fileName + "; ";
+		resultCommand += "echo '" + command + "' >> " + fileName + ";";
 		
 		UppmaxManager uppmaxManagerObj = new UppmaxManager();
-		uppmaxManagerObj.executeRemoteCommand(command);
+		uppmaxManagerObj.executeRemoteCommand(resultCommand);
 		return true;
 	}
 	
