@@ -1,4 +1,6 @@
 package net.bioclipse.uppmax.galaxytoolconfigparser;
+import java.util.ArrayList;
+
 import org.antlr.grammar.v3.*;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
@@ -12,18 +14,20 @@ import org.antlr.runtime.tree.TreeAdaptor;
 import org.antlr.stringtemplate.StringTemplate;
 
 public class ParseTest {
+	// Token ID:s, from the generated Parser code
     public static final int EOF=-1;
-    public static final int ELSE=4;
-    public static final int ENDIF=5;
-    public static final int WORD=6;
-    public static final int IF=7;
-    public static final int STRING=8;
-    public static final int VARIABLE=9;
-    public static final int EQTEST=10;
-    public static final int COLON=11;
-    public static final int DBLDASH=12;
-    public static final int EQ=13;
-    public static final int WS=14;
+    public static final int PARAM=4;
+    public static final int ELSE=5;
+    public static final int ENDIF=6;
+    public static final int WORD=7;
+    public static final int IF=8;
+    public static final int STRING=9;
+    public static final int VARIABLE=10;
+    public static final int EQTEST=11;
+    public static final int COLON=12;
+    public static final int DBLDASH=13;
+    public static final int EQ=14;
+    public static final int WS=15;
     
 	public static void main(String[] args) throws RecognitionException {
 		System.out.println("Beginning ...");
@@ -42,21 +46,40 @@ public class ParseTest {
 		TokenStream tokenStream = new CommonTokenStream(lexer);
 		GalaxyToolConfigParser parser = new GalaxyToolConfigParser(tokenStream, null);
 		
-		System.out.println("Starting ...");
+		System.out.println("Starting to parse ...");
 		// GalaxyToolConfigParser.command_return command = parser.command();
 		CommonTree tree = (CommonTree)parser.command().getTree();
-		System.out.println("Done executing command ...");
+		System.out.println("Done parsing ...");
 		
-		// System.out.println("Command: " + ((Tree)command.tree).toStringTree());
-		// CommonTree tree = (CommonTree)parser.command().getTree();
-
+		ArrayList<Tree> ifCondition = new ArrayList<Tree>();
+		boolean isInsideIfCond = false;
+		
 		int i = 0;
 		while (i<tree.getChildCount()) {
 			Tree subTree = tree.getChild(i);
-		    System.out.println("Subtree text: " + subTree.getText() + ", (Token type: " + subTree.getType() + ")");
+			if (isInsideIfCond) {
+				ifCondition.add(subTree);
+			}
+			if (subTree.getType() == IF) {
+				isInsideIfCond = true;
+			} else if (subTree.getType() == ELSE || subTree.getType() == ENDIF) {
+				isInsideIfCond = false;
+			}
+		    // System.out.println("Tree child: " + subTree.getText() + ", (Token type: " + subTree.getType() + ")");
 		    i++;
 	    }
 		
+		if (ifCondition.size() > 0) {
+			System.out.println("Inside IF statement:");
+			System.out.println("------------------------------");
+			for (Tree currTree : ifCondition) {
+				System.out.println(currTree.getText());
+			}
+			System.out.println("------------------------------");
+			System.out.println("End, IF statement.");
+		}
+		
+		// Generate DOT Syntax tree
 		//DOTTreeGenerator gen = new DOTTreeGenerator();
 	    //StringTemplate st = gen.toDOT(tree);
 	    //System.out.println("Tree: \n" + st);

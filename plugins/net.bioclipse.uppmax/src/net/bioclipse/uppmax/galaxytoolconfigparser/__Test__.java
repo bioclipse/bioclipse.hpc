@@ -1,4 +1,5 @@
 package net.bioclipse.uppmax.galaxytoolconfigparser;
+
 import java.io.*;
 import org.antlr.runtime.*;
 import org.antlr.runtime.debug.DebugEventSocketProxy;
@@ -12,9 +13,7 @@ public class __Test__ {
 
         GalaxyToolConfigParser g = new GalaxyToolConfigParser(tokens, null);
         try {
-        	System.out.println("Start");
             g.command();
-            System.out.println("End");
         } catch (RecognitionException e) {
             e.printStackTrace();
         }
