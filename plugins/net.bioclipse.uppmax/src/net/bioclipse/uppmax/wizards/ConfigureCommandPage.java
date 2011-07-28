@@ -123,11 +123,11 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 		
 		if (paramType.equals("data")) {
-			createSelectRemoteFile(parameter);
+			createSelectRemoteFileForParam(parameter);
 		} else if (paramType.equals("select")) {
-			createComboBox(parameter, 2);
+			createComboBoxForParam(parameter, 2);
 		} else {
-			createTextField(parameter, 2);
+			createTextFieldForParam(parameter, 2);
 		} 
 	}
 
@@ -141,12 +141,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		fieldLabel.setLayoutData(labelGridData);
 	}
 	
-	private void createSelectRemoteFile(Parameter parameter) {
+	private void createSelectRemoteFileForParam(Parameter parameter) {
 		// TODO: These are not used, no?
 		// ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
 		// final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
 		
-		final Text textField = createTextField(parameter, 1);
+		final Text textField = createTextFieldForParam(parameter, 1);
 		
 		Button btnBrowseRemoteFiles = new Button(composite, SWT.NONE);
 		btnBrowseRemoteFiles.setText("Browse...");
@@ -177,7 +177,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		});
 	}
 	
-	private void createComboBox(Parameter parameter, int horizontalSpan) {
+	private void createComboBoxForParam(Parameter parameter, int horizontalSpan) {
 		List<String> selectOptions = parameter.getSelectOptionValues();
 		Combo currentCombo = UppmaxUtils.createCombo(composite);
 
@@ -201,7 +201,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 	}
 
-	private Text createTextField(Parameter parameter, int horizontalSpan) {
+	private Text createTextFieldForParam(Parameter parameter, int horizontalSpan) {
 		String defaultText = parameter.getValue(); 
 		Text textField = new Text(this.composite, SWT.BORDER);
 		textField.setText(defaultText);
