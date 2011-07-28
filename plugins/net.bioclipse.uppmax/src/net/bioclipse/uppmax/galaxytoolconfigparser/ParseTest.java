@@ -51,12 +51,12 @@ public class ParseTest {
 		CommonTree tree = (CommonTree)parser.command().getTree();
 		System.out.println("Done parsing ...");
 		
-		ArrayList<Tree> ifCondition = extractIfCondition(tree);
+		ArrayList<Tree> ifConditionParts = extractIfCondition(tree);
 		
-		if (ifCondition.size() > 0) {
+		if (ifConditionParts.size() > 0) {
 			System.out.println("Inside IF statement:");
 			System.out.println("------------------------------");
-			for (Tree currTree : ifCondition) {
+			for (Tree currTree : ifConditionParts) {
 				System.out.println(currTree.getText());
 			}
 			System.out.println("------------------------------");

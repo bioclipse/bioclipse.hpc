@@ -37,7 +37,13 @@ public class Tool {
 	}
 
 	public String getCompleteCommand() {
-		String completeCommand = getInterpreter() + " " + getCommand();
+		String interpreter = getInterpreter();
+		String completeCommand = "";
+		if (!interpreter.equals("")) {
+			completeCommand = interpreter + " " + getCommand();
+		} else {
+			completeCommand = getCommand();
+		}
 		return completeCommand;
 	}
 
