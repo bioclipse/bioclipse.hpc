@@ -72,7 +72,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		String scriptString = "";
 
 		// Save SBATCH file here instead ...
-		scriptString = addLineToScript("#!/bin/bash", scriptString, fileName);
+		scriptString = addLineToScript("#!/bin/bash -l", scriptString, fileName);
 		scriptString = addLineToScript(command, scriptString, fileName);
 		
 		UppmaxManager uppmaxManagerObj = new UppmaxManager();
