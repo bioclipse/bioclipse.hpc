@@ -17,13 +17,6 @@
             name="UPPMAX Category">
       </category>
       <view
-            category="net.bioclipse.uppmax"
-            class="net.bioclipse.uppmax.views.UppmaxView"
-            icon="icons/sample.gif"
-            id="net.bioclipse.uppmax.views.UppmaxView"
-            name="UPPMAX View">
-      </view>
-      <view
             class="net.bioclipse.uppmax.views.ProjInfoView"
             id="net.bioclipse.uppmax.views.ProjInfoView"
             name="Project Info">
