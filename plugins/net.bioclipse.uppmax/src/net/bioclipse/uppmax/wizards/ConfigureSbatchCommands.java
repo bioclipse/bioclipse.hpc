@@ -53,13 +53,13 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 		createControl(parentComposite);
 		
 		// Populate wizard here
-		// -A [project name] // TODO: Retrieve the user's project automatic
-		// -p [partition] // Simple list, or get info from cluster?
-		// -N [no of nodes]
-		// -n [no of cpus]
-		// -t d-hh:mm:ss // TODO: Find a good widget for setting the time
-		// --qos=short (yes/no)
-		// -J [JobName]
+		// -A [project name] | Combo  // TODO: Retrieve the user's project automatic
+		// -p [partition]    | Combo  // Simple list, or get info from cluster?
+		// -N [no of nodes]  | Text-field / up-down number field?
+		// -n [no of cpus]   | Text-field / up-down number field?
+		// -t d-hh:mm:ss     | ?      // TODO: Find a good widget for setting the time
+		// --qos=short       | Combo (yes/no)
+		// -J [JobName]      | TextField
 	}
 
 	private void createComboBox(String label, List<String> optionValues, int horizontalSpan) {
