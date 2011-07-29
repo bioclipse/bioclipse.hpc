@@ -60,7 +60,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		ConfigureCommandPage configCommandPage = new ConfigureCommandPage(workbench, selection);
 		addPage(configCommandPage);
 		
-		ConfigureSbatchCommands configSbatchPage = new ConfigureSbatchCommands(workbench, selection);
+		ConfigureSbatchScriptPage configSbatchPage = new ConfigureSbatchScriptPage(workbench, selection);
 		addPage(configSbatchPage);
 	}
 
