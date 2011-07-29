@@ -25,7 +25,6 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 	// These are set in the constructor
 	IWorkbench workbench;
 	IStructuredSelection selection;
-
 	// Taken care of in the createControl(), and onEnterPage() functions
 	Composite parentComposite;
 	Composite composite;
@@ -33,7 +32,6 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 	StyledText scriptText; 	// TODO: Make sure to implement this one
 	List<Widget> widgets;
 
-	
 	protected ConfigureSbatchCommands(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 5");
 		setTitle("Configure SBATCH parameters");
@@ -53,6 +51,15 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 	
 	void onEnterPage() {
 		createControl(parentComposite);
+		
+		// Populate wizard here
+		// -A [project name] // TODO: Retrieve the user's project automatic
+		// -p [partition] // Simple list, or get info from cluster?
+		// -N [no of nodes]
+		// -n [no of cpus]
+		// -t d-hh:mm:ss // TODO: Find a good widget for setting the time
+		// --qos=short (yes/no)
+		// -J [JobName]
 	}
 
 	private void createComboBox(String label, List<String> optionValues, int horizontalSpan) {
