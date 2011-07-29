@@ -1,7 +1,9 @@
-package net.bioclipse.uppmax.business;
+package net.bioclipse.uppmax.views;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import net.bioclipse.uppmax.business.AbstractModelObject;
 
 public class ProjInfoGroup extends AbstractModelObject {
 	private String groupName;

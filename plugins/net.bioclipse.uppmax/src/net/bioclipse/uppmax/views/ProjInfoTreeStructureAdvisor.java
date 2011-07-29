@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.business;
+package net.bioclipse.uppmax.views;
 
 import org.eclipse.jface.databinding.viewers.TreeStructureAdvisor;
 

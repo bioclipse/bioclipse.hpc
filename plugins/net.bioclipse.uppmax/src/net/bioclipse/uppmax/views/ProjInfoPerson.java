@@ -1,4 +1,6 @@
-package net.bioclipse.uppmax.business;
+package net.bioclipse.uppmax.views;
+
+import net.bioclipse.uppmax.business.AbstractModelObject;
 
 public class ProjInfoPerson extends AbstractModelObject {
 	private String name;

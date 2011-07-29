@@ -8,11 +8,6 @@ import java.util.regex.Pattern;
 import javax.management.openmbean.CompositeData;
 
 import net.bioclipse.uppmax.business.ColumnSortListener;
-import net.bioclipse.uppmax.business.ProjInfoContentModel;
-import net.bioclipse.uppmax.business.ProjInfoContentProvider;
-import net.bioclipse.uppmax.business.ProjInfoLabelProvider;
-import net.bioclipse.uppmax.business.ProjInfoGroup;
-import net.bioclipse.uppmax.business.ProjInfoPerson;
 import net.bioclipse.uppmax.business.UppmaxManager;
 
 import org.eclipse.core.runtime.Platform;

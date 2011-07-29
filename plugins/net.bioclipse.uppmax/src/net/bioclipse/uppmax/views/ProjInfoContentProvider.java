@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.business;
+package net.bioclipse.uppmax.views;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;

@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.business;
+package net.bioclipse.uppmax.views;
 
 import java.util.ArrayList;
 import java.util.List;
