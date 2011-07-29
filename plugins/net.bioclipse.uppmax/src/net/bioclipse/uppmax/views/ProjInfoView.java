@@ -78,7 +78,7 @@ public class ProjInfoView extends ViewPart {
 		tableTreeViewer = new TableTreeViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 	    // Set the content and label providers
 		tableTreeViewer.setContentProvider(new ProjInfoContentProvider());
-		tableTreeViewer.setLabelProvider(new ProjInfoLabelProvider());
+		tableTreeViewer.setLabelProvider(new ProjInfoGroupLabelProvider());
 		tableTreeViewer.setInput(this.getContentModel());
 	    
 		TableTree tableTree = tableTreeViewer.getTableTree();

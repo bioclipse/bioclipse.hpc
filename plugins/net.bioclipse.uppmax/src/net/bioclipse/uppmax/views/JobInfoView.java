@@ -136,8 +136,7 @@ public class JobInfoView extends ViewPart {
 	}
 
 	public void setContentsFromXML(String projInfoXml) {
-		// TODO Auto-generated method stub
-
+		// TODO Auto-generated method stub (Is this ever used?)
 	}
 
 	public XmlDataProviderFactory getContentModel() {
