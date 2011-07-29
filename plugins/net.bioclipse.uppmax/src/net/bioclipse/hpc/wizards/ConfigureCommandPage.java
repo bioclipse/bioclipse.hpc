@@ -3,8 +3,10 @@ package net.bioclipse.hpc.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.domains.toolconfig.Option;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
@@ -153,8 +155,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		btnBrowseRemoteFiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				HPCManager hpcMgr = new HPCManager();
-				IHost hpcHost = hpcMgr.getHPCHost();
+				IHost hpcHost = getApplication().getHPCHost();
 				
 				if (hpcHost == null) {
 					MessageDialog.openWarning(SystemBasePlugin.getActiveWorkbenchShell(), "HPC Host was null!", "HPC Host was null!");
@@ -247,4 +248,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		return commandText.getText();
 	}
 
+	protected HPCApplication getApplication() {
+		Activator plugin = Activator.getDefault();
+		HPCApplication application = plugin.application;
+		return application;
+	}
 }

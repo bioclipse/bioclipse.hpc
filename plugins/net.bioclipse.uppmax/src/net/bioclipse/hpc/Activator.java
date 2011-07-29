@@ -13,6 +13,7 @@ package net.bioclipse.hpc;
 import net.bioclipse.hpc.business.IJavaScriptHPCManager;
 import net.bioclipse.hpc.business.IJavaHPCManager;
 import net.bioclipse.hpc.business.IHPCManager;
+import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.apache.log4j.Logger;
@@ -26,6 +27,9 @@ import org.osgi.util.tracker.ServiceTracker;
  * The Activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractUIPlugin {
+
+    // Domain specific Application object
+    public static HPCApplication application;
 
     private static final Logger logger = Logger.getLogger(Activator.class);
 
@@ -55,12 +59,19 @@ public class Activator extends AbstractUIPlugin {
 
         jsFinderTracker.open();
         
+        // Create an applicatoin object
+        application = new HPCApplication();
+        
         // Activate Galaxy tool configuration
-		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles("/home/samuel/.galaxy/tools");
+		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles("/home/samuel/.galaxy/tools"); // TODO: Don't hard-code!
     }
 
     public void stop(BundleContext context) throws Exception {
         plugin = null;
+        
+        // Null out the application
+        application = null;
+        
         super.stop(context);
     }
 

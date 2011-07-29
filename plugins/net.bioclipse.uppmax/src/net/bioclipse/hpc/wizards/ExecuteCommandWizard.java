@@ -1,7 +1,9 @@
 package net.bioclipse.hpc.wizards;
 
+import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCApplication;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -75,8 +77,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		scriptString = addLineToScript("#!/bin/bash -l", scriptString, fileName);
 		scriptString = addLineToScript(command, scriptString, fileName);
 		
-		HPCManager hpcManagerObj = new HPCManager();
-		hpcManagerObj.executeRemoteCommand(scriptString);
+		getApplication().executeRemoteCommand(scriptString);
 		return true;
 	}
 	
@@ -101,6 +102,12 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
 	public void setResultingCommand(String resultingCommand) {
 		this.resultingCommand = resultingCommand;
+	}
+	
+	protected HPCApplication getApplication() {
+		Activator plugin = Activator.getDefault();
+		HPCApplication application = plugin.application;
+		return application;
 	}
 
 }

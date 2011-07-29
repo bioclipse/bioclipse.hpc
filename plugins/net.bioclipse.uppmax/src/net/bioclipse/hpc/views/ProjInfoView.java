@@ -112,7 +112,7 @@ public class ProjInfoView extends ViewPart {
 
 	private void updateProjectInfoTable() {
 		HPCManager hpcManagerObj = new HPCManager();
-		hpcManagerObj.updateProjectInfoView();
+		hpcManagerObj.updateProjInfoView();
 	}
 
 	protected IRemoteFile getFirstSelectedRemoteFile() {
