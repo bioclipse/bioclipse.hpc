@@ -1,5 +1,6 @@
 package net.bioclipse.uppmax.wizards;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.bioclipse.uppmax.business.UppmaxUtils;
@@ -21,13 +22,15 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
 
 public class ConfigureSbatchCommands extends WizardPage implements Listener {
+	// These are set in the constructor
 	IWorkbench workbench;
 	IStructuredSelection selection;
 
+	// Taken care of in the createControl(), and onEnterPage() functions
 	Composite parentComposite;
 	Composite composite;
 
-	StyledText scriptText;
+	StyledText scriptText; 	// TODO: Make sure to implement this one
 	List<Widget> widgets;
 
 	
@@ -37,6 +40,7 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 		setDescription("Set the parameters for the SBATCH job batch script to be sent to the SLURM resource manager");
 		this.workbench = workbench;
 		this.selection = selection;
+		this.widgets = new ArrayList<Widget>();
 	}
 
 	@Override
@@ -51,8 +55,7 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 		createControl(parentComposite);
 	}
 
-	private void createComboBox(Parameter parameter, int horizontalSpan) {
-		List<String> selectOptions = parameter.getSelectOptionValues();
+	private void createComboBox(String label, List<String> optionValues, int horizontalSpan) {
 		Combo currentCombo = UppmaxUtils.createCombo(composite);
 
 		// Layout stuff
@@ -65,14 +68,15 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 		widgets.add((Widget) currentCombo);
 
 		// Populate
-		currentCombo.setData(parameter);
-		String[] selectOptionsArr = UppmaxUtils.stringListToArray(selectOptions);
+		String[] selectOptionsArr = UppmaxUtils.stringListToArray(optionValues);
 		currentCombo.setItems(selectOptionsArr);
-		Option selectedOption = parameter.getSelectedOption();
-		if (selectedOption != null) {
-			String selectedOptionValue = selectedOption.getValue();
-			currentCombo.setText(selectedOptionValue);
-		}
+		
+		// TODO: Is this really needed?
+		// Option selectedOption = ???
+		//	if (selectedOption != null) {
+		//		String selectedOptionValue = selectedOption.getValue();
+		//		currentCombo.setText(selectedOptionValue);
+		//	}
 	}
 
 	// TODO: Check that it works!
@@ -84,11 +88,9 @@ public class ConfigureSbatchCommands extends WizardPage implements Listener {
 				String newValue = null;
 				if (widget instanceof Combo) {
 					newValue = ((Combo) widget).getText();
-					// TODO: Remove Debug code
 					System.out.println("Selected option: " + newValue);
 				} else if (widget instanceof Text) {
 					newValue = ((Text) widget).getText();
-					// TODO: Remove Debug code
 					System.out.println("Selected option: " + newValue);
 				} else {
 					System.out.println("Could not set newValue");
