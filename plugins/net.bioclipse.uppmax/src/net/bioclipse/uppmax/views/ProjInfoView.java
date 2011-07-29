@@ -52,10 +52,10 @@ public class ProjInfoView extends ViewPart {
 	private List _selectedFiles;
 	private ProjInfoContentModel contentModel = new ProjInfoContentModel();
 	private TableTreeViewer tableTreeViewer;
-
 	public static final String ID = "net.bioclipse.uppmax.views.ProjInfoView"; //$NON-NLS-1$
 
 	public ProjInfoView() {
+		// Nothing here
 	}
 
 	/**
@@ -67,15 +67,14 @@ public class ProjInfoView extends ViewPart {
 		Composite container = new Composite(parent, SWT.V_SCROLL);
 		container.setLayout(new GridLayout(1, false));
 		
-				Button btnUpdate = new Button(container, SWT.NONE);
-				btnUpdate.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						UppmaxManager uppmaxManagerObj = new UppmaxManager();
-						uppmaxManagerObj.updateProjectInfoView();
-					}
-				});
-				btnUpdate.setText("Update");
+		Button btnUpdate = new Button(container, SWT.NONE);
+		btnUpdate.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateProjectInfoTable();
+			}
+		});
+		btnUpdate.setText("Update");
 
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -115,9 +114,9 @@ public class ProjInfoView extends ViewPart {
 		initializeMenu();
 	}
 
-
 	private void updateProjectInfoTable() {
-		// 
+		UppmaxManager uppmaxManagerObj = new UppmaxManager();
+		uppmaxManagerObj.updateProjectInfoView();
 	}
 
 	protected IRemoteFile getFirstSelectedRemoteFile() {
