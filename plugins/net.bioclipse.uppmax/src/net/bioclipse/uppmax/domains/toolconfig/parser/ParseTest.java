@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.galaxytoolconfigparser;
+package net.bioclipse.uppmax.domains.toolconfig.parser;
 import java.util.ArrayList;
 
 import org.antlr.grammar.v3.*;

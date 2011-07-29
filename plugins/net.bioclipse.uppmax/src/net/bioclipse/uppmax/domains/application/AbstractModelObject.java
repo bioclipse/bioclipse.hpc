@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.business;
+package net.bioclipse.uppmax.domains.application;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

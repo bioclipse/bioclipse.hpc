@@ -3,6 +3,8 @@ package net.bioclipse.uppmax.views;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import net.bioclipse.uppmax.domains.hpc.Person;
+
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -35,7 +37,7 @@ class ProjInfoPersonLabelProvider implements ITableLabelProvider {
    * @return String
    */
   public String getColumnText(Object arg0, int arg1) {
-	  ProjInfoPerson person = (ProjInfoPerson) arg0;
+	  Person person = (Person) arg0;
 	  switch (arg1) {
 	  case 0:
 		  return person.getName();

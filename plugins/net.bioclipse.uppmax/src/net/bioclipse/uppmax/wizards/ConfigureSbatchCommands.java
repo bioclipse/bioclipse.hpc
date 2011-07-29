@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bioclipse.uppmax.business.UppmaxUtils;
-import net.bioclipse.uppmax.toolconfig.Option;
-import net.bioclipse.uppmax.toolconfig.Parameter;
-import net.bioclipse.uppmax.toolconfig.Tool;
+import net.bioclipse.uppmax.domains.toolconfig.Option;
+import net.bioclipse.uppmax.domains.toolconfig.Parameter;
+import net.bioclipse.uppmax.domains.toolconfig.Tool;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;

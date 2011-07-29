@@ -1,11 +1,12 @@
-package net.bioclipse.uppmax.views;
+package net.bioclipse.uppmax.domains.hpc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.bioclipse.uppmax.business.AbstractModelObject;
+import net.bioclipse.uppmax.domains.application.AbstractModelObject;
 
-public class ProjInfoGroup extends AbstractModelObject {
+
+public class Project extends AbstractModelObject {
 	private String groupName;
 	private String groupUsedHours;
 	private String groupCurrentAllocation;
@@ -15,7 +16,7 @@ public class ProjInfoGroup extends AbstractModelObject {
 		setGroupName(groupName);
 	}
 	
-	public void addPersonToGroup(ProjInfoPerson person) {
+	public void addPersonToGroup(Person person) {
 		projInfoPersons.add(person);
 		System.out.println("Added person to group: " + person.getName()); // TODO: Debug-code
 	}

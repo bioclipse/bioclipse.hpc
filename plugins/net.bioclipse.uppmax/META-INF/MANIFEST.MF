@@ -9,7 +9,7 @@ Bundle-ClassPath: .,
  jars/commons-io-2.0.1.jar
 Export-Package: net.bioclipse.uppmax,
  net.bioclipse.uppmax.business,
- net.bioclipse.uppmax.toolconfig,
+ net.bioclipse.uppmax.domains.toolconfig,
  net.bioclipse.uppmax.views,
  net.bioclipse.uppmax.wizards,
  net.bioclipse.uppmax.xmldisplay

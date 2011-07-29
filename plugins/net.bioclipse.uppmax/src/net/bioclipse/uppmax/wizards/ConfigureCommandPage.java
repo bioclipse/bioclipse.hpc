@@ -5,10 +5,10 @@ import java.util.List;
 
 import net.bioclipse.uppmax.business.UppmaxManager;
 import net.bioclipse.uppmax.business.UppmaxUtils;
-import net.bioclipse.uppmax.toolconfig.Option;
-import net.bioclipse.uppmax.toolconfig.Parameter;
-import net.bioclipse.uppmax.toolconfig.Tool;
-import net.bioclipse.uppmax.toolconfig.ToolConfigDomain;
+import net.bioclipse.uppmax.domains.toolconfig.Option;
+import net.bioclipse.uppmax.domains.toolconfig.Parameter;
+import net.bioclipse.uppmax.domains.toolconfig.Tool;
+import net.bioclipse.uppmax.domains.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;

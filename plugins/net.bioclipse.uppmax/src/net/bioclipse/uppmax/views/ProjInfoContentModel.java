@@ -3,6 +3,8 @@ package net.bioclipse.uppmax.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bioclipse.uppmax.domains.hpc.Project;
+
 public class ProjInfoContentModel {
 	private List/* <ProjInfoGroup> */projInfoGroups = new ArrayList();
 	
@@ -10,15 +12,15 @@ public class ProjInfoContentModel {
 		// Nothing
 	}
 
-	public List<ProjInfoGroup> getProjInfoGroups() {
+	public List<Project> getProjInfoGroups() {
 		return projInfoGroups;
 	}
 
-	public void setProjInfoGroups(List<ProjInfoGroup> projInfoGroups) {
+	public void setProjInfoGroups(List<Project> projInfoGroups) {
 		this.projInfoGroups = projInfoGroups;
 	}
 
-	public void addProjInfoGroup(ProjInfoGroup projInfoGroup) {
+	public void addProjInfoGroup(Project projInfoGroup) {
 		projInfoGroups.add(projInfoGroup);
 	}
 

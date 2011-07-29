@@ -13,7 +13,7 @@ package net.bioclipse.uppmax;
 import net.bioclipse.uppmax.business.IUppmaxManager;
 import net.bioclipse.uppmax.business.IJavaUppmaxManager;
 import net.bioclipse.uppmax.business.IJavaScriptUppmaxManager;
-import net.bioclipse.uppmax.toolconfig.ToolConfigDomain;
+import net.bioclipse.uppmax.domains.toolconfig.ToolConfigDomain;
 
 import org.apache.log4j.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

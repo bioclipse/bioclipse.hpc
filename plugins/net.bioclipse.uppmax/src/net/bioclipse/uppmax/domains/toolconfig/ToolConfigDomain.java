@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.toolconfig;
+package net.bioclipse.uppmax.domains.toolconfig;
 
 import java.io.File;
 import java.util.ArrayList;

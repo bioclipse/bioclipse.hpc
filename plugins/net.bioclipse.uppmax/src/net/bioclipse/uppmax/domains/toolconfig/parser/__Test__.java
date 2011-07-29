@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.galaxytoolconfigparser;
+package net.bioclipse.uppmax.domains.toolconfig.parser;
 
 import java.io.*;
 import org.antlr.runtime.*;

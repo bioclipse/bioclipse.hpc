@@ -1,5 +1,8 @@
 package net.bioclipse.uppmax.views;
 
+import net.bioclipse.uppmax.domains.hpc.Person;
+import net.bioclipse.uppmax.domains.hpc.Project;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -17,8 +20,8 @@ public class ProjInfoContentProvider implements ITreeContentProvider {
    * @return Object[]
    */
   public Object[] getChildren(Object arg0) {
-    if (arg0 instanceof ProjInfoGroup)
-      return ((ProjInfoGroup) arg0).getProjInfoPersons().toArray();
+    if (arg0 instanceof Project)
+      return ((Project) arg0).getProjInfoPersons().toArray();
     // ProjInfoPersons have no children . . . except Shawn Kemp
     return EMPTY;
   }
@@ -31,7 +34,7 @@ public class ProjInfoContentProvider implements ITreeContentProvider {
    * @return Object
    */
   public Object getParent(Object arg0) {
-    return ((ProjInfoPerson) arg0).getProjInfoGroup();
+    return ((Person) arg0).getProjInfoGroup();
   }
 
   /**

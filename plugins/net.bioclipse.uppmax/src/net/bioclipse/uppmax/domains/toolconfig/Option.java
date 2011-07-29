@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.toolconfig;
+package net.bioclipse.uppmax.domains.toolconfig;
 
 public class Option {
 	private String m_value;

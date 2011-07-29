@@ -1,12 +1,13 @@
-package net.bioclipse.uppmax.views;
+package net.bioclipse.uppmax.domains.hpc;
 
-import net.bioclipse.uppmax.business.AbstractModelObject;
+import net.bioclipse.uppmax.domains.application.AbstractModelObject;
 
-public class ProjInfoPerson extends AbstractModelObject {
+
+public class Person extends AbstractModelObject {
 	private String name;
 	private String usedHours;
 	private String currentAllocation;
-	private ProjInfoGroup group;
+	private Project group;
 	
 	public String getName() {
 		return name;
@@ -26,7 +27,7 @@ public class ProjInfoPerson extends AbstractModelObject {
 	public void setCurrentAllocation(String currentAllocation) {
 		this.currentAllocation = currentAllocation;
 	}
-	public ProjInfoGroup getProjInfoGroup() {
+	public Project getProjInfoGroup() {
 		// TODO Auto-generated method stub
 		return group;
 	}

@@ -9,6 +9,8 @@ import javax.management.openmbean.CompositeData;
 
 import net.bioclipse.uppmax.business.ColumnSortListener;
 import net.bioclipse.uppmax.business.UppmaxManager;
+import net.bioclipse.uppmax.domains.hpc.Person;
+import net.bioclipse.uppmax.domains.hpc.Project;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IMenuManager;
@@ -78,7 +80,7 @@ public class ProjInfoView extends ViewPart {
 		tableTreeViewer = new TableTreeViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 	    // Set the content and label providers
 		tableTreeViewer.setContentProvider(new ProjInfoContentProvider());
-		tableTreeViewer.setLabelProvider(new ProjInfoGroupLabelProvider());
+		tableTreeViewer.setLabelProvider(new ProjInfoProjectLabelProvider());
 		tableTreeViewer.setInput(this.getContentModel());
 	    
 		TableTree tableTree = tableTreeViewer.getTableTree();
@@ -155,7 +157,7 @@ public class ProjInfoView extends ViewPart {
 		List<String> groupXMLParts = getMatches("<groupinfo>.*?</groupinfo>", xmlString);
 		contentModel.clearProjInfoGroups();
 		for (String g : groupXMLParts) {
-			ProjInfoGroup projInfoGroup = new ProjInfoGroup();
+			Project projInfoGroup = new Project();
 			String groupName = getMatch("<name>(.*?)</name>", g, 1);
 			String groupUsedHours = getMatch("<time>(.*?)</time>", g, 1);
 			String groupCurrentAllocation = getMatch("<allocation>(.*?)</allocation>", g, 1);
@@ -168,7 +170,7 @@ public class ProjInfoView extends ViewPart {
 				String userName = getMatch("<name>(.*?)</name>", s, 1);
 				String usedHours = getMatch("<time>(.*?)</time>", s, 1);
 				String currentAllocation = getMatch("<allocation>(.*?)</allocation>", s, 1);
-				ProjInfoPerson p = new ProjInfoPerson();
+				Person p = new Person();
 				p.setName(userName);
 				p.setUsedHours(usedHours);
 				p.setCurrentAllocation(currentAllocation);

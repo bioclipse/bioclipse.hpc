@@ -1,7 +1,7 @@
 package net.bioclipse.uppmax.wizards;
 
 import net.bioclipse.uppmax.business.UppmaxUtils;
-import net.bioclipse.uppmax.toolconfig.ToolConfigDomain;
+import net.bioclipse.uppmax.domains.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;

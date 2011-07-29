@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.galaxytoolconfigparser;
+package net.bioclipse.uppmax.domains.toolconfig.parser;
 
 public class Snippet {
 	public static final int EOF=-1;

@@ -1,4 +1,4 @@
-package net.bioclipse.uppmax.galaxytoolconfigparser;
+package net.bioclipse.uppmax.domains.toolconfig.parser;
 // $ANTLR 3.3 Nov 30, 2010 12:45:30 /home/samuel/projects/galaxy-toolconfig-bnf/GalaxyToolConfig.g 2011-07-28 13:19:41
 
 import org.antlr.runtime.*;
