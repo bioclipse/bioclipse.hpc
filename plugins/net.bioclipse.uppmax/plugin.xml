@@ -5,25 +5,25 @@
    <extension
          point="net.bioclipse.scripting.contribution">
       <scriptContribution
-            service="net.bioclipse.uppmax.business.UppmaxManagerFactory"
-            id="net.bioclipse.uppmax.business.UppmaxManager">
+            service="net.bioclipse.hpc.business.HPCManagerFactory"
+            id="net.bioclipse.hpc.business.HPCManager">
       </scriptContribution>
    </extension>
    
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="net.bioclipse.uppmax"
-            name="UPPMAX Category">
+            id="net.bioclipse.hpc"
+            name="HPC Category">
       </category>
       <view
-            class="net.bioclipse.uppmax.views.ProjInfoView"
-            id="net.bioclipse.uppmax.views.ProjInfoView"
+            class="net.bioclipse.hpc.views.ProjInfoView"
+            id="net.bioclipse.hpc.views.ProjInfoView"
             name="Project Info">
       </view>
       <view
-            class="net.bioclipse.uppmax.views.JobInfoView"
-            id="net.bioclipse.uppmax.views.JobInfoView"
+            class="net.bioclipse.hpc.views.JobInfoView"
+            id="net.bioclipse.hpc.views.JobInfoView"
             name="JobInfo">
       </view>
    </extension>
@@ -58,10 +58,10 @@
            <action
                    label="Execute Command through a Wizard"
                    tooltip="TODO: Some description here..."
-                   class="net.bioclipse.uppmax.wizards.ExecuteCommandAction"
+                   class="net.bioclipse.hpc.wizards.ExecuteCommandAction"
                    menubarPath="additions"
                    enablesFor="1"
-                   id="net.bioclipse.uppmax.wizards.action1">
+                   id="net.bioclipse.hpc.wizards.action1">
            </action>
        </objectContribution>       
     </extension>    
@@ -72,10 +72,10 @@
            <action
                    label="Execute Command through a Wizard"
                    tooltip="TODO: Some description here..."
-                   class="net.bioclipse.uppmax.wizards.ExecuteCommandAction"
+                   class="net.bioclipse.hpc.wizards.ExecuteCommandAction"
                    menubarPath="additions"
                    enablesFor="1"
-                   id="net.bioclipse.uppmax.wizards.action2">
+                   id="net.bioclipse.hpc.wizards.action2">
            </action>
        </objectContribution>       
     </extension -->    
@@ -84,7 +84,7 @@
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
          <view
-               id="net.bioclipse.uppmax.views.SampleView"
+               id="net.bioclipse.hpc.views.SampleView"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.TaskList">

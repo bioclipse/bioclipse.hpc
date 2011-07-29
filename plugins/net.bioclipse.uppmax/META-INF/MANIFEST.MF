@@ -1,18 +1,18 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Uppmax
-Bundle-SymbolicName: net.bioclipse.uppmax; singleton:=true
+Bundle-Name: HPC
+Bundle-SymbolicName: net.bioclipse.hpc;singleton:=true
 Bundle-Version: 1.0.0.v20101007
-Bundle-Activator: net.bioclipse.uppmax.Activator
+Bundle-Activator: net.bioclipse.hpc.Activator
 Bundle-Vendor: The Bioclipse project
 Bundle-ClassPath: .,
  jars/commons-io-2.0.1.jar
-Export-Package: net.bioclipse.uppmax,
- net.bioclipse.uppmax.business,
- net.bioclipse.uppmax.domains.toolconfig,
- net.bioclipse.uppmax.views,
- net.bioclipse.uppmax.wizards,
- net.bioclipse.uppmax.xmldisplay
+Export-Package: net.bioclipse.hpc,
+ net.bioclipse.hpc.business,
+ net.bioclipse.hpc.domains.toolconfig,
+ net.bioclipse.hpc.views,
+ net.bioclipse.hpc.wizards,
+ net.bioclipse.hpc.xmldisplay
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  net.bioclipse.core,
