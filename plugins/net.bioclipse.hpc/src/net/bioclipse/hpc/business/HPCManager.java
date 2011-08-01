@@ -13,6 +13,7 @@ package net.bioclipse.hpc.business;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,6 +78,10 @@ public class HPCManager implements IBioclipseManager {
 	 * Main methods (mostly just passed on to the application object) 
 	 */
 
+	public Map<String,String> getUserInfo() {
+		return application.getUserInfo();
+	}
+	
 	public void executeCommand(String command) {
 		application.executeCommand(command);
 	}

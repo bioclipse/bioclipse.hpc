@@ -10,6 +10,8 @@
  ******************************************************************************/
 package net.bioclipse.hpc.business;
 
+import java.util.Map;
+
 import net.bioclipse.core.PublishedClass;
 import net.bioclipse.core.PublishedMethod;
 import net.bioclipse.core.Recorded;
@@ -21,6 +23,13 @@ import net.bioclipse.managers.business.IBioclipseManager;
 public interface IHPCManager extends IBioclipseManager {
 
 	
+	@Recorded
+	@PublishedMethod(
+			params="", 
+			methodSummary="Returns info about the currently logged in user, such as user name and projects in which he/she is a member"
+	)
+	public Map<String,String> getUserInfo();
+
 	@Recorded
 	@PublishedMethod(
 			params="String command", 

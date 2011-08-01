@@ -7,10 +7,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.xpath.XPathConstants;
+
 import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.JobInfoView;
 import net.bioclipse.hpc.views.ProjInfoView;
+import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.rse.core.model.IHost;
@@ -25,6 +28,7 @@ import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
 import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
+import org.w3c.dom.Document;
 
 public class HPCApplication extends AbstractModelObject {
 	private List _selectedFiles;
@@ -130,9 +134,13 @@ public class HPCApplication extends AbstractModelObject {
 		
 		commandOutput = executeRemoteCommand("fimsproxy -t userinfo");
 		
-		String userInfoString = getMatch("<userinfo>.*</userinfo>", commandOutput);
-		if (userInfoString != null) {
-			// Do stuff here that populates userInfo
+		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
+		if (userInfoXmlString != null) {
+			Document userInfoXmlDoc = XmlUtils.parseXmlToDocument(userInfoXmlString);
+			String userName = (String) XmlUtils.evalXPathExpr(userInfoXmlDoc, "userinfo/username", XPathConstants.STRING);
+			userInfo.put("username", userName);
+			// TODO: Remove debug code
+			System.out.println("DEBUG: Username: " + userName);
 		} else {
 			System.out.println("Could not extract XML for userinfo!");
 		}
