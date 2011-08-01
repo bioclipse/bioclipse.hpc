@@ -88,7 +88,7 @@ public class HPCApplication extends AbstractModelObject {
 			System.out.println("Found jobInfoView: " + jobInfoView);
 
 			//		String rawContent = executeRemoteCommand("python /home/samuel/projects/bioclipseclient/clusterproxy.py -t jobinfo nimar" /* "clusterproxy -t jobinfo" */ );
-			String rawContent = executeRemoteCommand("/home/samuel/projects/bioclipseclient/output_squeue_as_xml.sh pontuss" /* "clusterproxy -t jobinfo" */ );
+			String rawContent = executeRemoteCommand("fimsproxy -t jobinfo -u pontuss" /* "clusterproxy -t jobinfo" */ );
 			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
@@ -108,9 +108,9 @@ public class HPCApplication extends AbstractModelObject {
 		// find the right view
 		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
-			System.out.println("Found jobInfoView: " + projInfoView);
+			System.out.println("Found projInfoView: " + projInfoView);
 
-			commandOutput = executeRemoteCommand("showprojinfo");
+			commandOutput = executeRemoteCommand("fimsproxy -t projinfo");
 			
 			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
 			if (projInfoXml != null) {
