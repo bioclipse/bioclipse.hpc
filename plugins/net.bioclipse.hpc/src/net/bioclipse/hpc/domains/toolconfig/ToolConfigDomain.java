@@ -106,10 +106,10 @@ public class ToolConfigDomain {
 		Tool tool = new Tool();
 		try {
 			// XPath Expressions
-			String name = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/@name", XPathConstants.STRING);
-			String description = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/description", XPathConstants.STRING);
-			String command = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/command", XPathConstants.STRING);
-			String interpreter = (String) XmlUtils.evaluateXPathExpr(xmlDoc, "/tool/command/@interpreter", XPathConstants.STRING);
+			String name = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/@name", XPathConstants.STRING);
+			String description = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/description", XPathConstants.STRING);
+			String command = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/command", XPathConstants.STRING);
+			String interpreter = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/command/@interpreter", XPathConstants.STRING);
 
 			tool.setName(name);
 			tool.setDescription(description);

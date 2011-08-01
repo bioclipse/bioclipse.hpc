@@ -65,7 +65,7 @@ public class XmlUtils {
 		return xmlDoc;
 	}
 	
-	public static Object evaluateXPathExpr(Document xmlDocument, String pathExpr, QName returnType) {
+	public static Object evalXPathExpr(Document xmlDocument, String pathExpr, QName returnType) {
 		XPathFactory xPathFactory = XPathFactory.newInstance();
 		XPath xpathObj = xPathFactory.newXPath();
 		XPathExpression expr;
