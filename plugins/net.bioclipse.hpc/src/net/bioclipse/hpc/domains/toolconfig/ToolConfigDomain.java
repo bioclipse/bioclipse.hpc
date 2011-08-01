@@ -87,17 +87,8 @@ public class ToolConfigDomain {
 					String toolName = toolFile.getName();
 					// The actual tool configurations are stored in XML-files, so do read these
 					if (toolName.endsWith(".xml")) {
-						String toolFilePath = toolFile.getAbsolutePath();
-						String[] fileContentLines = HPCUtils.readFileToStringArray(toolFilePath);
-						
-						// Remove the XML Definition line
-						fileContentLines = HPCUtils.removeXmlDefinitionLine(fileContentLines);
-						// Convert to String
-						String fileContent = HPCUtils.arrayToString(fileContentLines); 
-						// Parse to Xml Document
-						Document xmlDoc = XmlUtils.parseXmlToDocument(fileContent);
+						Document xmlDoc = XmlUtils.parseXmlFileToXmlDoc(toolFile);
 						Tool tool = initializeToolFromXmlDoc(xmlDoc);
-
 						toolGroup.addTool(tool);
 						xmlFilesCount++;
 					}
@@ -110,7 +101,7 @@ public class ToolConfigDomain {
 		// TODO: Don't use hard-coded file name
 		System.out.println(timeStamp + " INFO  [net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain] Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
 	}
-	
+
 	private Tool initializeToolFromXmlDoc(Document xmlDoc) {
 		Tool tool = new Tool();
 		try {

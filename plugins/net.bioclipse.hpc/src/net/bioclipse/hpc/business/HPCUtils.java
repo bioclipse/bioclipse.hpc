@@ -13,11 +13,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.bioclipse.hpc.xmldisplay.XmlUtils;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.w3c.dom.Document;
 
 public class HPCUtils {
 	
@@ -99,7 +102,7 @@ public class HPCUtils {
 		}
 		return str;
 	}
-
+    
 	public static String[] removeXmlDefinitionLine(String[] fileContentLines) {
 		// Remove the initial XML header, if existing, since it messes up the SAX parser
 		fileContentLines[0] = fileContentLines[0].replaceFirst("<\\?xml.*\\?>", ""); 

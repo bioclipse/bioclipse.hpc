@@ -1,5 +1,6 @@
 package net.bioclipse.hpc.xmldisplay;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,6 +13,8 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
+import net.bioclipse.hpc.business.HPCUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;
@@ -47,6 +50,19 @@ public class XmlUtils {
 		}
 		
 		return resultXmlDocument;
+	}
+	
+	public static Document parseXmlFileToXmlDoc(File toolFile) {
+		String toolFilePath = toolFile.getAbsolutePath();
+		String[] fileContentLines = HPCUtils.readFileToStringArray(toolFilePath);
+		
+		// Remove the XML Definition line
+		fileContentLines = HPCUtils.removeXmlDefinitionLine(fileContentLines);
+		// Convert to String
+		String fileContent = HPCUtils.arrayToString(fileContentLines); 
+		// Parse to Xml Document
+		Document xmlDoc = XmlUtils.parseXmlToDocument(fileContent);
+		return xmlDoc;
 	}
 	
 	public static Object evaluateXPathExpr(Document xmlDocument, String pathExpr, QName returnType) {
