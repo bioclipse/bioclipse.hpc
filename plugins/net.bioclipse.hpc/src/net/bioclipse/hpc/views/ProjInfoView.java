@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import javax.management.openmbean.CompositeData;
 
 import net.bioclipse.hpc.business.HPCManager;
+import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
 
@@ -152,23 +153,24 @@ public class ProjInfoView extends ViewPart {
 	}
 
 	public void setContentsFromXML(String xmlString) {
+		// Why am I not doing this with XPath expressions?
 		System.out.println("XML String:\n" + xmlString);
-		List<String> groupXMLParts = getMatches("<groupinfo>.*?</groupinfo>", xmlString);
+		List<String> groupXMLParts = HPCUtils.getMatches("<groupinfo>.*?</groupinfo>", xmlString);
 		contentModel.clearProjInfoGroups();
 		for (String g : groupXMLParts) {
 			Project projInfoGroup = new Project();
-			String groupName = getMatch("<name>(.*?)</name>", g, 1);
-			String groupUsedHours = getMatch("<time>(.*?)</time>", g, 1);
-			String groupCurrentAllocation = getMatch("<allocation>(.*?)</allocation>", g, 1);
+			String groupName = HPCUtils.getMatch("<name>(.*?)</name>", g, 1);
+			String groupUsedHours = HPCUtils.getMatch("<time>(.*?)</time>", g, 1);
+			String groupCurrentAllocation = HPCUtils.getMatch("<allocation>(.*?)</allocation>", g, 1);
 			projInfoGroup.setGroupName(groupName);
 			projInfoGroup.setGroupUsedHours(groupUsedHours);
 			projInfoGroup.setGroupCurrentAllocation(groupCurrentAllocation);
 			
-			List<String> userXMLParts = getMatches("<user>.*?</user>", xmlString);
+			List<String> userXMLParts = HPCUtils.getMatches("<user>.*?</user>", xmlString);
 			for (String s : userXMLParts) {
-				String userName = getMatch("<name>(.*?)</name>", s, 1);
-				String usedHours = getMatch("<time>(.*?)</time>", s, 1);
-				String currentAllocation = getMatch("<allocation>(.*?)</allocation>", s, 1);
+				String userName = HPCUtils.getMatch("<name>(.*?)</name>", s, 1);
+				String usedHours = HPCUtils.getMatch("<time>(.*?)</time>", s, 1);
+				String currentAllocation = HPCUtils.getMatch("<allocation>(.*?)</allocation>", s, 1);
 				Person p = new Person();
 				p.setName(userName);
 				p.setUsedHours(usedHours);
@@ -180,27 +182,6 @@ public class ProjInfoView extends ViewPart {
 		tableTreeViewer.refresh();
 	}
 	
-	protected List<String> getMatches(String regexPattern, String text) {
-		List<String> result = new ArrayList<String>();
-		Pattern p = Pattern.compile(regexPattern);
-		Matcher m = p.matcher(text);
-		while (m.find()) {
-			String currentMatchString = m.group();
-			result.add(currentMatchString); 
-		}
-		return result;
-	}
-	
-	protected String getMatch(String regexPattern, String text, int group) {
-		String result = null;
-		Pattern p = Pattern.compile(regexPattern);
-		Matcher m = p.matcher(text);
-		if (m.find()) {
-			result = m.group(group);
-		}
-		return result;
-	}
-
 	public ProjInfoContentModel getContentModel() {
 		return contentModel;
 	}

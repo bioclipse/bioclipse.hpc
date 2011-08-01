@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -68,6 +70,27 @@ public class HPCUtils {
     	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(System.currentTimeMillis());
     }
+    
+	public static List<String> getMatches(String regexPattern, String text) {
+		List<String> result = new ArrayList<String>();
+		Pattern p = Pattern.compile(regexPattern);
+		Matcher m = p.matcher(text);
+		while (m.find()) {
+			String currentMatchString = m.group();
+			result.add(currentMatchString); 
+		}
+		return result;
+	}
+	
+	public static String getMatch(String regexPattern, String text, int group) {
+		String result = null;
+		Pattern p = Pattern.compile(regexPattern);
+		Matcher m = p.matcher(text);
+		if (m.find()) {
+			result = m.group(group);
+		}
+		return result;
+	}
 
     public static String arrayToString(String[] stringArray){
 		String str = " ";
