@@ -87,8 +87,8 @@ public class ToolConfigDomain {
 					String toolName = toolFile.getName();
 					// The actual tool configurations are stored in XML-files, so do read these
 					if (toolName.endsWith(".xml")) {
-						String folderFilePath = toolFile.getAbsolutePath();
-						String[] fileContentLines = HPCUtils.readFileToStringArray(folderFilePath);
+						String toolFilePath = toolFile.getAbsolutePath();
+						String[] fileContentLines = HPCUtils.readFileToStringArray(toolFilePath);
 						
 						// Remove the XML Definition line
 						fileContentLines = HPCUtils.removeXmlDefinitionLine(fileContentLines);

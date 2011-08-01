@@ -112,7 +112,7 @@ public class ProjInfoView extends ViewPart {
 	}
 
 	public void setContentsFromXML(String xmlString) {
-		// Why am I not doing this with XPath expressions?
+		// Why am I not doing this with XPath expressions, such as in the JobInfoView?
 		// ... and should this XML format dependent stuff really be stored here?
 		System.out.println("XML String:\n" + xmlString);
 		List<String> groupXMLParts = HPCUtils.getMatches("<groupinfo>.*?</groupinfo>", xmlString);
