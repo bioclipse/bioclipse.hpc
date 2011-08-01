@@ -111,49 +111,9 @@ public class ProjInfoView extends ViewPart {
 		initializeMenu();
 	}
 
-	private void updateProjectInfoTable() {
-		HPCManager hpcManagerObj = new HPCManager();
-		hpcManagerObj.updateProjInfoView();
-	}
-
-	protected IRemoteFile getFirstSelectedRemoteFile() {
-		if (_selectedFiles.size() > 0) {
-			return (IRemoteFile) _selectedFiles.get(0);
-		}
-		return null;
-	}
-
-
-	/**
-	 * Create the actions.
-	 */
-	private void createActions() {
-		// Create the actions
-	}
-
-	/**
-	 * Initialize the toolbar.
-	 */
-	private void initializeToolBar() {
-		IToolBarManager toolbarManager = getViewSite().getActionBars()
-		.getToolBarManager();
-	}
-
-	/**
-	 * Initialize the menu.
-	 */
-	private void initializeMenu() {
-		IMenuManager menuManager = getViewSite().getActionBars()
-		.getMenuManager();
-	}
-
-	@Override
-	public void setFocus() {
-		// Set the focus
-	}
-
 	public void setContentsFromXML(String xmlString) {
 		// Why am I not doing this with XPath expressions?
+		// ... and should this XML format dependent stuff really be stored here?
 		System.out.println("XML String:\n" + xmlString);
 		List<String> groupXMLParts = HPCUtils.getMatches("<groupinfo>.*?</groupinfo>", xmlString);
 		contentModel.clearProjInfoGroups();
@@ -180,6 +140,46 @@ public class ProjInfoView extends ViewPart {
 			contentModel.addProjInfoGroup(projInfoGroup);
 		}
 		tableTreeViewer.refresh();
+	}
+
+	private void updateProjectInfoTable() {
+		HPCManager hpcManagerObj = new HPCManager();
+		hpcManagerObj.updateProjInfoView();
+	}
+
+	protected IRemoteFile getFirstSelectedRemoteFile() {
+		if (_selectedFiles.size() > 0) {
+			return (IRemoteFile) _selectedFiles.get(0);
+		}
+		return null;
+	}
+	
+	/**
+	 * Create the actions.
+	 */
+	private void createActions() {
+		// Create the actions
+	}
+
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars()
+		.getToolBarManager();
+	}
+
+	/**
+	 * Initialize the menu.
+	 */
+	private void initializeMenu() {
+		IMenuManager menuManager = getViewSite().getActionBars()
+		.getMenuManager();
+	}
+
+	@Override
+	public void setFocus() {
+		// Set the focus
 	}
 	
 	public ProjInfoContentModel getContentModel() {
