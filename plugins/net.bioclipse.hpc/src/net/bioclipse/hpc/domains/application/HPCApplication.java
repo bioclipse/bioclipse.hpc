@@ -1,7 +1,9 @@
 package net.bioclipse.hpc.domains.application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -102,7 +104,6 @@ public class HPCApplication extends AbstractModelObject {
 	
 	public void updateProjInfoView() {
 		String commandOutput;
-		IHost hpcHost;
 
 		System.out.println("Button was clicked!");
 		// find the right view
@@ -121,6 +122,21 @@ public class HPCApplication extends AbstractModelObject {
 		} else {
 			System.out.println("No View found!");
 		}
+	}
+	
+	public Map<String,String> getUserInfo() {
+		String commandOutput;
+		HashMap<String,String> userInfo = new HashMap<String,String>();
+		
+		commandOutput = executeRemoteCommand("fimsproxy -t userinfo");
+		
+		String userInfoString = getMatch("<userinfo>.*</userinfo>", commandOutput);
+		if (userInfoString != null) {
+			// Do stuff here that populates userInfo
+		} else {
+			System.out.println("Could not extract XML for userinfo!");
+		}
+		return userInfo;
 	}
 	
 	public void readToolConfigFiles(String folderPath) {
