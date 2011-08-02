@@ -131,9 +131,9 @@ public class HPCApplication extends AbstractModelObject {
 		}
 	}
 	
-	public Map<String,String> getUserInfo() {
+	public Map<String,Object> getUserInfo() {
 		String commandOutput;
-		HashMap<String,String> userInfo = new HashMap<String,String>();
+		HashMap<String,Object> userInfo = new HashMap<String,Object>();
 		
 		commandOutput = executeRemoteCommand("fimsproxy -t userinfo");
 		
@@ -150,7 +150,7 @@ public class HPCApplication extends AbstractModelObject {
 				String nodeVal = node.getTextContent();
 				projects.add(nodeVal);
 			}
-			userInfo.put("projects", projects.toString());
+			userInfo.put("projects", projects);
 		} else {
 			System.out.println("Could not extract XML for userinfo!");
 		}

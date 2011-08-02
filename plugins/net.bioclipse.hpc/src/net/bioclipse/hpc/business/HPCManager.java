@@ -78,7 +78,7 @@ public class HPCManager implements IBioclipseManager {
 	 * Main methods (mostly just passed on to the application object) 
 	 */
 
-	public Map<String,String> getUserInfo() {
+	public Map<String,Object> getUserInfo() {
 		return application.getUserInfo();
 	}
 	
