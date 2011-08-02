@@ -2,8 +2,10 @@ package net.bioclipse.hpc.wizards;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.domains.toolconfig.Option;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
@@ -60,6 +62,17 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		// -t d-hh:mm:ss     | ?      // TODO: Find a good widget for setting the time
 		// --qos=short       | Combo (yes/no)
 		// -J [JobName]      | TextField
+		
+		// Get user info, to use for writing the SBATCH config
+		Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
+		
+		String username = (String) userInfo.get("username");
+		List<String> projects = (List<String>) userInfo.get("projects");
+		
+		// TODO: Remove Debug code
+		System.out.println("Username: " + username + ", Projects: " + projects.toString());
+		
+	    this.composite.pack();
 	}
 
 	private void createComboBox(String label, List<String> optionValues, int horizontalSpan) {

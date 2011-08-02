@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.bioclipse.hpc.Activator;
+import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.swt.SWT;
@@ -23,6 +25,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
 
 public class HPCUtils {
+	
+	public static HPCApplication getApplication() {
+		Activator plugin = Activator.getDefault();
+		HPCApplication application = plugin.application;
+		return application;
+	}
 	
 	public static String[] readFileToStringArray(String filePath) {
 		File file = new File(filePath);

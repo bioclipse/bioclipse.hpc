@@ -14,6 +14,7 @@ import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.rse.core.IRSECoreRegistry;
 import org.eclipse.rse.core.RSECorePlugin;
@@ -155,7 +156,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		btnBrowseRemoteFiles.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				IHost hpcHost = getApplication().getHPCHost();
+				IHost hpcHost = HPCUtils.getApplication().getHPCHost();
 				
 				if (hpcHost == null) {
 					MessageDialog.openWarning(SystemBasePlugin.getActiveWorkbenchShell(), "HPC Host was null!", "HPC Host was null!");
@@ -247,10 +248,11 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	public String getCommandText() {
 		return commandText.getText();
 	}
-
-	protected HPCApplication getApplication() {
-		Activator plugin = Activator.getDefault();
-		HPCApplication application = plugin.application;
-		return application;
+	
+	@Override
+	public IWizardPage getNextPage() {
+		ConfigureSbatchScriptPage configSbatchScriptPage = ((ConfigureSbatchScriptPage) this.getWizard().getPage("Page 5"));
+		configSbatchScriptPage.onEnterPage();
+		return configSbatchScriptPage;
 	}
 }
