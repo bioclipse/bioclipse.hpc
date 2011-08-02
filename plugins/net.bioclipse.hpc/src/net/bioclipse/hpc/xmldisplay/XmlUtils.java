@@ -3,6 +3,8 @@ package net.bioclipse.hpc.xmldisplay;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -65,7 +67,7 @@ public class XmlUtils {
 		return xmlDoc;
 	}
 	
-	public static Object evalXPathExpr(Document xmlDocument, String pathExpr, QName returnType) {
+	public static Object evalXPathExpr(String pathExpr, Document xmlDocument, QName returnType) {
 		XPathFactory xPathFactory = XPathFactory.newInstance();
 		XPath xpathObj = xPathFactory.newXPath();
 		XPathExpression expr;
@@ -80,7 +82,7 @@ public class XmlUtils {
 		return result;
 	}
 	
-	public static Object evaluateXPathExprToNodeSet(String pathExpr, Document xmlDocument) {
+	public static Object evalXPathExprToNodeList(String pathExpr, Document xmlDocument) {
 		XPathFactory xPathFactory = XPathFactory.newInstance();
 		XPath xpathObj = xPathFactory.newXPath();
 		XPathExpression expr;
@@ -95,6 +97,21 @@ public class XmlUtils {
 		return result;
 	}
 	
+
+	/**
+	 * Convert W3C Dom NodeList to an Java ArrayList of Nodes
+	 * @param nodeList
+	 * @return
+	 */
+	public static List<Node> nodeListToListOfNodes(NodeList nodeList) {
+		ArrayList<Node> listOfNodes = new ArrayList<Node>();
+		for (int i=0; i<nodeList.getLength(); i++) {
+			Node currentNode = nodeList.item(i);
+			listOfNodes.add(currentNode);
+		}
+		return listOfNodes;
+	}
+
 	public static Node getNodeChildByName(Node parentNode, String childNodeName) {
 		Node childNode = null;
 		NodeList childNodeList = parentNode.getChildNodes();

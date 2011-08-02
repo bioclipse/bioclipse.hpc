@@ -106,10 +106,10 @@ public class ToolConfigDomain {
 		Tool tool = new Tool();
 		try {
 			// XPath Expressions
-			String name = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/@name", XPathConstants.STRING);
-			String description = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/description", XPathConstants.STRING);
-			String command = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/command", XPathConstants.STRING);
-			String interpreter = (String) XmlUtils.evalXPathExpr(xmlDoc, "/tool/command/@interpreter", XPathConstants.STRING);
+			String name = (String) XmlUtils.evalXPathExpr("/tool/@name", xmlDoc, XPathConstants.STRING);
+			String description = (String) XmlUtils.evalXPathExpr("/tool/description", xmlDoc, XPathConstants.STRING);
+			String command = (String) XmlUtils.evalXPathExpr("/tool/command", xmlDoc, XPathConstants.STRING);
+			String interpreter = (String) XmlUtils.evalXPathExpr("/tool/command/@interpreter", xmlDoc, XPathConstants.STRING);
 
 			tool.setName(name);
 			tool.setDescription(description);
@@ -127,7 +127,7 @@ public class ToolConfigDomain {
 			// Create empty hashmap
 			Map<String,String> attributes = new HashMap<String,String>(); 
 
-			NodeList paramNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/inputs/param", xmlDoc);
+			NodeList paramNodes = (NodeList) XmlUtils.evalXPathExprToNodeList("/tool/inputs/param", xmlDoc);
 			
 			// Loop over all parameters for the current tool
 			for (int i=0; i<paramNodes.getLength(); i++) {
@@ -136,7 +136,7 @@ public class ToolConfigDomain {
 				configureNewParamAndAddToTool(tool, currentNode);
 			}
 
-			NodeList outputNodes = (NodeList) XmlUtils.evaluateXPathExprToNodeSet("/tool/outputs/data", xmlDoc);
+			NodeList outputNodes = (NodeList) XmlUtils.evalXPathExprToNodeList("/tool/outputs/data", xmlDoc);
 			// Loop over all parameters for the current tool
 			for (int i=0; i<outputNodes.getLength(); i++) {
 				Node currentNode = outputNodes.item(i);

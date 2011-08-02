@@ -60,8 +60,8 @@ public class XmlDataProviderFactory {
 		Document xmlDoc = XmlUtils.parseXmlToDocument(rawXmlContent);
 		setXmlDocument(xmlDoc);
 		
-		createColumnLabelMappings((NodeList) XmlUtils.evaluateXPathExprToNodeSet("infodocument/columnlabelmappings/mapping", getXmlDocument()));
-		setNodeList((NodeList) XmlUtils.evaluateXPathExprToNodeSet("infodocument/item", getXmlDocument()));
+		createColumnLabelMappings((NodeList) XmlUtils.evalXPathExprToNodeList("infodocument/columnlabelmappings/mapping", getXmlDocument()));
+		setNodeList((NodeList) XmlUtils.evalXPathExprToNodeList("infodocument/item", getXmlDocument()));
 		createRowCollectionsFromNodeList(getNodeList());
 	}
 

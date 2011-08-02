@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import javax.xml.xpath.XPathConstants;
 
 import net.bioclipse.hpc.Activator;
+import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.JobInfoView;
 import net.bioclipse.hpc.views.ProjInfoView;
@@ -29,6 +30,8 @@ import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class HPCApplication extends AbstractModelObject {
 	private List _selectedFiles;
@@ -137,10 +140,17 @@ public class HPCApplication extends AbstractModelObject {
 		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
 		if (userInfoXmlString != null) {
 			Document userInfoXmlDoc = XmlUtils.parseXmlToDocument(userInfoXmlString);
-			String userName = (String) XmlUtils.evalXPathExpr(userInfoXmlDoc, "userinfo/username", XPathConstants.STRING);
+			String userName = (String) XmlUtils.evalXPathExpr("/userinfo/username", userInfoXmlDoc, XPathConstants.STRING);
 			userInfo.put("username", userName);
-			// TODO: Remove debug code
-			System.out.println("DEBUG: Username: " + userName);
+			NodeList projectsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/userinfo/projects/project", userInfoXmlDoc);
+			// Easier to work with NodeList or List of Nodes? 
+			List<Node> projectNodes = XmlUtils.nodeListToListOfNodes(projectsNodeList);
+			List<String> projects = new ArrayList<String>();
+			for (Node node : projectNodes) {
+				String nodeVal = node.getTextContent();
+				projects.add(nodeVal);
+			}
+			userInfo.put("projects", projects.toString());
 		} else {
 			System.out.println("Could not extract XML for userinfo!");
 		}
