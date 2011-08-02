@@ -69,12 +69,12 @@ public class HPCApplication extends AbstractModelObject {
 				while (temp != null) {
 					temp = null;
 					temp = simpleCommandOp.readLine(true);
-					if (temp != "") {
+					// if (temp != "") {
 						allOutput += temp;
-						System.out.println("Output from : " + temp);
-					}
+						// System.out.println("Output from : " + temp);
+					// }
 					try {
-						Thread.sleep(15);
+						Thread.sleep(0);
 					} catch (Exception sleepError) {
 						sleepError.printStackTrace();
 					}

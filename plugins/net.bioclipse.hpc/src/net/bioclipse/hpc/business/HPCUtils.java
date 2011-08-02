@@ -118,7 +118,7 @@ public class HPCUtils {
 	}
 
 	public static String[] stringListToArray(List<String> stringList) {
-		String[] stringArray = stringList.toArray(new String[stringList.size()]);  
+		String[] stringArray = stringList.toArray(new String[stringList.size()]);
 		return stringArray;
 	}
 
