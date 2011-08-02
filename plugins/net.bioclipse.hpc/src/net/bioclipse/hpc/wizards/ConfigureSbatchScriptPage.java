@@ -69,13 +69,16 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		String username = (String) userInfo.get("username");
 		List<String> projects = (List<String>) userInfo.get("projects");
 		
+		createLabel("Project to account");
+		createComboBox(projects, 2);
+		
 		// TODO: Remove Debug code
 		System.out.println("Username: " + username + ", Projects: " + projects.toString());
 		
 	    this.composite.pack();
 	}
 
-	private void createComboBox(String label, List<String> optionValues, int horizontalSpan) {
+	private void createComboBox(List<String> optionValues, int horizontalSpan) {
 		Combo currentCombo = HPCUtils.createCombo(composite);
 
 		// Layout stuff
@@ -97,6 +100,16 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		//		String selectedOptionValue = selectedOption.getValue();
 		//		currentCombo.setText(selectedOptionValue);
 		//	}
+	}
+	
+	private void createLabel(String labelText) {
+		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
+		labelText = HPCUtils.ensureEndsWithColon(labelText);
+		fieldLabel.setBackground (composite.getBackground());
+		fieldLabel.setText(labelText);
+		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
+		labelGridData.widthHint = 160;
+		fieldLabel.setLayoutData(labelGridData);
 	}
 
 	// TODO: Check that it works!
