@@ -32,8 +32,17 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	Composite parentComposite;
 	Composite composite;
 
-	StyledText sbatchScript;
+	StyledText sbatchStyledText;
 	List<Widget> widgets;
+	
+	String sbatchTemplate = 
+		"#SBATCH -A [project]\n" +
+		"#SBATCH -p [partition]\n" +
+		"#SBATCH -N [noofnodes]\n" +
+		"#SBATCH -n [noofcpus]\n" +
+		"#SBATCH -t [runtime]\n" +
+		"#SBATCH [qosshort]\n" +
+		"#SBATCH -J [jobname]\n";	
 
 	protected ConfigureSbatchScriptPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 5");
@@ -127,23 +136,15 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 
 	private void createResultingSBatchScriptTextbox() {
 		createLabel("Resulting SBATCH Script");
-		String sbatchScriptText = 
-			"#SBATCH -A [project]\n" +
-			"#SBATCH -p [partition]\n" +
-			"#SBATCH -N [noofnodes]\n" +
-			"#SBATCH -n [noofcpus]\n" +
-			"#SBATCH -t [runtime]\n" +
-			"#SBATCH [qosshort]\n" +
-			"#SBATCH -J [jobname]\n";
-		
-		sbatchScript = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
-		sbatchScript.setText(sbatchScriptText);
+
+		sbatchStyledText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
+		sbatchStyledText.setText(sbatchTemplate);
 		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
 		gridLayoutData.horizontalSpan = 2;
 		gridLayoutData.grabExcessHorizontalSpace = true;
 		gridLayoutData.heightHint = 48;
 		gridLayoutData.widthHint = 200;
-		sbatchScript.setLayoutData(gridLayoutData);
+		sbatchStyledText.setLayoutData(gridLayoutData);
 	}
 
 	private void createComboBox(String identifier, List<String> optionValues, int horizontalSpan, String defValue) {
@@ -203,37 +204,42 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		fieldLabel.setLayoutData(labelGridData);
 	}
 
-	// TODO: Check that it works!
 	@Override
 	public void handleEvent(Event event) {
 		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
-			Widget widget = event.widget;
-			String id = (String) widget.getData();
-			String newValue = null;
-			if (widget instanceof Combo) {
-				newValue = ((Combo) event.widget).getText();
-			} else if (widget instanceof Text) {
-				newValue = ((Text) event.widget).getText();
-			} else {
-				System.out.println("Could not set newValue");
-			}
-			System.out.println(id + " = " + newValue);
+			for (Widget widget : widgets) {
+				String id = (String) widget.getData();
+				String newValue = null;
+				if (widget instanceof Combo) {
+					newValue = ((Combo) widget).getText();
+				} else if (widget instanceof Text) {
+					newValue = ((Text) widget).getText();
+				} else {
+					System.out.println("Could not set newValue");
+				}
+				System.out.println(id + " = " + newValue);
 
-			if (id.equals("project")) {
-			//	
-			} else if (id.equals("partition")) {
-				//	
-			} else if (id.equals("noofnodes")) {
-				//	
-			} else if (id.equals("noofcpus")) {
-				//	
-			} else if (id.equals("runtime")) {
-				//	
-			} else if (id.equals("qosshort")) {
-				//	
-			} else if (id.equals("jobname")) {
-				//	
+				// Update the Resulting SBATCH StyledText
+				String newSbatchText = "";
+				newSbatchText = sbatchTemplate.replace("[" + id + "]", newValue);
+				sbatchStyledText.setText(newSbatchText);
 			}
+
+//			if (id.equals("project")) {
+//				//	
+//			} else if (id.equals("partition")) {
+//				//
+//			} else if (id.equals("noofnodes")) {
+//				//	
+//			} else if (id.equals("noofcpus")) {
+//				//	
+//			} else if (id.equals("runtime")) {
+//				//	
+//			} else if (id.equals("qosshort")) {
+//				//	
+//			} else if (id.equals("jobname")) {
+//				//	
+//			}
 		}
 	}
 
