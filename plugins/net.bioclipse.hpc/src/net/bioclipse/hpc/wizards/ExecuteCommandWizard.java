@@ -15,6 +15,7 @@ import org.eclipse.ui.IWorkbench;
 
 public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	
+	public boolean canFinish;
 	private String resultingCommand;
 	// the workbench instance
 	protected IWorkbench workbench;
@@ -67,33 +68,40 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	@Override
 	public boolean performFinish() {
 
-		ConfigureCommandPage page = (ConfigureCommandPage) this.getPage("Page 3");
-		String command = page.getCommandText();
+		ConfigureCommandPage cmdPage = (ConfigureCommandPage) this.getPage("Page 3");
+		String command = cmdPage.getCommandText();
+
+		ConfigureSbatchScriptPage sbatchPage = (ConfigureSbatchScriptPage) this.getPage("Page 5");
+		String sbatchParam = sbatchPage.getResultingSbatchAndCommandText();
+		
 		String dateTimeStamp = HPCUtils.dateTimeStamp();
 		String fileName = "temp-command-file." + dateTimeStamp + ".sh";
 		String scriptString = "";
 
 		// Save SBATCH file here instead ...
 		scriptString = addLineToScript("#!/bin/bash -l", scriptString, fileName);
-		scriptString = addLineToScript(command, scriptString, fileName);
+		scriptString = addLineToScript(sbatchParam, scriptString, fileName);
+		// Command line already added in sbatch config page
+		// scriptString = addLineToScript(command, scriptString, fileName);
 		
 		getApplication().executeRemoteCommand(scriptString);
 		return true;
 	}
 	
 	public String addLineToScript(String line, String scriptString, String scriptFileName) {
-		line = escapeDoubleQuotes(line);
+		line = escapeSpecialChars(line);
 		scriptString += "echo '" + line + "' >> " + scriptFileName + ";";
 		return scriptString;
 	}
 	
-	private String escapeDoubleQuotes(String line) {
+	private String escapeSpecialChars(String line) {
+		line = line.replace("\\", "\\\\");
 		line = line.replace("\"", "\\\"");
 		return line;
 	}
 
 	public boolean canFinish() {
-		return true;
+		return canFinish;
 	}
 
 	public String getResultingCommand() {
@@ -108,6 +116,10 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		Activator plugin = Activator.getDefault();
 		HPCApplication application = plugin.application;
 		return application;
+	}
+
+	public void setCanFinish(boolean b) {
+		canFinish = b;
 	}
 
 }

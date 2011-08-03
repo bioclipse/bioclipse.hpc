@@ -51,6 +51,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	StyledText commandText;
 	Tool currentTool;
 	List<Widget> widgets;
+	boolean initialized;
 	
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 3");
@@ -75,25 +76,27 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 	
 	void onEnterPage() {
-		
-		createControl(parentComposite);
-		
-		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
-		String selectedToolName = comboTool.getText();
-		currentTool = ToolConfigDomain.getInstance().getToolByName(selectedToolName);
+		if (!this.initialized) {
+			this.initialized = true;
+			createControl(parentComposite);
+			
+			Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
+			String selectedToolName = comboTool.getText();
+			currentTool = ToolConfigDomain.getInstance().getToolByName(selectedToolName);
 
-		if (currentTool != null) {
-			parameters = currentTool.getParameters();
-			for (Parameter parameter : parameters) {
-				createWidgetsForParam(parameter);
+			if (currentTool != null) {
+				parameters = currentTool.getParameters();
+				for (Parameter parameter : parameters) {
+					createWidgetsForParam(parameter);
+				}
+				String commandString = currentTool.getCompleteCommand();
+				createResultingCommandTextbox(commandString);
+			} else {
+				System.out.println("Tool with name '" + selectedToolName + "' not found.");
 			}
-			String commandString = currentTool.getCompleteCommand();
-			createResultingCommandTextbox(commandString);
-		} else {
-			System.out.println("Tool with name '" + selectedToolName + "' not found.");
+			
+		    this.composite.pack();
 		}
-		
-	    this.composite.pack();
 	}
 
 	private void createResultingCommandTextbox(String commandString) {
