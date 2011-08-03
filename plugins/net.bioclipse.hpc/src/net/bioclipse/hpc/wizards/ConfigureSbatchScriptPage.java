@@ -90,7 +90,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 				System.out.println("ERROR: MaxCPUs is zero!");
 			}
 		}
-		createComboBox("noofcpus", maxNodesStringList, 2);
+		createComboBox("noofnodes", maxNodesStringList, 2);
 
 		// -n [no of cpus]   | Text-field / up-down number field?
 		createLabel("No of CPUs");
