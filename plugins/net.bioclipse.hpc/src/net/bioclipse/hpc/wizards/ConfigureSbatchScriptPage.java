@@ -1,6 +1,7 @@
 package net.bioclipse.hpc.wizards;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +78,8 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		// -n [no of cpus]   | Text-field / up-down number field?
 		// -t d-hh:mm:ss     | ?      // TODO: Find a good widget for setting the time
 		// --qos=short       | Combo (yes/no)
+		createLabel("Activate --qos=short option?");
+		createComboBox(Arrays.asList("no", "yes"), 2, "no");
 		// -J [JobName]      | TextField
 		
 		// TODO: Remove Debug code
@@ -85,7 +88,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	    this.composite.pack();
 	}
 
-	private void createComboBox(List<String> optionValues, int horizontalSpan) {
+	private void createComboBox(List<String> optionValues, int horizontalSpan, String defValue) {
 		Combo currentCombo = HPCUtils.createCombo(composite);
 
 		// Layout stuff
@@ -100,16 +103,17 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		// Populate
 		String[] selectOptionsArr = HPCUtils.stringListToArray(optionValues);
 		currentCombo.setItems(selectOptionsArr);
-		
-		// TODO: Is this really needed?
-		// Option selectedOption = ???
-		//	if (selectedOption != null) {
-		//		String selectedOptionValue = selectedOption.getValue();
-		//		currentCombo.setText(selectedOptionValue);
-		//	}
+		if (defValue != "") {
+			currentCombo.setText(defValue);
+		}
 	}
 	
-	private void createLabel(String labelText) {
+	// Optional signature without the default value set
+	private void createComboBox(List<String> optionValues, int horizontalSpan) {
+		createComboBox(optionValues, horizontalSpan, "");
+	}
+
+		private void createLabel(String labelText) {
 		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
 		labelText = HPCUtils.ensureEndsWithColon(labelText);
 		fieldLabel.setBackground (composite.getBackground());
