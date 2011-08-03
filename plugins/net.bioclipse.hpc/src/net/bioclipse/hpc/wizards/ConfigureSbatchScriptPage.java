@@ -54,23 +54,27 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	void onEnterPage() {
 		createControl(parentComposite);
 		
+		// Get user info, to use for writing the SBATCH config
+		Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
+		String username = (String) userInfo.get("username");
+		List<String> projects = (List<String>) userInfo.get("projects");
+
+		// Get various info used for writing SBATCH config
+		Map<String,Object> clusterInfo = HPCUtils.getApplication().getClusterInfo();
+		String maxNodes = (String) clusterInfo.get("maxnodes");
+		String maxCpus = (String) clusterInfo.get("maxcpus");
+		List<String> partitions = (List<String>) clusterInfo.get("partitions");
+
 		// Populate wizard here
 		// -A [project name] | Combo  // TODO: Retrieve the user's project automatic
+		createLabel("Project to account");
+		createComboBox(projects, 2);
 		// -p [partition]    | Combo  // Simple list, or get info from cluster?
 		// -N [no of nodes]  | Text-field / up-down number field?
 		// -n [no of cpus]   | Text-field / up-down number field?
 		// -t d-hh:mm:ss     | ?      // TODO: Find a good widget for setting the time
 		// --qos=short       | Combo (yes/no)
 		// -J [JobName]      | TextField
-		
-		// Get user info, to use for writing the SBATCH config
-		Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
-		
-		String username = (String) userInfo.get("username");
-		List<String> projects = (List<String>) userInfo.get("projects");
-		
-		createLabel("Project to account");
-		createComboBox(projects, 2);
 		
 		// TODO: Remove Debug code
 		System.out.println("Username: " + username + ", Projects: " + projects.toString());

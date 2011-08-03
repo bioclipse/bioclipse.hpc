@@ -78,6 +78,10 @@ public class HPCManager implements IBioclipseManager {
 	 * Main methods (mostly just passed on to the application object) 
 	 */
 
+	public Map<String,Object> getClusterInfo() {
+		return application.getClusterInfo();
+	}
+	
 	public Map<String,Object> getUserInfo() {
 		return application.getUserInfo();
 	}

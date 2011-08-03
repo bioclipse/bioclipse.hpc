@@ -32,6 +32,13 @@ public interface IHPCManager extends IBioclipseManager {
 
 	@Recorded
 	@PublishedMethod(
+			params="", 
+			methodSummary="Returns info about the currently logged in user, such as user name and projects in which he/she is a member"
+	)
+	public Map<String,Object> getClusterInfo();
+
+	@Recorded
+	@PublishedMethod(
 			params="String command", 
 			methodSummary="Executes a command"
 	)

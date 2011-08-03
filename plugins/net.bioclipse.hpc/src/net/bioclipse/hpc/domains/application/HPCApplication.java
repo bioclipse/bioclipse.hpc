@@ -157,6 +157,36 @@ public class HPCApplication extends AbstractModelObject {
 		return userInfo;
 	}
 	
+	public Map<String, Object> getClusterInfo() {
+		String commandOutput;
+		HashMap<String,Object> clusterInfo = new HashMap<String,Object>();
+		
+		commandOutput = executeRemoteCommand("fimsproxy -t userinfo");
+		
+		String clusterInfoXmlString = getMatch("<clusterinfo>.*</clusterinfo>", commandOutput);
+		if (clusterInfoXmlString != null) {
+			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
+			String maxNodes = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
+			String maxCpus = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
+			clusterInfo.put("username", maxNodes);
+			clusterInfo.put("username", maxCpus);
+			
+			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/clusterinfo/partitions/partition", clusterInfoXmlDoc);
+
+			// Easier to work with NodeList or List of Nodes? 
+			List<Node> partitionsNodes = XmlUtils.nodeListToListOfNodes(partitionsNodeList);
+			List<String> partitions = new ArrayList<String>();
+			for (Node partition : partitionsNodes) {
+				String partitionNodeVal = partition.getTextContent();
+				partitions.add(partitionNodeVal);
+			}
+			clusterInfo.put("partitions", partitions);
+		} else {
+			System.out.println("Could not extract XML for clusterinfo!");
+		}
+		return clusterInfo;
+	}	
+	
 	public void readToolConfigFiles(String folderPath) {
 		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(folderPath);
 	}
