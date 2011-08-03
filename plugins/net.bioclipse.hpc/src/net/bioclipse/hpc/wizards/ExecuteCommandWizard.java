@@ -61,7 +61,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 
 		ConfigureCommandPage cmdPage = (ConfigureCommandPage) this.getPage("Page 3");
-		String command = cmdPage.getCommandText();
+		// String command = cmdPage.getCommandText();
 
 		ConfigureSbatchScriptPage sbatchPage = (ConfigureSbatchScriptPage) this.getPage("Page 5");
 		String sbatchParam = sbatchPage.getResultingSbatchAndCommandText();
@@ -87,8 +87,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	}
 	
 	private String escapeSpecialChars(String line) {
-		line = line.replace("\\", "\\\\");
-		line = line.replace("\"", "\\\"");
+		// line = line.replace("\"", "\\\"");
 		return line;
 	}
 

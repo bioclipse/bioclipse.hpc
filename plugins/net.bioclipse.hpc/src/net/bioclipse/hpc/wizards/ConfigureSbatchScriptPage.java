@@ -218,7 +218,6 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 			String newSbatchText = getDefaultSbatchTextWithCommand();
 
 			for (Widget widget : widgets) {
-				String id = (String) widget.getData();
 				String newValue = null;
 				if (widget instanceof Combo) {
 					newValue = ((Combo) widget).getText();
@@ -227,12 +226,22 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 				} else {
 					System.out.println("Could not set newValue");
 				}
-				System.out.println(id + " = " + newValue);
-
-				// Update the Resulting SBATCH StyledText
+				
 				if (newValue != null && !newValue.equals("")) {
-					newSbatchText = newSbatchText.replace("[" + id + "]", newValue);
-					sbatchStyledText.setText(newSbatchText);
+					// Update the Resulting SBATCH StyledText
+					String id = (String) widget.getData();
+					if (id.equals("qosshort")) {
+						// TODO: This is rather UPPMAX specific, no?
+						if (newValue.equals("yes")) {
+							newSbatchText = newSbatchText.replace("[" + id + "]", "--qos=short");
+						} else {
+							newSbatchText = newSbatchText.replace("#SBATCH [" + id + "]\n", "");
+						}
+					} else {
+						newSbatchText = newSbatchText.replace("[" + id + "]", newValue);
+						sbatchStyledText.setText(newSbatchText);
+					}
+					System.out.println(id + " = " + newValue);
 				}
 			}
 
