@@ -97,7 +97,7 @@ public class HPCApplication extends AbstractModelObject {
 			System.out.println("Found jobInfoView: " + jobInfoView);
 
 			//		String rawContent = executeRemoteCommand("python /home/samuel/projects/bioclipseclient/clusterproxy.py -t jobinfo nimar" /* "clusterproxy -t jobinfo" */ );
-			String rawContent = execRemoteCommand("fimsproxy -t jobinfo -u samuel" /* "clusterproxy -t jobinfo" */ );
+			String rawContent = execRemoteCommand("fimsproxy -t jobinfo" /* "clusterproxy -t jobinfo" */ );
 			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
