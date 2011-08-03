@@ -17,6 +17,8 @@ import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,6 +68,16 @@ public class HPCUtils {
 		String[] result = stringBuffer.toArray(new String[]{});
 		return result;
 	}
+	
+	public static String getFileAbsolutePathFromSelection(IStructuredSelection sel) {
+		Object selObj = sel.getFirstElement();
+		String remFileAbsPath = null;
+		if (selObj instanceof IRemoteFile){
+			IRemoteFile remFile = (IRemoteFile) selObj;
+			remFileAbsPath = remFile.getAbsolutePath();
+		}
+		return remFileAbsPath;
+	}	
 
 	public static String currentTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");

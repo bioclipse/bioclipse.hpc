@@ -65,6 +65,21 @@
            </action>
        </objectContribution>       
     </extension>    
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+               objectClass="org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile"
+               nameFilter="*.sh"
+               id="actions.execScriptAsBatchJob">
+           <action
+                   label="Submit as Slurm Batch script"
+                   tooltip="Assumes that the script includes the required #SBATCH parameters, so that it can simply be sent to sbatch as is..."
+                   class="net.bioclipse.hpc.wizards.ExecScriptAsBatchJobAction"
+                   menubarPath="additions"
+                   enablesFor="1"
+                   id="net.bioclipse.hpc.wizards.action2">
+           </action>
+       </objectContribution>       
+    </extension>        
    <!-- extension point="org.eclipse.ui.popupMenus">
       <objectContribution
                objectClass="java.lang.Object"

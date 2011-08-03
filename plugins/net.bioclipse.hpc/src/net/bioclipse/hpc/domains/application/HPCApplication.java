@@ -51,7 +51,7 @@ public class HPCApplication extends AbstractModelObject {
 		}
 	}
 	
-	public String executeRemoteCommand(String command) {
+	public String execRemoteCommand(String command) {
 		IHost hpcHost;
 		String temp = "";
 		String allOutput = "";
@@ -97,7 +97,7 @@ public class HPCApplication extends AbstractModelObject {
 			System.out.println("Found jobInfoView: " + jobInfoView);
 
 			//		String rawContent = executeRemoteCommand("python /home/samuel/projects/bioclipseclient/clusterproxy.py -t jobinfo nimar" /* "clusterproxy -t jobinfo" */ );
-			String rawContent = executeRemoteCommand("fimsproxy -t jobinfo -u pontuss" /* "clusterproxy -t jobinfo" */ );
+			String rawContent = execRemoteCommand("fimsproxy -t jobinfo -u samuel" /* "clusterproxy -t jobinfo" */ );
 			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
@@ -118,7 +118,7 @@ public class HPCApplication extends AbstractModelObject {
 		if (projInfoView!=null) {
 			System.out.println("Found projInfoView: " + projInfoView);
 
-			commandOutput = executeRemoteCommand("fimsproxy -t projinfo");
+			commandOutput = execRemoteCommand("fimsproxy -t projinfo");
 			
 			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
 			if (projInfoXml != null) {
@@ -135,7 +135,7 @@ public class HPCApplication extends AbstractModelObject {
 		String commandOutput;
 		HashMap<String,Object> userInfo = new HashMap<String,Object>();
 		
-		commandOutput = executeRemoteCommand("fimsproxy -t userinfo");
+		commandOutput = execRemoteCommand("fimsproxy -t userinfo");
 		
 		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
 		if (userInfoXmlString != null) {
@@ -161,7 +161,7 @@ public class HPCApplication extends AbstractModelObject {
 		String commandOutput;
 		HashMap<String,Object> clusterInfo = new HashMap<String,Object>();
 		
-		commandOutput = executeRemoteCommand("fimsproxy -t clusterinfo");
+		commandOutput = execRemoteCommand("fimsproxy -t clusterinfo");
 		
 		String clusterInfoXmlString = getMatch("<clusterinfo>.*</clusterinfo>", commandOutput);
 		if (clusterInfoXmlString != null) {
