@@ -10,6 +10,7 @@
  ******************************************************************************/
 package net.bioclipse.hpc.business;
 
+import java.util.List;
 import java.util.Map;
 
 import net.bioclipse.core.PublishedClass;
@@ -37,6 +38,13 @@ public interface IHPCManager extends IBioclipseManager {
 	)
 	public Map<String,Object> getClusterInfo();
 
+	@Recorded
+	@PublishedMethod(
+			params="String binaryName", 
+			methodSummary="Shows a list of the HPC modules, in which a binary of the specified name are found"
+	)
+	public List<String> getModulesForBinary(String binaryName);
+	
 	@Recorded
 	@PublishedMethod(
 			params="String command", 

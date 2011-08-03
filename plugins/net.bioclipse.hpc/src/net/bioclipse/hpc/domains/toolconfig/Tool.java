@@ -94,4 +94,10 @@ public class Tool {
 		return m_interpreter;
 	}
 
+	public String getBinary() {
+		String[] commandParts = this.getCommand().split(" ");
+		String binary = commandParts[0];
+		return binary;
+	}
+
 }

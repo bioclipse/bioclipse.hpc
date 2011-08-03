@@ -63,7 +63,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		ConfigureCommandPage cmdPage = (ConfigureCommandPage) this.getPage("Page 3");
 		// String command = cmdPage.getCommandText();
 
-		ConfigureSbatchScriptPage sbatchPage = (ConfigureSbatchScriptPage) this.getPage("Page 5");
+		ConfigureSbatchScriptPage sbatchPage = (ConfigureSbatchScriptPage) this.getPage("Page 4");
 		String sbatchParam = sbatchPage.getResultingSbatchAndCommandText();
 		
 		String dateTimeStamp = HPCUtils.dateTimeStamp();

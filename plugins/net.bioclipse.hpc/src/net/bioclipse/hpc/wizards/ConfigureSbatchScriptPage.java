@@ -47,7 +47,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		"#SBATCH -J [jobname]\n";	
 
 	protected ConfigureSbatchScriptPage(IWorkbench workbench, IStructuredSelection selection) {
-		super("Page 5");
+		super("Page 4");
 		setTitle("Configure SBATCH parameters");
 		setDescription("Set the parameters for the SBATCH job batch script to be sent to the SLURM resource manager");
 		this.workbench = workbench;
@@ -68,6 +68,10 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		if (!this.initialized) {
 			this.initialized = true;
 			createControl(parentComposite);
+
+			// Get user info, to use for writing the SBATCH config
+			String currentBinary = ((ConfigureCommandPage) this.getWizard().getPage("Page 3")).currentTool.getBinary();
+			List<String> modulesForCommand = HPCUtils.getApplication().getModulesForBinary(currentBinary);
 
 			// Get user info, to use for writing the SBATCH config
 			Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();

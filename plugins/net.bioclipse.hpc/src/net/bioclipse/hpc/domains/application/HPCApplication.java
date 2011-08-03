@@ -178,6 +178,29 @@ public class HPCApplication extends AbstractModelObject {
 		return clusterInfo;
 	}	
 	
+	public List<String> getModulesForBinary(String currentBinary) {
+		String commandOutput;
+		List<String> modulesForBinary = new ArrayList<String>();
+		
+		commandOutput = execRemoteCommand("fimsproxy -t modulesforbin -c " + currentBinary);
+		
+		String clusterInfoXmlString = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
+		if (clusterInfoXmlString != null) {
+			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
+			NodeList modForBinNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/modulesforbinary/module", clusterInfoXmlDoc);
+			
+			List<Node> modForBinListOfNodes = XmlUtils.nodeListToListOfNodes(modForBinNodeList);
+			List<String> partitions = new ArrayList<String>();
+			for (Node modForBinNode : modForBinListOfNodes) {
+				String modForBinStr = modForBinNode.getTextContent();
+				modulesForBinary.add(modForBinStr);
+			}
+		} else {
+			System.out.println("Could not extract XML for modules for binary " + currentBinary + "!");
+		}
+		return modulesForBinary;
+	}
+	
 	public void readToolConfigFiles(String folderPath) {
 		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(folderPath);
 	}
@@ -248,5 +271,6 @@ public class HPCApplication extends AbstractModelObject {
 		}
 		return hpcHost;
 	}
+
 
 }

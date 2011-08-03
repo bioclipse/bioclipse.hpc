@@ -86,6 +86,10 @@ public class HPCManager implements IBioclipseManager {
 		return application.getUserInfo();
 	}
 	
+	public List<String> getModulesForBinary(String binaryName) {
+		return application.getModulesForBinary(binaryName);
+	}
+	
 	public void executeCommand(String command) {
 		application.executeCommand(command);
 	}
