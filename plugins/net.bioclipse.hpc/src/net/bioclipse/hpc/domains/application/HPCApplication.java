@@ -1,6 +1,5 @@
 package net.bioclipse.hpc.domains.application;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +9,6 @@ import java.util.regex.Pattern;
 
 import javax.xml.xpath.XPathConstants;
 
-import net.bioclipse.hpc.Activator;
-import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.JobInfoView;
 import net.bioclipse.hpc.views.ProjInfoView;
@@ -88,16 +85,10 @@ public class HPCApplication extends AbstractModelObject {
 	}
 	
 	public void updateJobInfoView() {
-		String commandOutput;
-
-		System.out.println("Update JobInfo-Button was clicked!");
 		// find the right view
 		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
 		if (jobInfoView!=null) {
-			System.out.println("Found jobInfoView: " + jobInfoView);
-
-			//		String rawContent = executeRemoteCommand("python /home/samuel/projects/bioclipseclient/clusterproxy.py -t jobinfo nimar" /* "clusterproxy -t jobinfo" */ );
-			String rawContent = execRemoteCommand("fimsproxy -t jobinfo" /* "clusterproxy -t jobinfo" */ );
+			String rawContent = execRemoteCommand("fimsproxy -t jobinfo");
 			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
@@ -250,7 +241,7 @@ public class HPCApplication extends AbstractModelObject {
 
 		for (IHost host : hosts) {
 			String hostAlias = host.getAliasName();
-			if (hostAlias.equals("kalkyl.uppmax.uu.se")) { // TODO: This should be configureable!
+			if (hostAlias.equals("kalkyl.uppmax.uu.se")) { // TODO: This should be configurable!
 				hpcHost = host;
 				break;
 			}
