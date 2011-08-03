@@ -1,5 +1,6 @@
 package net.bioclipse.hpc.domains.application;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,14 +74,13 @@ public class HPCApplication extends AbstractModelObject {
 						allOutput += temp;
 						// System.out.println("Output from : " + temp);
 					// }
-					try {
-						Thread.sleep(0);
-					} catch (Exception sleepError) {
-						sleepError.printStackTrace();
-					}
+					// try {
+					// 	Thread.sleep(0);
+					// } catch (Exception sleepError) {
+					// sleepError.printStackTrace();
+					// }
 				}
 			} catch (Exception commandError) {
-				// TODO Auto-generated catch block
 				commandError.printStackTrace();
 			}
 		}

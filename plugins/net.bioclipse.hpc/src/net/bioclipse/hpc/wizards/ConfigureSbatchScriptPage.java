@@ -62,32 +62,67 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 
 		// Get various info used for writing SBATCH config
 		Map<String,Object> clusterInfo = HPCUtils.getApplication().getClusterInfo();
-		String maxNodes = (String) clusterInfo.get("maxnodes");
-		String maxCpus = (String) clusterInfo.get("maxcpus");
+		String maxNodesStr = (String) clusterInfo.get("maxnodes");
+		String maxCpusStr = (String) clusterInfo.get("maxcpus");
 		List<String> partitions = (List<String>) clusterInfo.get("partitions");
 
 		// Populate wizard here
 		// -A [project name] | Combo  // TODO: Retrieve the user's project automatic
 		createLabel("Project to account");
-		createComboBox(projects, 2);
+		createComboBox("project", projects, 2);
 		// -p [partition]    | Combo  // Simple list, or get info from cluster?
 		createLabel("Partition (type of job)");
-		createComboBox(partitions, 2);
+		createComboBox("partition", partitions, 2);
 		
 		// -N [no of nodes]  | Text-field / up-down number field?
+		createLabel("No of Nodes");
+		List<String> maxNodesStringList = new ArrayList<String>();
+		if (maxNodesStr != null) {
+			int maxNodes = Integer.parseInt(maxNodesStr);
+			if (maxNodes > 0) {
+				int[] nodeNos = HPCUtils.range(1, maxNodes, 1);
+				for (int i=0;i<maxNodes;i++) {
+					String nodeNoStr = Integer.toString(nodeNos[i]);
+					maxNodesStringList.add(nodeNoStr);
+				}
+			} else {
+				System.out.println("ERROR: MaxCPUs is zero!");
+			}
+		}
+		createComboBox("noofcpus", maxNodesStringList, 2);
+
 		// -n [no of cpus]   | Text-field / up-down number field?
-		// -t d-hh:mm:ss     | ?      // TODO: Find a good widget for setting the time
+		createLabel("No of CPUs");
+		List<String> maxCpusStringList = new ArrayList<String>();
+		if (maxCpusStr != null) {
+			int maxCpus = Integer.parseInt(maxCpusStr);
+			if (maxCpus > 0) {
+				int[] cpuNos = HPCUtils.range(1, maxCpus, 1);
+				for (int i=0;i<maxCpus;i++) {
+					String cpuNoStr = Integer.toString(cpuNos[i]);
+					maxCpusStringList.add(cpuNoStr);
+				}
+			} else {
+				System.out.println("ERROR: MaxCPUs is zero!");
+			}
+		}
+		createComboBox("noofcpus", maxCpusStringList, 2);
+		
+		// -t d-hh:mm:ss     | ?      
+		createLabel("Running time (d-hh:mm:ss)"); // TODO: Find a good widget for setting the time?
+		createTextField("runtime", 2);
+
 		// --qos=short       | Combo (yes/no)
 		createLabel("Activate --qos=short option?");
-		createComboBox(Arrays.asList("no", "yes"), 2, "no");
+		createComboBox("qosshort", Arrays.asList("no", "yes"), 2, "no");
 		// -J [JobName]      | TextField
 		createLabel("Job name");
-		createTextField(2);
+		createTextField("jobname", 2);
 		
 	    this.composite.pack();
 	}
 
-	private void createComboBox(List<String> optionValues, int horizontalSpan, String defValue) {
+	private void createComboBox(String identifier, List<String> optionValues, int horizontalSpan, String defValue) {
 		Combo currentCombo = HPCUtils.createCombo(composite);
 
 		// Layout stuff
@@ -108,11 +143,11 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	}
 	
 	// Optional signature without the default value set
-	private void createComboBox(List<String> optionValues, int horizontalSpan) {
-		createComboBox(optionValues, horizontalSpan, "");
+	private void createComboBox(String identifier, List<String> optionValues, int horizontalSpan) {
+		createComboBox(identifier, optionValues, horizontalSpan, "");
 	}
 	
-	private Text createTextField(int horizontalSpan, String defaultText) {
+	private Text createTextField(String identifier, int horizontalSpan, String defaultText) {
 		Text textField = new Text(this.composite, SWT.BORDER);
 		textField.setText(defaultText);
 		// Connect the widget to it's corresponding parameter
@@ -128,8 +163,8 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		return textField;
 	}
 
-	private Text createTextField(int horizontalSpan) {
-		return createTextField(horizontalSpan, "");
+	private Text createTextField(String identifier, int horizontalSpan) {
+		return createTextField(identifier, horizontalSpan, "");
 	}
 
 		
@@ -139,7 +174,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		fieldLabel.setBackground (composite.getBackground());
 		fieldLabel.setText(labelText);
 		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		labelGridData.widthHint = 160;
+		labelGridData.widthHint = 120;
 		fieldLabel.setLayoutData(labelGridData);
 	}
 
@@ -152,12 +187,12 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 				String newValue = null;
 				if (widget instanceof Combo) {
 					newValue = ((Combo) widget).getText();
-					System.out.println("Selected option: " + newValue);
+					// System.out.println("Selected option: " + newValue);
 				} else if (widget instanceof Text) {
 					newValue = ((Text) widget).getText();
-					System.out.println("Selected option: " + newValue);
+					// System.out.println("Selected option: " + newValue);
 				} else {
-					System.out.println("Could not set newValue");
+					// System.out.println("Could not set newValue");
 				}
 			}
 		}

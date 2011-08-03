@@ -25,13 +25,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.w3c.dom.Document;
 
 public class HPCUtils {
-	
+
 	public static HPCApplication getApplication() {
 		Activator plugin = Activator.getDefault();
 		HPCApplication application = plugin.application;
 		return application;
 	}
-	
+
 	public static String[] readFileToStringArray(String filePath) {
 		File file = new File(filePath);
 		FileInputStream fis = null;
@@ -67,21 +67,21 @@ public class HPCUtils {
 		return result;
 	}
 
-    public static String currentTime() {
-    	SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
-        return sdf.format(System.currentTimeMillis());
-    }
+	public static String currentTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
+		return sdf.format(System.currentTimeMillis());
+	}
 
-    public static String dateTimeStamp() {
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmm");
-        return sdf.format(System.currentTimeMillis());
-    }
+	public static String dateTimeStamp() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd.HHmm");
+		return sdf.format(System.currentTimeMillis());
+	}
 
-    public static String dateStamp() {
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        return sdf.format(System.currentTimeMillis());
-    }
-    
+	public static String dateStamp() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		return sdf.format(System.currentTimeMillis());
+	}
+
 	public static List<String> getMatches(String regexPattern, String text) {
 		List<String> result = new ArrayList<String>();
 		Pattern p = Pattern.compile(regexPattern);
@@ -92,7 +92,7 @@ public class HPCUtils {
 		}
 		return result;
 	}
-	
+
 	public static String getMatch(String regexPattern, String text, int group) {
 		String result = null;
 		Pattern p = Pattern.compile(regexPattern);
@@ -103,14 +103,14 @@ public class HPCUtils {
 		return result;
 	}
 
-    public static String arrayToString(String[] stringArray){
+	public static String arrayToString(String[] stringArray){
 		String str = " ";
 		for (int i = 0; i < stringArray.length; i++) {
 			str = str + stringArray[i];
 		}
 		return str;
 	}
-    
+
 	public static String[] removeXmlDefinitionLine(String[] fileContentLines) {
 		// Remove the initial XML header, if existing, since it messes up the SAX parser
 		fileContentLines[0] = fileContentLines[0].replaceFirst("<\\?xml.*\\?>", ""); 
@@ -144,4 +144,16 @@ public class HPCUtils {
 		combo.setLayoutData(gridData);
 		return combo;
 	}
+
+	public static int[] range(int start, int end, int increment) {
+		int[] values = new int[Math.abs((end - start) / increment) + 1];
+		boolean reverse = start > end;
+
+		for (int i = start, index = 0; reverse ? (i >= end) : (i <= end); i+=increment, ++index)
+		{
+			values[index] = i;
+		}
+		return values;
+	}
+
 }
