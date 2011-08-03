@@ -32,7 +32,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	Composite parentComposite;
 	Composite composite;
 
-	StyledText scriptText; 	// TODO: Make sure to implement this one
+	StyledText sbatchScript;
 	List<Widget> widgets;
 
 	protected ConfigureSbatchScriptPage(IWorkbench workbench, IStructuredSelection selection) {
@@ -70,6 +70,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		// -A [project name] | Combo  // TODO: Retrieve the user's project automatic
 		createLabel("Project to account");
 		createComboBox("project", projects, 2);
+		
 		// -p [partition]    | Combo  // Simple list, or get info from cluster?
 		createLabel("Partition (type of job)");
 		createComboBox("partition", partitions, 2);
@@ -117,14 +118,38 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		createComboBox("qosshort", Arrays.asList("no", "yes"), 2, "no");
 		// -J [JobName]      | TextField
 		createLabel("Job name");
-		createTextField("jobname", 2);
+		createTextField("jobname", 2, "Untitled");
+		
+		createResultingSBatchScriptTextbox();
 		
 	    this.composite.pack();
 	}
 
+	private void createResultingSBatchScriptTextbox() {
+		createLabel("Resulting SBATCH Script");
+		String sbatchScriptText = 
+			"#SBATCH -A [project]\n" +
+			"#SBATCH -p [partition]\n" +
+			"#SBATCH -N [noofnodes]\n" +
+			"#SBATCH -n [noofcpus]\n" +
+			"#SBATCH -t [runtime]\n" +
+			"#SBATCH [qosshort]\n" +
+			"#SBATCH -J [jobname]\n";
+		
+		sbatchScript = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
+		sbatchScript.setText(sbatchScriptText);
+		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
+		gridLayoutData.horizontalSpan = 2;
+		gridLayoutData.grabExcessHorizontalSpace = true;
+		gridLayoutData.heightHint = 48;
+		gridLayoutData.widthHint = 200;
+		sbatchScript.setLayoutData(gridLayoutData);
+	}
+
 	private void createComboBox(String identifier, List<String> optionValues, int horizontalSpan, String defValue) {
 		Combo currentCombo = HPCUtils.createCombo(composite);
-
+		currentCombo.setData(identifier);
+		
 		// Layout stuff
 		GridData comboLayoutData = new GridData();
 		comboLayoutData.horizontalSpan = horizontalSpan;
@@ -150,6 +175,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	private Text createTextField(String identifier, int horizontalSpan, String defaultText) {
 		Text textField = new Text(this.composite, SWT.BORDER);
 		textField.setText(defaultText);
+		textField.setData(identifier);
 		// Connect the widget to it's corresponding parameter
 		textField.addListener(SWT.KeyUp, this);
 		widgets.add((Widget) textField);
@@ -157,7 +183,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
 		textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
 		textGridData.horizontalSpan = horizontalSpan;
-		textGridData.widthHint = 248;
+		textGridData.widthHint = 160;
 		textField.setLayoutData(textGridData);
 
 		return textField;
@@ -167,14 +193,13 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		return createTextField(identifier, horizontalSpan, "");
 	}
 
-		
-		private void createLabel(String labelText) {
+	private void createLabel(String labelText) {
 		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
 		labelText = HPCUtils.ensureEndsWithColon(labelText);
 		fieldLabel.setBackground (composite.getBackground());
 		fieldLabel.setText(labelText);
 		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
-		labelGridData.widthHint = 120;
+		labelGridData.widthHint = 160;
 		fieldLabel.setLayoutData(labelGridData);
 	}
 
@@ -182,18 +207,32 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	@Override
 	public void handleEvent(Event event) {
 		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
-			for (Widget widget : this.widgets) {
-				// Get the new value from the widget
-				String newValue = null;
-				if (widget instanceof Combo) {
-					newValue = ((Combo) widget).getText();
-					// System.out.println("Selected option: " + newValue);
-				} else if (widget instanceof Text) {
-					newValue = ((Text) widget).getText();
-					// System.out.println("Selected option: " + newValue);
-				} else {
-					// System.out.println("Could not set newValue");
-				}
+			Widget widget = event.widget;
+			String id = (String) widget.getData();
+			String newValue = null;
+			if (widget instanceof Combo) {
+				newValue = ((Combo) event.widget).getText();
+			} else if (widget instanceof Text) {
+				newValue = ((Text) event.widget).getText();
+			} else {
+				System.out.println("Could not set newValue");
+			}
+			System.out.println(id + " = " + newValue);
+
+			if (id.equals("project")) {
+			//	
+			} else if (id.equals("partition")) {
+				//	
+			} else if (id.equals("noofnodes")) {
+				//	
+			} else if (id.equals("noofcpus")) {
+				//	
+			} else if (id.equals("runtime")) {
+				//	
+			} else if (id.equals("qosshort")) {
+				//	
+			} else if (id.equals("jobname")) {
+				//	
 			}
 		}
 	}
