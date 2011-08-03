@@ -81,9 +81,8 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		createLabel("Activate --qos=short option?");
 		createComboBox(Arrays.asList("no", "yes"), 2, "no");
 		// -J [JobName]      | TextField
-		
-		// TODO: Remove Debug code
-		System.out.println("Username: " + username + ", Projects: " + projects.toString());
+		createLabel("Job name");
+		createTextField(2);
 		
 	    this.composite.pack();
 	}
@@ -112,7 +111,28 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	private void createComboBox(List<String> optionValues, int horizontalSpan) {
 		createComboBox(optionValues, horizontalSpan, "");
 	}
+	
+	private Text createTextField(int horizontalSpan, String defaultText) {
+		Text textField = new Text(this.composite, SWT.BORDER);
+		textField.setText(defaultText);
+		// Connect the widget to it's corresponding parameter
+		textField.addListener(SWT.KeyUp, this);
+		widgets.add((Widget) textField);
 
+		GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
+		textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
+		textGridData.horizontalSpan = horizontalSpan;
+		textGridData.widthHint = 248;
+		textField.setLayoutData(textGridData);
+
+		return textField;
+	}
+
+	private Text createTextField(int horizontalSpan) {
+		return createTextField(horizontalSpan, "");
+	}
+
+		
 		private void createLabel(String labelText) {
 		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
 		labelText = HPCUtils.ensureEndsWithColon(labelText);
