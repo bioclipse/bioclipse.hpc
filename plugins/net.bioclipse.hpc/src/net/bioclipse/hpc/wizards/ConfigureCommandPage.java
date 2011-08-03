@@ -254,7 +254,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	
 	@Override
 	public IWizardPage getNextPage() {
-		ConfigureSbatchScriptPage configSbatchScriptPage = ((ConfigureSbatchScriptPage) this.getWizard().getPage("Page 5"));
+		ConfigureSbatchScriptPage configSbatchScriptPage = ((ConfigureSbatchScriptPage) this.getWizard().getPage("Page 4"));
 		configSbatchScriptPage.onEnterPage();
 		return configSbatchScriptPage;
 	}

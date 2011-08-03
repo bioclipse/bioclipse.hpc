@@ -44,7 +44,10 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		"#SBATCH -n [noofcpus]\n" +
 		"#SBATCH -t [runtime]\n" +
 		"#SBATCH [qosshort]\n" +
-		"#SBATCH -J [jobname]\n";	
+		"#SBATCH -J [jobname]\n" +
+		"\n" +
+		"module load bioinfo-tools [modulename]\n";
+		
 
 	protected ConfigureSbatchScriptPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 4");
@@ -85,6 +88,10 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 			List<String> partitions = (List<String>) clusterInfo.get("partitions");
 
 			// Populate wizard here
+			// Modules relevant to the binary chosen in the previous wizard page
+			createLabel("HPC Module to load");
+			createComboBox("module", modulesForCommand, 2);
+
 			// -A [project name] | Combo  // TODO: Retrieve the user's project automatic
 			createLabel("Project to account");
 			createComboBox("project", projects, 2);
@@ -234,7 +241,9 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 				if (newValue != null && !newValue.equals("")) {
 					// Update the Resulting SBATCH StyledText
 					String id = (String) widget.getData();
-					if (id.equals("qosshort")) {
+				    if (id.equals("module")) {
+				    	newSbatchText = newSbatchText.replace("[modulename]", newValue);
+				    } else if (id.equals("qosshort")) {
 						// TODO: This is rather UPPMAX specific, no?
 						if (newValue.equals("yes")) {
 							newSbatchText = newSbatchText.replace("[" + id + "]", "--qos=short");
