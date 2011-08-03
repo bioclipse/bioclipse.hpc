@@ -70,6 +70,9 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		createLabel("Project to account");
 		createComboBox(projects, 2);
 		// -p [partition]    | Combo  // Simple list, or get info from cluster?
+		createLabel("Partition (type of job)");
+		createComboBox(partitions, 2);
+		
 		// -N [no of nodes]  | Text-field / up-down number field?
 		// -n [no of cpus]   | Text-field / up-down number field?
 		// -t d-hh:mm:ss     | ?      // TODO: Find a good widget for setting the time
