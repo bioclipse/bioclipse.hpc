@@ -161,15 +161,15 @@ public class HPCApplication extends AbstractModelObject {
 		String commandOutput;
 		HashMap<String,Object> clusterInfo = new HashMap<String,Object>();
 		
-		commandOutput = executeRemoteCommand("fimsproxy -t userinfo");
+		commandOutput = executeRemoteCommand("fimsproxy -t clusterinfo");
 		
 		String clusterInfoXmlString = getMatch("<clusterinfo>.*</clusterinfo>", commandOutput);
 		if (clusterInfoXmlString != null) {
 			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
 			String maxNodes = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
 			String maxCpus = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
-			clusterInfo.put("username", maxNodes);
-			clusterInfo.put("username", maxCpus);
+			clusterInfo.put("maxnodes", maxNodes);
+			clusterInfo.put("maxcpus", maxCpus);
 			
 			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/clusterinfo/partitions/partition", clusterInfoXmlDoc);
 
