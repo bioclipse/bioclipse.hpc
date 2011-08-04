@@ -37,6 +37,15 @@
    <!-- ======================================= -->
    <!-- Remote Object Popup Menu Actions        -->
    <!-- ======================================= -->
+   <extension point="org.eclipse.ui.viewActions">
+    <viewContribution id="net.bioclipse.hpc.views.JobInfoViewActionContrib" targetID="net.bioclipse.hpc.views.JobInfoView">
+    <action id="net.bioclipse.hpc.views.jobinfoaction1"
+            label="Refresh"
+            toolbarPath="jobinfoaction1"
+            class="net.bioclipse.hpc.views.UpdateJobInfoViewAction">
+    </action>
+  </viewContribution>
+   </extension>
    <extension point="org.eclipse.ui.popupMenus">
       <objectContribution
                objectClass="org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile"

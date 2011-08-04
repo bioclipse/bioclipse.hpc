@@ -12,9 +12,13 @@ import javax.xml.xpath.XPathConstants;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.JobInfoView;
 import net.bioclipse.hpc.views.ProjInfoView;
+import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rse.core.model.IHost;
 import org.eclipse.rse.core.model.ISystemRegistry;
 import org.eclipse.rse.core.model.SystemStartHere;
@@ -26,6 +30,7 @@ import org.eclipse.rse.subsystems.shells.core.model.SimpleCommandOperation;
 import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
 import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -271,6 +276,5 @@ public class HPCApplication extends AbstractModelObject {
 		}
 		return hpcHost;
 	}
-
 
 }

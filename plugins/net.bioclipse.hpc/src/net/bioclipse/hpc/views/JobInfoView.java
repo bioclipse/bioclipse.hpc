@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.bioclipse.hpc.business.HPCManager;
+import net.bioclipse.hpc.business.HPCManagerFactory;
+import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlContentProvider;
 import net.bioclipse.hpc.xmldisplay.XmlDataProviderFactory;
 import net.bioclipse.hpc.xmldisplay.XmlLabelProvider;
@@ -41,12 +44,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.wizard.WizardDialog;
 
 public class JobInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.hpc.views.JobInfoView"; //$NON-NLS-1$
@@ -63,18 +68,8 @@ public class JobInfoView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		final Composite container = new Composite(parent, SWT.V_SCROLL);
-		container.setLayout(new GridLayout(1, false));
+		container.setLayout(new GridLayout());
 
-		Button btnUpdate = new Button(container, SWT.NONE);
-		btnUpdate.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				HPCManager hpcManagerObj = new HPCManager();
-				hpcManagerObj.updateJobInfoView();
-			}
-		});
-		btnUpdate.setText("Update");
-		
 		treeViewer = new TreeViewer(container, SWT.BORDER);
 		Tree tree = treeViewer.getTree();
 		tree.setHeaderVisible(true);

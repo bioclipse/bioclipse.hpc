@@ -1,5 +1,7 @@
 package net.bioclipse.hpc.wizards;
 
+import net.bioclipse.hpc.business.HPCUtils;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -11,18 +13,17 @@ public class ExecuteCommandAction implements IObjectActionDelegate {
 
 	IWorkbenchPart part;
 	ISelection selection;
-	
+
 	@Override
 	public void run(IAction action) {
 		ExecuteCommandWizard wizard = new ExecuteCommandWizard();
 		if ((selection instanceof IStructuredSelection) || (selection == null)) {
-			wizard.init(part.getSite().getWorkbenchWindow().getWorkbench(), (IStructuredSelection)selection);
-			
+			wizard.init(part.getSite().getWorkbenchWindow().getWorkbench(), (IStructuredSelection)selection);  
+
 			WizardDialog dialog = new WizardDialog( part.getSite().getShell(), wizard);
 			dialog.create();
 			dialog.open();
 		}
-
 	}
 
 	@Override
