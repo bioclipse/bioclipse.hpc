@@ -15,15 +15,19 @@ import java.util.regex.Pattern;
 
 import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.application.HPCApplication;
+import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.w3c.dom.Document;
 
 public class HPCUtils {
@@ -68,7 +72,7 @@ public class HPCUtils {
 		String[] result = stringBuffer.toArray(new String[]{});
 		return result;
 	}
-	
+
 	public static String getFileAbsolutePathFromSelection(IStructuredSelection sel) {
 		Object selObj = sel.getFirstElement();
 		String remFileAbsPath = null;
@@ -168,4 +172,14 @@ public class HPCUtils {
 		return values;
 	}
 
+	public static void openJobConfigWizard(ISelection selection, IWorkbenchPart part) {
+		ExecuteCommandWizard wizard = new ExecuteCommandWizard();
+		if ((selection instanceof IStructuredSelection) || (selection == null)) {
+			wizard.init(part.getSite().getWorkbenchWindow().getWorkbench(), (IStructuredSelection)selection);  
+
+			WizardDialog dialog = new WizardDialog( part.getSite().getShell(), wizard);
+			dialog.create();
+			dialog.open();
+		}
+	}
 }
