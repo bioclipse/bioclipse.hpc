@@ -43,7 +43,8 @@ public class HPCPreferencePage
 		addField(userName);
 		galaxyToolConfigPath = new StringFieldEditor("galaxytoolconfigpath", "Path to Galaxy ToolConfigs", getFieldEditorParent());
 		addField(galaxyToolConfigPath);
-		showPrefDialogOnStartup = new BooleanFieldEditor("showdialogonstartup", "Show dialog on start up?", BooleanFieldEditor.SEPARATE_LABEL, getFieldEditorParent());
+		showPrefDialogOnStartup = new BooleanFieldEditor("showdialogonstartup", "Show dialog on start up?", getFieldEditorParent());
+		addField(showPrefDialogOnStartup);
 	}
 	
 	@Override

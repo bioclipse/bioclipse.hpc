@@ -291,6 +291,7 @@ public class HPCApplication extends AbstractModelObject {
 		store.setDefault("hostname", "localhost");
 		store.setDefault("username", "anonymous");
 		store.setDefault("galaxytoolconfigpath", "/var/www/galaxy/tools");	
+		store.setDefault("showdialogonstartup", true);
 	}
 
 }
