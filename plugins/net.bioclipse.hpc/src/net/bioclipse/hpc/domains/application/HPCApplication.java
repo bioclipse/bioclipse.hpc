@@ -17,6 +17,7 @@ import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import net.bioclipse.hpc.Activator;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -43,7 +44,7 @@ public class HPCApplication extends AbstractModelObject {
 	public HPCApplication() {
 		_selectedFiles = new ArrayList();
 	}
-	
+
 	public void executeCommand(String command) {
 		IRemoteCmdSubSystem cmdss = getRemoteCmdSubSystem();
 		if (cmdss != null && cmdss.isConnected()) {
@@ -53,14 +54,14 @@ public class HPCApplication extends AbstractModelObject {
 			MessageDialog.openError(getShell(), "No command subsystem", "Found no command subsystem");
 		}
 	}
-	
+
 	public String execRemoteCommand(String command) {
 		IHost hpcHost;
 		String temp = "";
 		String allOutput = "";
-		
+
 		hpcHost = getHPCHost();
-		
+
 		if (hpcHost == null) {
 			System.out.println("No active HPC host!");
 		} else {
@@ -74,8 +75,8 @@ public class HPCApplication extends AbstractModelObject {
 					temp = null;
 					temp = simpleCommandOp.readLine(true);
 					// if (temp != "") {
-						allOutput += temp;
-						// System.out.println("Output from : " + temp);
+					allOutput += temp;
+					// System.out.println("Output from : " + temp);
 					// }
 					// try {
 					// 	Thread.sleep(0);
@@ -89,7 +90,7 @@ public class HPCApplication extends AbstractModelObject {
 		}
 		return allOutput;
 	}
-	
+
 	public void updateJobInfoView() {
 		// find the right view
 		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
@@ -105,7 +106,7 @@ public class HPCApplication extends AbstractModelObject {
 			System.out.println("No View found!");
 		}
 	}
-	
+
 	public void updateProjInfoView() {
 		String commandOutput;
 
@@ -116,7 +117,7 @@ public class HPCApplication extends AbstractModelObject {
 			System.out.println("Found projInfoView: " + projInfoView);
 
 			commandOutput = execRemoteCommand("fimsproxy -t projinfo");
-			
+
 			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
 			if (projInfoXml != null) {
 				projInfoView.setContentsFromXML(projInfoXml);
@@ -127,13 +128,13 @@ public class HPCApplication extends AbstractModelObject {
 			System.out.println("No View found!");
 		}
 	}
-	
+
 	public Map<String,Object> getUserInfo() {
 		String commandOutput;
 		HashMap<String,Object> userInfo = new HashMap<String,Object>();
-		
+
 		commandOutput = execRemoteCommand("fimsproxy -t userinfo");
-		
+
 		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
 		if (userInfoXmlString != null) {
 			Document userInfoXmlDoc = XmlUtils.parseXmlToDocument(userInfoXmlString);
@@ -153,13 +154,13 @@ public class HPCApplication extends AbstractModelObject {
 		}
 		return userInfo;
 	}
-	
+
 	public Map<String, Object> getClusterInfo() {
 		String commandOutput;
 		HashMap<String,Object> clusterInfo = new HashMap<String,Object>();
-		
+
 		commandOutput = execRemoteCommand("fimsproxy -t clusterinfo");
-		
+
 		String clusterInfoXmlString = getMatch("<clusterinfo>.*</clusterinfo>", commandOutput);
 		if (clusterInfoXmlString != null) {
 			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
@@ -167,7 +168,7 @@ public class HPCApplication extends AbstractModelObject {
 			String maxCpus = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
 			clusterInfo.put("maxnodes", maxNodes);
 			clusterInfo.put("maxcpus", maxCpus);
-			
+
 			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/clusterinfo/partitions/partition", clusterInfoXmlDoc);
 
 			// Easier to work with NodeList or List of Nodes? 
@@ -183,18 +184,18 @@ public class HPCApplication extends AbstractModelObject {
 		}
 		return clusterInfo;
 	}	
-	
+
 	public List<String> getModulesForBinary(String currentBinary) {
 		String commandOutput;
 		List<String> modulesForBinary = new ArrayList<String>();
-		
+
 		commandOutput = execRemoteCommand("fimsproxy -t modulesforbin -c " + currentBinary);
-		
+
 		String clusterInfoXmlString = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
 		if (clusterInfoXmlString != null) {
 			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
 			NodeList modForBinNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/modulesforbinary/module", clusterInfoXmlDoc);
-			
+
 			List<Node> modForBinListOfNodes = XmlUtils.nodeListToListOfNodes(modForBinNodeList);
 			List<String> partitions = new ArrayList<String>();
 			for (Node modForBinNode : modForBinListOfNodes) {
@@ -206,11 +207,11 @@ public class HPCApplication extends AbstractModelObject {
 		}
 		return modulesForBinary;
 	}
-	
+
 	public void readToolConfigFiles(String folderPath) {
 		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(folderPath);
 	}
-	
+
 	/**
 	 * Gets the Command subsystem associated with the current host
 	 */
@@ -225,15 +226,15 @@ public class HPCApplication extends AbstractModelObject {
 		return null;
 	}
 
-	
+
 	protected ISubSystem getSubSystem() {
 		return getFirstSelectedRemoteFile().getParentRemoteFileSubSystem();
 	}
-	
+
 	protected Shell getShell() {
 		return SystemBasePlugin.getActiveWorkbenchShell();
 	}
-	
+
 	protected IRemoteFile getFirstSelectedRemoteFile() {
 		if (_selectedFiles.size() > 0) {
 			System.out.println("### No Selected file! ###");
@@ -242,7 +243,7 @@ public class HPCApplication extends AbstractModelObject {
 		System.out.println("### No Selected file! ###");
 		return null;
 	}
-	
+
 	protected String getMatch(String regexPattern, String text) {
 		String result = null;
 		Pattern p = Pattern.compile(regexPattern);
@@ -252,7 +253,7 @@ public class HPCApplication extends AbstractModelObject {
 		}
 		return result;
 	}
-	
+
 	/* Utility methods */
 
 	/**
@@ -280,9 +281,16 @@ public class HPCApplication extends AbstractModelObject {
 	}
 
 	public void readGalaxyToolConfigFiles() {
-        // Activate Galaxy tool configuration
-        String galaxyToolConfigPath = Activator.getDefault().getPreferenceStore().getString("galaxytoolconfigpath");
+		// Activate Galaxy tool configuration
+		String galaxyToolConfigPath = Activator.getDefault().getPreferenceStore().getString("galaxytoolconfigpath");
 		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(galaxyToolConfigPath);
+	}
+
+	public void setDefaultPreferences() {
+        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setDefault("hostname", "localhost");
+		store.setDefault("username", "anonymous");
+		store.setDefault("galaxytoolconfigpath", "/var/www/galaxy/tools");	
 	}
 
 }

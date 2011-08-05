@@ -4,6 +4,9 @@ import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCUtils;
 
 import net.bioclipse.hpc.Activator;
+
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FontFieldEditor;
 import org.eclipse.jface.preference.PreferencePage;
@@ -20,6 +23,7 @@ public class HPCPreferencePage
 	public StringFieldEditor hostName;
 	public StringFieldEditor userName;
 	public StringFieldEditor galaxyToolConfigPath;
+	public BooleanFieldEditor showPrefDialogOnStartup;
 
 	public HPCPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
@@ -39,6 +43,7 @@ public class HPCPreferencePage
 		addField(userName);
 		galaxyToolConfigPath = new StringFieldEditor("galaxytoolconfigpath", "Path to Galaxy ToolConfigs", getFieldEditorParent());
 		addField(galaxyToolConfigPath);
+		showPrefDialogOnStartup = new BooleanFieldEditor("showdialogonstartup", "Show dialog on start up?", BooleanFieldEditor.SEPARATE_LABEL, getFieldEditorParent());
 	}
 	
 	@Override
@@ -47,6 +52,7 @@ public class HPCPreferencePage
 		hostName.loadDefault();
 		userName.loadDefault();
 		galaxyToolConfigPath.loadDefault();
+		showPrefDialogOnStartup.loadDefault();
 	}
 
 }

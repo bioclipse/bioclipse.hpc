@@ -69,10 +69,7 @@ public class Activator extends AbstractUIPlugin {
         HPCUtils.getApplication().readGalaxyToolConfigFiles();
         
         // Need to set this here to, since initializeDefaultPreferences() is not always run
-        IPreferenceStore store = this.getDefault().getPreferenceStore();
-		store.setDefault("hostname", "localhost");
-		store.setDefault("username", "anonymous");
-		store.setDefault("galaxytoolconfigpath", "/var/www/galaxy/tools");
+        HPCUtils.getApplication().setDefaultPreferences();
     }
 
     public void stop(BundleContext context) throws Exception {
@@ -130,9 +127,7 @@ public class Activator extends AbstractUIPlugin {
     }
     
 	protected void initializeDefaultPreferences(IPreferenceStore store) {
-		store.setDefault("hostname", "localhost");
-		store.setDefault("username", "anonymous");
-		store.setDefault("galaxytoolconfigpath", "/var/www/galaxy/tools");
+		HPCUtils.getApplication().setDefaultPreferences();
 	}
 
 }
