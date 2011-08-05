@@ -48,6 +48,10 @@ public class HPCPreferencePage
 		hostName.setStringValue(getPreferenceStore().getDefaultString("hostname"));
 		userName.setStringValue(getPreferenceStore().getDefaultString("username"));
 		galaxyToolConfigPath.setStringValue(getPreferenceStore().getDefaultString("galaxytoolconfigpath"));
+		
+		hostName.loadDefault();
+		userName.loadDefault();
+		galaxyToolConfigPath.loadDefault();
 	}
 
 }

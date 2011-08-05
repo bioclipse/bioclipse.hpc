@@ -19,6 +19,7 @@ import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -66,6 +67,12 @@ public class Activator extends AbstractUIPlugin {
         application = new HPCApplication();
         
         HPCUtils.getApplication().readGalaxyToolConfigFiles();
+        
+        // Need to set this here to, since initializeDefaultPreferences() is not always run
+        IPreferenceStore store = this.getDefault().getPreferenceStore();
+		store.setDefault("hostname", "localhost");
+		store.setDefault("username", "anonymous");
+		store.setDefault("galaxytoolconfigpath", "/var/www/galaxy/tools");
     }
 
     public void stop(BundleContext context) throws Exception {
