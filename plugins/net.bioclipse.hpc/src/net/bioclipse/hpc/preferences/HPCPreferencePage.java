@@ -44,11 +44,6 @@ public class HPCPreferencePage
 	@Override
 	protected void performDefaults() {
 		super.performDefaults();
-		System.out.println("Performing defaults...");
-		hostName.setStringValue(getPreferenceStore().getDefaultString("hostname"));
-		userName.setStringValue(getPreferenceStore().getDefaultString("username"));
-		galaxyToolConfigPath.setStringValue(getPreferenceStore().getDefaultString("galaxytoolconfigpath"));
-		
 		hostName.loadDefault();
 		userName.loadDefault();
 		galaxyToolConfigPath.loadDefault();
