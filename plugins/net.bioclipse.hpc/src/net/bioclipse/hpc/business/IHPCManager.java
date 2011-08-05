@@ -19,7 +19,7 @@ import net.bioclipse.core.Recorded;
 import net.bioclipse.managers.business.IBioclipseManager;
 
 @PublishedClass(
-    value="TODO: Describe the manager here."
+    value="Manager for the HPC integration functionality in Bioclipse."
 )
 public interface IHPCManager extends IBioclipseManager {
 
