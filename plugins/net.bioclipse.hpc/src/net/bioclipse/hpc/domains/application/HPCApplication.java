@@ -231,7 +231,7 @@ public class HPCApplication extends AbstractModelObject {
 		return getFirstSelectedRemoteFile().getParentRemoteFileSubSystem();
 	}
 
-	protected Shell getShell() {
+	public Shell getShell() {
 		return SystemBasePlugin.getActiveWorkbenchShell();
 	}
 

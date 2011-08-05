@@ -38,12 +38,16 @@ public class HPCPreferencePage
 	@Override
 	protected void createFieldEditors() {
 		hostName = new StringFieldEditor("hostname", "Hostname", getFieldEditorParent());
+		hostName.load();
 		addField(hostName);
 		userName = new StringFieldEditor("username", "Username", getFieldEditorParent());
+		userName.load();
 		addField(userName);
 		galaxyToolConfigPath = new StringFieldEditor("galaxytoolconfigpath", "Path to Galaxy ToolConfigs", getFieldEditorParent());
+		galaxyToolConfigPath.load();
 		addField(galaxyToolConfigPath);
 		showPrefDialogOnStartup = new BooleanFieldEditor("showdialogonstartup", "Show dialog on start up?", getFieldEditorParent());
+		showPrefDialogOnStartup.load();
 		addField(showPrefDialogOnStartup);
 	}
 	

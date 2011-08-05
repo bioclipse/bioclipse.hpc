@@ -16,11 +16,13 @@ import net.bioclipse.hpc.business.IJavaHPCManager;
 import net.bioclipse.hpc.business.IHPCManager;
 import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
-
 import org.apache.log4j.Logger;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -70,6 +72,15 @@ public class Activator extends AbstractUIPlugin {
         
         // Need to set this here to, since initializeDefaultPreferences() is not always run
         HPCUtils.getApplication().setDefaultPreferences();
+        
+        boolean showPrefDialogOnStartup = getPreferenceStore().getBoolean("showdialogonstartup");
+        if (showPrefDialogOnStartup) {
+        	Dialog mainPrefsDialog = new HPCMainPreferencesDialog(HPCUtils.getApplication().getShell());
+        	mainPrefsDialog.open();
+        } else {
+        	System.out.println("DEBUG: Preferences dialog set to not start..."); // TODO Remove debug code
+        }
+        
     }
 
     public void stop(BundleContext context) throws Exception {
