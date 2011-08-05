@@ -66,40 +66,40 @@ public class ToolConfigDomain {
 		int xmlFilesCount = 0;
 
 		if (!toolsFolder.isDirectory()) {
-			System.out.println("Not a directory: " + toolsFolderPath);
-		} 
+			System.out.println("ERROR: Galaxy toolconfig folder not a directory: " + toolsFolderPath);
+		} else {
+			// Get a list of the individual tool folders, from the over-arching
+			// tools folder (located under Galaxy's root rolder)
+			File[] toolFolders = toolsFolder.listFiles();
 
-		// Get a list of the individual tool folders, from the over-arching
-		// tools folder (located under Galaxy's root rolder)
-		File[] toolFolders = toolsFolder.listFiles();
-
-		for (File toolFolder : toolFolders) {
-			String toolFolderName = toolFolder.getName();
-			if (toolFolder.isDirectory()) {
-				// Create a tool group object for each tool folder
-				// (Since there are most often more than one tool XML file in each folder
-				// (though they are closely related))
-				ToolGroup toolGroup = new ToolGroup(toolFolderName);
-				this.addToolGroup(toolGroup);
-				
-				File[] toolFiles = toolFolder.listFiles();
-				for (File toolFile : toolFiles) {
-					String toolName = toolFile.getName();
-					// The actual tool configurations are stored in XML-files, so do read these
-					if (toolName.endsWith(".xml")) {
-						Document xmlDoc = XmlUtils.parseXmlFileToXmlDoc(toolFile);
-						Tool tool = initializeToolFromXmlDoc(xmlDoc);
-						toolGroup.addTool(tool);
-						xmlFilesCount++;
+			for (File toolFolder : toolFolders) {
+				String toolFolderName = toolFolder.getName();
+				if (toolFolder.isDirectory()) {
+					// Create a tool group object for each tool folder
+					// (Since there are most often more than one tool XML file in each folder
+					// (though they are closely related))
+					ToolGroup toolGroup = new ToolGroup(toolFolderName);
+					this.addToolGroup(toolGroup);
+					
+					File[] toolFiles = toolFolder.listFiles();
+					for (File toolFile : toolFiles) {
+						String toolName = toolFile.getName();
+						// The actual tool configurations are stored in XML-files, so do read these
+						if (toolName.endsWith(".xml")) {
+							Document xmlDoc = XmlUtils.parseXmlFileToXmlDoc(toolFile);
+							Tool tool = initializeToolFromXmlDoc(xmlDoc);
+							toolGroup.addTool(tool);
+							xmlFilesCount++;
+						}
 					}
+				} else {
+					System.out.println("Current tool folder is not a directory: " + toolFolder.getName());
 				}
-			} else {
-				System.out.println("Current tool folder is not a directory: " + toolFolder.getName());
 			}
+			String timeStamp = HPCUtils.currentTime(); 
+			// TODO: Don't use hard-coded file name
+			System.out.println(timeStamp + " INFO  [net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain] Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
 		}
-		String timeStamp = HPCUtils.currentTime(); 
-		// TODO: Don't use hard-coded file name
-		System.out.println(timeStamp + " INFO  [net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain] Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
 	}
 
 	private Tool initializeToolFromXmlDoc(Document xmlDoc) {
