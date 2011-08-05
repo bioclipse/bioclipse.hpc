@@ -33,6 +33,8 @@ public class HPCPreferencePage
 		addField(hostName);
 		StringFieldEditor userName = new StringFieldEditor("username", "Username", getFieldEditorParent());
 		addField(userName);
+		StringFieldEditor galaxyToolConfigPath = new StringFieldEditor("galaxytoolconfigpath", "Path to Galaxy ToolConfigs", getFieldEditorParent());
+		addField(galaxyToolConfigPath);
 	}
 
 }

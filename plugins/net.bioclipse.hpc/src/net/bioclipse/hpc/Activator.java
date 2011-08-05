@@ -64,7 +64,8 @@ public class Activator extends AbstractUIPlugin {
         application = new HPCApplication();
         
         // Activate Galaxy tool configuration
-		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles("/home/samuel/.galaxy/tools"); // TODO: Don't hard-code!
+        String galaxyToolConfigPath = Activator.getDefault().getPreferenceStore().getString("galaxytoolconfigpath");
+		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(galaxyToolConfigPath);
     }
 
     public void stop(BundleContext context) throws Exception {
