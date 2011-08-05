@@ -17,6 +17,7 @@ import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.apache.log4j.Logger;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -119,5 +120,10 @@ public class Activator extends AbstractUIPlugin {
         }
         return manager;
     }
+    
+    protected void initializeDefaultPreferences(IPreferenceStore store) {
+		store.setDefault("kalkyl.uppmax.uu.se", "samuel");
+	}
+    
 
 }

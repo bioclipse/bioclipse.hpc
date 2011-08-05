@@ -89,4 +89,11 @@
            </action>
        </objectContribution>       
     </extension>        
+
+	<extension point="org.eclipse.ui.preferencePages">
+	 	<page id="BioclipseHPCMainPreferencePage"
+	 		name="HPC Preferences"
+	    		class="net.bioclipse.hpc.preferences.MainPreferencePage">
+	   	</page>
+	</extension>
 </plugin>
