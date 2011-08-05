@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
    <extension
          point="net.bioclipse.scripting.contribution">
       <scriptContribution
@@ -27,6 +26,8 @@
             name="JobInfo">
       </view>
    </extension>
+   
+   <!-- TODO: What is this?!! -->
    <extension
          point="org.eclipse.help.contexts">
       <contexts
@@ -37,6 +38,7 @@
    <!-- ======================================= -->
    <!-- Remote Object Popup Menu Actions        -->
    <!-- ======================================= -->
+   
    <extension point="org.eclipse.ui.viewActions">
       <viewContribution id="net.bioclipse.hpc.views.OpenJobConfigWizardContrib" targetID="net.bioclipse.hpc.views.JobInfoView">
          <action id="net.bioclipse.hpc.views.jobinfoaction2"
@@ -71,20 +73,7 @@
            </action>
        </objectContribution>       
     </extension>
-   <!-- extension point="org.eclipse.ui.popupMenus">
-      <objectContribution
-               objectClass="org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile"
-               id="actions.execCmdWizard">
-           <action
-                   label="Execute Command through a Wizard"
-                   tooltip="TODO: Some description here..."
-                   class="net.bioclipse.hpc.wizards.ExecuteCommandAction"
-                   menubarPath="additions"
-                   enablesFor="1"
-                   id="net.bioclipse.hpc.wizards.action1">
-           </action>
-       </objectContribution>       
-    </extension -->    
+
    <extension point="org.eclipse.ui.popupMenus">
       <objectContribution
                objectClass="org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile"
@@ -100,32 +89,4 @@
            </action>
        </objectContribution>       
     </extension>        
-   <!-- extension point="org.eclipse.ui.popupMenus">
-      <objectContribution
-               objectClass="java.lang.Object"
-               id="actions.execCmdWizard2">
-           <action
-                   label="Execute Command through a Wizard"
-                   tooltip="TODO: Some description here..."
-                   class="net.bioclipse.hpc.wizards.ExecuteCommandAction"
-                   menubarPath="additions"
-                   enablesFor="1"
-                   id="net.bioclipse.hpc.wizards.action2">
-           </action>
-       </objectContribution>       
-    </extension -->    
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view
-               id="net.bioclipse.hpc.views.SampleView"
-               ratio="0.5"
-               relationship="right"
-               relative="org.eclipse.ui.views.TaskList">
-         </view>
-      </perspectiveExtension>
-   </extension>
-   
-   
 </plugin>
