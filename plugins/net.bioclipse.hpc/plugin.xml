@@ -92,8 +92,8 @@
 
 	<extension point="org.eclipse.ui.preferencePages">
 	 	<page id="BioclipseHPCMainPreferencePage"
-	 		name="HPC Preferences"
-	    		class="net.bioclipse.hpc.preferences.MainPreferencePage">
+	 		name="HPC Integration"
+	    		class="net.bioclipse.hpc.preferences.HPCPreferencePage">
 	   	</page>
 	</extension>
 </plugin>
