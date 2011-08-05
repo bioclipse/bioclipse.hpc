@@ -120,10 +120,5 @@ public class Activator extends AbstractUIPlugin {
         }
         return manager;
     }
-    
-    protected void initializeDefaultPreferences(IPreferenceStore store) {
-		store.setDefault("kalkyl.uppmax.uu.se", "samuel");
-	}
-    
 
 }
