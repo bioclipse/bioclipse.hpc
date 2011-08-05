@@ -15,6 +15,7 @@ import net.bioclipse.hpc.views.ProjInfoView;
 import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
+import net.bioclipse.hpc.Activator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -269,7 +270,8 @@ public class HPCApplication extends AbstractModelObject {
 
 		for (IHost host : hosts) {
 			String hostAlias = host.getAliasName();
-			if (hostAlias.equals("kalkyl.uppmax.uu.se")) { // TODO: This should be configurable!
+			String hostNameInPrefPage = Activator.getDefault().getPreferenceStore().getString("hostname");
+			if (hostAlias.equals(hostNameInPrefPage)) {
 				hpcHost = host;
 				break;
 			}
