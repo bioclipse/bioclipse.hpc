@@ -10,6 +10,7 @@
  ******************************************************************************/
 package net.bioclipse.hpc;
 
+import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.business.IJavaScriptHPCManager;
 import net.bioclipse.hpc.business.IJavaHPCManager;
 import net.bioclipse.hpc.business.IHPCManager;
@@ -64,9 +65,7 @@ public class Activator extends AbstractUIPlugin {
         // Create an applicatoin object
         application = new HPCApplication();
         
-        // Activate Galaxy tool configuration
-        String galaxyToolConfigPath = Activator.getDefault().getPreferenceStore().getString("galaxytoolconfigpath");
-		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(galaxyToolConfigPath);
+        HPCUtils.getApplication().readGalaxyToolConfigFiles();
     }
 
     public void stop(BundleContext context) throws Exception {

@@ -279,4 +279,10 @@ public class HPCApplication extends AbstractModelObject {
 		return hpcHost;
 	}
 
+	public void readGalaxyToolConfigFiles() {
+        // Activate Galaxy tool configuration
+        String galaxyToolConfigPath = Activator.getDefault().getPreferenceStore().getString("galaxytoolconfigpath");
+		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(galaxyToolConfigPath);
+	}
+
 }

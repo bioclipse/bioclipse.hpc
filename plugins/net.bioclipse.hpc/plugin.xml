@@ -40,21 +40,32 @@
    <!-- ======================================= -->
    
    <extension point="org.eclipse.ui.viewActions">
-      <viewContribution id="net.bioclipse.hpc.views.OpenJobConfigWizardContrib" targetID="net.bioclipse.hpc.views.JobInfoView">
-         <action id="net.bioclipse.hpc.views.jobinfoaction2"
-            label="Submit New Job"
-            toolbarPath="jobinfoaction1"
-            class="net.bioclipse.hpc.views.OpenJobConfigWizardAction">
-         </action>
-      </viewContribution>
-   </extension>
-   
-   <extension point="org.eclipse.ui.viewActions">
       <viewContribution id="net.bioclipse.hpc.views.JobInfoViewActionContrib" targetID="net.bioclipse.hpc.views.JobInfoView">
          <action id="net.bioclipse.hpc.views.jobinfoaction1"
             label="Refresh"
             toolbarPath="jobinfoaction1"
             class="net.bioclipse.hpc.views.UpdateJobInfoViewAction">
+         </action>
+      </viewContribution>
+   </extension>
+   
+   <extension point="org.eclipse.ui.viewActions">
+      <viewContribution id="net.bioclipse.hpc.views.OpenJobConfigWizardContrib" targetID="net.bioclipse.hpc.views.JobInfoView">
+         <action id="net.bioclipse.hpc.views.jobinfoaction2"
+            label="Submit New Job"
+            toolbarPath="jobinfoaction2"
+            class="net.bioclipse.hpc.views.OpenJobConfigWizardAction">
+         </action>
+      </viewContribution>
+   </extension>
+
+   <!-- TODO Maybe take away this later -->
+   <extension point="org.eclipse.ui.viewActions">
+      <viewContribution id="net.bioclipse.hpc.views.RefreshGalaxyToolConfigsContrib" targetID="net.bioclipse.hpc.views.JobInfoView">
+         <action id="net.bioclipse.hpc.views.jobinfoaction1"
+            label="Update ToolConfigs"
+            toolbarPath="jobinfoaction3"
+            class="net.bioclipse.hpc.views.RefreshGalaxyToolConfigsAction">
          </action>
       </viewContribution>
    </extension>

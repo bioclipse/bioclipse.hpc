@@ -4,6 +4,7 @@ import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.domains.application.HPCApplication;
+import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -37,7 +38,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	}
 	
 	public void createControl(Composite parent) {
-		// Nothing so far
+		//
 	}
 	
 	public void addPages() {
