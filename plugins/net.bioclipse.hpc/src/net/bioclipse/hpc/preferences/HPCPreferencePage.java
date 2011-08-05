@@ -16,7 +16,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class HPCPreferencePage 
 	extends FieldEditorPreferencePage 
 	implements IWorkbenchPreferencePage {
-	
+
+	public StringFieldEditor hostName;
+	public StringFieldEditor userName;
+	public StringFieldEditor galaxyToolConfigPath;
+
 	public HPCPreferencePage() {
 		super(FieldEditorPreferencePage.GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
@@ -29,12 +33,21 @@ public class HPCPreferencePage
 
 	@Override
 	protected void createFieldEditors() {
-		StringFieldEditor hostName = new StringFieldEditor("hostname", "Hostname", getFieldEditorParent());
+		hostName = new StringFieldEditor("hostname", "Hostname", getFieldEditorParent());
 		addField(hostName);
-		StringFieldEditor userName = new StringFieldEditor("username", "Username", getFieldEditorParent());
+		userName = new StringFieldEditor("username", "Username", getFieldEditorParent());
 		addField(userName);
-		StringFieldEditor galaxyToolConfigPath = new StringFieldEditor("galaxytoolconfigpath", "Path to Galaxy ToolConfigs", getFieldEditorParent());
+		galaxyToolConfigPath = new StringFieldEditor("galaxytoolconfigpath", "Path to Galaxy ToolConfigs", getFieldEditorParent());
 		addField(galaxyToolConfigPath);
+	}
+	
+	@Override
+	protected void performDefaults() {
+		super.performDefaults();
+		System.out.println("Performing defaults...");
+		hostName.setStringValue(getPreferenceStore().getDefaultString("hostname"));
+		userName.setStringValue(getPreferenceStore().getDefaultString("username"));
+		galaxyToolConfigPath.setStringValue(getPreferenceStore().getDefaultString("galaxytoolconfigpath"));
 	}
 
 }
