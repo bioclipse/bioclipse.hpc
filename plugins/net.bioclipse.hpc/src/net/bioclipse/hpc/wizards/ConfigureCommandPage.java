@@ -20,9 +20,13 @@ import org.eclipse.rse.core.IRSECoreRegistry;
 import org.eclipse.rse.core.RSECorePlugin;
 import org.eclipse.rse.core.model.IHost;
 import org.eclipse.rse.core.model.ISystemRegistry;
+import org.eclipse.rse.files.ui.dialogs.SystemRemoteArchiveDialog;
 import org.eclipse.rse.files.ui.dialogs.SystemRemoteFileDialog;
+import org.eclipse.rse.files.ui.dialogs.SystemRemoteFolderDialog;
+import org.eclipse.rse.internal.files.ui.resources.SystemRemoteEditManager;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.rse.ui.SystemBasePlugin;
+import org.eclipse.rse.ui.dialogs.SystemRemoteResourceDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -242,7 +246,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					tempCommand = tempCommand.replace("$" + parameter.getName(), newValue);
 					commandText.setText(tempCommand);
 				} else {
-					System.out.println("ERROR: Parameter or widget value was null");
+					// System.out.println("ERROR: Parameter or widget value was null");
 				}
 			}
 		}
