@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parameter {
+	// For distinguishing "normal" and "output" type params
+	private String m_paramType;
+
 	private String m_name;
 	private String m_type;
 	private String m_format;
@@ -92,5 +95,13 @@ public class Parameter {
 			}
 		}
 		return null;
+	}
+
+	public void setParamType(String paramType) {
+		m_paramType = paramType;
+	}
+
+	public String getParamType() {
+		return m_paramType;
 	}
 }

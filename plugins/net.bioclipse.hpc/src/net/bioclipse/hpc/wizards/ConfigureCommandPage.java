@@ -31,6 +31,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.custom.StyledTextPrintOptions;
 import org.eclipse.swt.internal.gtk.GdkColor;
@@ -117,28 +118,34 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private void createWidgetsForParam(Parameter parameter) {
-		String paramLabel = parameter.getLabel();
-		String paramName = parameter.getName();
-		String paramType = parameter.getType();
-		
-		if (paramLabel != "" && paramLabel != null) {
-			createLabel(paramLabel);
-		} else if (!paramName.equals("") && paramName != null) {
-			createLabel(paramName);
+		String label = parameter.getLabel();
+		String name = parameter.getName();
+		String type = parameter.getType();
+		String paramType = parameter.getParamType();
+
+		if (paramType.equals("normal")) {
+			if (label != "" && label != null) {
+				createLabel(label);
+			} else if (!name.equals("") && name != null) {
+				createLabel(name);
+			}
+			
+			String paramValue = parameter.getValue();
+			if (paramValue == null) {
+				paramValue = "";
+			}
+			
+			// This is a way to recognize fields for specifying "input data file"
+			if (type.equals("data")) {
+				createSelectRemoteFileForParam(parameter);
+			} else if (type.equals("select")) {
+				createComboBoxForParam(parameter, 2);
+			} else {
+				createTextFieldForParam(parameter, 2);
+			} 
+		} else if (paramType.equals("output")) {
+			createOutputFileNameWidgets(parameter);
 		}
-		
-		String paramValue = parameter.getValue();
-		if (paramValue == null) {
-			paramValue = "";
-		}
-		
-		if (paramType.equals("data")) {
-			createSelectRemoteFileForParam(parameter);
-		} else if (paramType.equals("select")) {
-			createComboBoxForParam(parameter, 2);
-		} else {
-			createTextFieldForParam(parameter, 2);
-		} 
 	}
 
 	private void createLabel(String labelText) {
@@ -225,6 +232,66 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		textField.setLayoutData(textGridData);
 		return textField;
 	}
+	
+	private void createOutputFileNameWidgets(Parameter parameter) {
+
+		createLabel("Output directory");
+
+		String defaultText = parameter.getValue(); 
+		final Text outputFolder = new Text(this.composite, SWT.BORDER|SWT.READ_ONLY);
+		outputFolder.setText(defaultText);
+		// Connect the widget to it's corresponding parameter
+		outputFolder.setData(parameter);
+		outputFolder.addListener(SWT.KeyUp, this);
+		widgets.add((Widget) outputFolder);
+		GridData outputFolderGridData = new GridData(GridData.FILL_HORIZONTAL);
+		outputFolderGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
+		outputFolderGridData.widthHint = 248;
+		outputFolder.setLayoutData(outputFolderGridData);
+		outputFolder.setBackground(new Color(null, new RGB(240, 240, 240)));
+		
+		Button btnBrowseRemoteOutputFolder = new Button(composite, SWT.NONE);
+		btnBrowseRemoteOutputFolder.setText("Browse...");
+		
+		btnBrowseRemoteOutputFolder.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				IHost hpcHost = HPCUtils.getApplication().getHPCHost();
+				
+				if (hpcHost == null) {
+					MessageDialog.openWarning(SystemBasePlugin.getActiveWorkbenchShell(), "HPC Host was null!", "HPC Host was null!");
+				} else {
+					SystemRemoteFileDialog dialog = new SystemRemoteFolderDialog(SystemBasePlugin.getActiveWorkbenchShell());
+
+					dialog.setDefaultSystemConnection(hpcHost, true);
+					
+					dialog.open();
+					Object o = dialog.getSelectedObject();
+					if (o instanceof IRemoteFile) {
+						IRemoteFile file = (IRemoteFile) o; 
+						outputFolder.setText(file.getAbsolutePath());
+						outputFolder.notifyListeners(SWT.KeyUp, new Event());
+					} else {
+						System.out.println("No valid file selected!");
+					}
+				}
+			}
+		});
+		
+		createLabel("Output filename");
+		final Text outputFileName = new Text(this.composite, SWT.BORDER);
+		outputFileName.setText(defaultText);
+		// Connect the widget to it's corresponding parameter
+		outputFileName.setData("Output filename");
+		outputFileName.addListener(SWT.KeyUp, this);
+		widgets.add((Widget) outputFileName);
+		GridData outputFileNameGridData = new GridData(GridData.FILL_HORIZONTAL);
+		outputFileNameGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
+		outputFileNameGridData.widthHint = 248;
+		outputFileNameGridData.horizontalSpan = 2;
+		outputFileName.setLayoutData(outputFileNameGridData);
+	}
+
 
 	@Override
 	public void handleEvent(Event event) {
@@ -241,15 +308,35 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					System.out.println("Could not set newValue");
 				}
 
-				Parameter parameter = (Parameter) widget.getData();
-				if (parameter != null && newValue != null && !newValue.equals("")) {
-					tempCommand = tempCommand.replace("$" + parameter.getName(), newValue);
-					commandText.setText(tempCommand);
-				} else {
-					// System.out.println("ERROR: Parameter or widget value was null");
+				Object data = widget.getData();
+				if (data instanceof Parameter) {
+					Parameter parameter = (Parameter) data;
+					if (parameter.getParamType().equals("output")) {
+						String outputFolderAndFileName = newValue + "/" + (String) ((Text) getWidgetWithData("Output filename")).getText();
+						tempCommand = tempCommand.replace("$" + parameter.getName(), outputFolderAndFileName);
+						commandText.setText(tempCommand);
+					} else {
+						if (parameter != null && newValue != null && !newValue.equals("")) {
+							tempCommand = tempCommand.replace("$" + parameter.getName(), newValue);
+							commandText.setText(tempCommand);
+						} else {
+							// System.out.println("ERROR: Parameter or widget value was null");
+						}
+					}
+				} else if (data instanceof String && ((String) data).equals("Output filename")) {
+					// Nothing
 				}
 			}
 		}
+	}
+
+	private Widget getWidgetWithData(Object data) {
+		for (Widget widget : this.widgets) {
+			if (widget.getData().equals(data)) {
+				return widget;
+			} 
+		}
+		return null;
 	}
 
 	public String getCommandText() {

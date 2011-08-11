@@ -18,6 +18,8 @@ import org.w3c.dom.NodeList;
 
 public class ToolConfigDomain {
 	private Map<String,ToolGroup> m_toolGroups;
+	final int PARAMTYPE_NORMAL = 1;
+	final int PARAMTYPE_OUTPUT = 2;
 	
 	private static ToolConfigDomain instance = new ToolConfigDomain();
 	
@@ -133,7 +135,7 @@ public class ToolConfigDomain {
 			for (int i=0; i<paramNodes.getLength(); i++) {
 				Node currentNode = paramNodes.item(i);
 				// Create new Parameter objects for each node, and connect to Tool object 
-				configureNewParamAndAddToTool(tool, currentNode);
+				configureNewParamAndAddToTool(tool, currentNode, PARAMTYPE_NORMAL);
 			}
 
 			NodeList outputNodes = (NodeList) XmlUtils.evalXPathExprToNodeList("/tool/outputs/data", xmlDoc);
@@ -141,7 +143,7 @@ public class ToolConfigDomain {
 			for (int i=0; i<outputNodes.getLength(); i++) {
 				Node currentNode = outputNodes.item(i);
 				// Create new Parameter objects for each node, and connect to Tool object 
-				configureNewParamAndAddToTool(tool, currentNode);
+				configureNewParamAndAddToTool(tool, currentNode, PARAMTYPE_OUTPUT);
 			}
 
 			tool.setAttributes(attributes);
@@ -152,10 +154,16 @@ public class ToolConfigDomain {
 		return tool;
 	}
 
-	private void configureNewParamAndAddToTool(Tool tool, Node currentNode) {
+	private void configureNewParamAndAddToTool(Tool tool, Node currentNode, int paramType) {
 		Parameter param = new Parameter();
 		NamedNodeMap attrs = currentNode.getAttributes();
 
+		if (paramType == PARAMTYPE_NORMAL) {
+			param.setParamType("normal");
+		} else if (paramType == PARAMTYPE_OUTPUT) {
+			param.setParamType("output");
+		} 
+		
 		// Get details of a parameter
 		String attrName = getAttributeValue(attrs, "name");
 		param.setName(attrName);
