@@ -3,14 +3,6 @@
 
 <target name="Spring-osgi-1.0.2">
 <locations>
-<location path="${project_loc:/net.bioclipse.target.platform}/logging" type="Directory"/>
-<location path="${project_loc:net.bioclipse.target.platform}/libs" type="Directory"/>
-<location includeAllPlatforms="true" includeMode="planner" type="InstallableUnit">
-<unit id="nu.psnet.quickimage.feature.group" version="1.0.3.2"/>
-<repository location="http://psnet.nu/eclipse/updates"/>
-</location>
-<location path="${project_loc:net.bioclipse.target.platform}/spring-osgi-1.0.2/dist" type="Directory"/>
-<location path="${project_loc:net.bioclipse.target.platform}/spring-osgi-1.0.2/lib" type="Directory"/>
 <location includeAllPlatforms="true" includeMode="planner" type="InstallableUnit">
 <unit id="org.eclipse.platform.ide" version="3.6.1.M20100909-0800"/>
 <unit id="org.eclipse.platform.sdk" version="3.6.1.M20100909-0800"/>
@@ -18,11 +10,8 @@
 <unit id="org.eclipse.rcp.source.feature.group" version="3.6.1.r361_v20100827-9OArFLdFjY-ThSQXmKvKz0_T"/>
 <repository location="http://download.eclipse.org/eclipse/updates/3.6"/>
 </location>
-<location includeAllPlatforms="true" includeMode="planner" type="InstallableUnit">
-<unit id="org.eclipse.pde.junit.runtime.addon.feature.group" version="1.0.0.v20100831"/>
-<unit id="org.eclipse.pde.junit.runtime.standalone.feature.group" version="1.0.0.v20100831"/>
-<repository location="http://download.eclipse.org/releases/helios"/>
-</location>
+<location path="${project_loc:net.bioclipse.target.platform}/spring-osgi-1.0.2/dist" type="Directory"/>
+<location path="${project_loc:/net.bioclipse.target.platform}/logging" type="Directory"/>
 <location includeAllPlatforms="true" includeMode="planner" type="InstallableUnit">
 <unit id="org.junit4" version="4.8.1.v20100525"/>
 <unit id="org.eclipse.wst.xml.core" version="1.1.502.v201009010342"/>
@@ -48,8 +37,15 @@
 <unit id="org.eclipse.emf.common.ui.source.feature.group" version="2.6.0.v20100914-1218"/>
 <repository location="http://download.eclipse.org/releases/helios"/>
 </location>
+<location path="${project_loc:net.bioclipse.target.platform}/spring-osgi-1.0.2/lib" type="Directory"/>
+<location path="${project_loc:net.bioclipse.target.platform}/libs" type="Directory"/>
 <location includeAllPlatforms="true" includeMode="planner" type="InstallableUnit">
 <unit id="org.eclipse.rse.feature.group" version="3.2.1.v201008191400-7L78FA-8wqbPcNj4qa8R0eViy7vZ"/>
+<repository location="http://download.eclipse.org/releases/helios"/>
+</location>
+<location includeAllPlatforms="true" includeMode="planner" type="InstallableUnit">
+<unit id="org.eclipse.pde.junit.runtime.addon.feature.group" version="1.0.0.v20100831"/>
+<unit id="org.eclipse.pde.junit.runtime.standalone.feature.group" version="1.0.0.v20100831"/>
 <repository location="http://download.eclipse.org/releases/helios"/>
 </location>
 </locations>
