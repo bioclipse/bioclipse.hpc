@@ -6,14 +6,18 @@ import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.internal.handlers.WizardHandler;
 
 public class SelectToolGroupPage extends WizardPage {
 
@@ -36,11 +40,9 @@ public class SelectToolGroupPage extends WizardPage {
 
 	@Override
 	public void createControl(Composite parent) {
-		// create the composite to hold the widgets
 		Composite composite =  new Composite(parent, SWT.NULL);
-
-
 		initializeGridLayout(composite);
+		((WizardDialog) this.getWizard().getContainer()).setMinimumPageSize(300, 300);
 
 		String labelText = "Tool group:";
 		createLabelWithText(composite, labelText);
