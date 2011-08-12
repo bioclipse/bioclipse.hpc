@@ -3,6 +3,13 @@ package net.bioclipse.hpc.wizards;
 import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.domains.application.HPCApplication;
+
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.rse.core.events.ISystemResourceChangeEvents;

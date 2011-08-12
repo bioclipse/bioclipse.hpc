@@ -8,6 +8,7 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -36,11 +37,10 @@ public class SelectToolPage extends WizardPage {
 	
 	@Override
 	public void createControl(Composite parent) {
-	    // create the composite to hold the widgets
 		Composite composite =  new Composite(parent, SWT.NULL);
-	    HPCUtils.createGridLayout(composite, 2);
+		HPCUtils.createGridLayout(composite, 2);
 
-	    String labelText = "Select tool:";
+		String labelText = "Select tool:";
 		createLabel(composite, labelText);
 		createCombo(composite);
 	    

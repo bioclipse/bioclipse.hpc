@@ -148,8 +148,10 @@ public class HPCUtils {
 	public static void createGridLayout(Composite composite, int columnsCount) {
 		// create the desired layout for this wizard page
 		GridLayout gl = new GridLayout();
+		GridData gd = new GridData(SWT.LEFT, SWT.BEGINNING, true, true);
 		gl.numColumns = columnsCount;
 		composite.setLayout(gl);
+		composite.setLayoutData(gd);
 	}
 
 	public static Combo createCombo(Composite composite) {
