@@ -27,7 +27,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.rse.ui;bundle-version="3.1.101",
  org.eclipse.rse.subsystems.files.core;bundle-version="3.2.1",
  org.eclipse.rse.subsystems.files.ssh,
- org.eclipse.core.resources;bundle-version="3.6.1"
+ org.eclipse.core.resources;bundle-version="3.6.1",
+ org.eclipse.rse.services;bundle-version="3.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.log4j,
  org.eclipse.jface.databinding.viewers
