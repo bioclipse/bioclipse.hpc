@@ -18,9 +18,9 @@ import org.eclipse.ui.IWorkbench;
 public class SelectToolGroupPage extends WizardPage {
 
 	public Combo comboToolGroup;
-	
+
 	public String[] toolGroups;
-	
+
 	IWorkbench workbench;
 	IStructuredSelection selection;
 	IWizard wizard = this.getWizard(); 
@@ -33,17 +33,19 @@ public class SelectToolGroupPage extends WizardPage {
 		this.workbench = workbench;
 		this.selection = selection;
 	}
-	
+
 	@Override
 	public void createControl(Composite parent) {
-	    // create the composite to hold the widgets
+		// create the composite to hold the widgets
 		Composite composite =  new Composite(parent, SWT.NULL);
 
+
 		initializeGridLayout(composite);
+
 		String labelText = "Tool group:";
 		createLabelWithText(composite, labelText);
 		comboToolGroup = HPCUtils.createCombo(composite);
-		
+
 		String[] toolGroups = ToolConfigDomain.getInstance().getToolGroupNames();
 		if (toolGroups.length > 0) {
 			setItemsOfCombo(toolGroups);
@@ -75,7 +77,7 @@ public class SelectToolGroupPage extends WizardPage {
 	public boolean canFlipToNextPage() {
 		return true;
 	}
-	
+
 	public String getSelectedToolGroup() {
 		return selectedToolGroup;
 	}
@@ -83,7 +85,7 @@ public class SelectToolGroupPage extends WizardPage {
 	public Combo getComboToolGroup() {
 		return comboToolGroup;
 	}
-	
+
 	@Override
 	public IWizardPage getNextPage() {
 		SelectToolPage selectToolPage = ((SelectToolPage) this.getWizard().getPage("Page 2"));
