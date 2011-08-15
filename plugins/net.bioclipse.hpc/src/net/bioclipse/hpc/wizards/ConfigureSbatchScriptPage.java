@@ -161,7 +161,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
 		gridLayoutData.horizontalSpan = 2;
 		gridLayoutData.grabExcessHorizontalSpace = true;
-		gridLayoutData.heightHint = 48;
+		gridLayoutData.minimumHeight = 60;
 		gridLayoutData.widthHint = 200;
 		sbatchStyledText.setLayoutData(gridLayoutData);
 	}

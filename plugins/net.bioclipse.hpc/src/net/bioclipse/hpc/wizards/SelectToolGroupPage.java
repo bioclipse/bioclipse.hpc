@@ -42,7 +42,7 @@ public class SelectToolGroupPage extends WizardPage {
 	public void createControl(Composite parent) {
 		Composite composite =  new Composite(parent, SWT.NULL);
 		initializeGridLayout(composite);
-		((WizardDialog) this.getWizard().getContainer()).setMinimumPageSize(300, 300);
+		((WizardDialog) this.getWizard().getContainer()).setMinimumPageSize(300, 440);
 
 		String labelText = "Tool group:";
 		createLabelWithText(composite, labelText);
