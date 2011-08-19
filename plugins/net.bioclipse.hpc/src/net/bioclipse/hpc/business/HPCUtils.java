@@ -154,15 +154,6 @@ public class HPCUtils {
 		composite.setLayoutData(gd);
 	}
 
-	public static Combo createCombo(Composite composite) {
-		GridData gridData;
-		Combo combo = new Combo(composite, SWT.BORDER);
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = GridData.BEGINNING;
-		combo.setLayoutData(gridData);
-		return combo;
-	}
-
 	public static int[] range(int start, int end, int increment) {
 		int[] values = new int[Math.abs((end - start) / increment) + 1];
 		boolean reverse = start > end;

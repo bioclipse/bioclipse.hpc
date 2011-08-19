@@ -1,15 +1,7 @@
 package net.bioclipse.hpc.wizards;
 
-import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.business.HPCUtils;
-import net.bioclipse.hpc.domains.application.HPCApplication;
 
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.rse.core.events.ISystemResourceChangeEvents;
@@ -66,10 +58,11 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		addPage(configSbatchPage);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean performFinish() {
 
-		ConfigureCommandPage cmdPage = (ConfigureCommandPage) this.getPage("Page 3");
+		// ConfigureCommandPage cmdPage = (ConfigureCommandPage) this.getPage("Page 3");
 		// String command = cmdPage.getCommandText();
 
 		ConfigureSbatchScriptPage sbatchPage = (ConfigureSbatchScriptPage) this.getPage("Page 4");
@@ -85,7 +78,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		// Command line already added in sbatch config page
 		// scriptString = addLineToScript(command, scriptString, fileName);
 
-		getApplication().execRemoteCommand(scriptString);
+		HPCUtils.getApplication().execRemoteCommand(scriptString);
 
 		// Update the file browser, to show any newly created files
 		IRemoteFileSubSystem rfss = RemoteFileUtility.getFileSubSystem(HPCUtils.getApplication().getHPCHost());
@@ -118,12 +111,6 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
 	public void setResultingCommand(String resultingCommand) {
 		this.resultingCommand = resultingCommand;
-	}
-
-	protected HPCApplication getApplication() {
-		Activator plugin = Activator.getDefault();
-		HPCApplication application = plugin.application;
-		return application;
 	}
 
 	public void setCanFinish(boolean b) {

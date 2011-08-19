@@ -3,11 +3,7 @@ package net.bioclipse.hpc.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.bioclipse.hpc.Activator;
-import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCUtils;
-import net.bioclipse.hpc.domains.application.HPCApplication;
-import net.bioclipse.hpc.domains.toolconfig.Option;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
@@ -16,31 +12,22 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.rse.core.IRSECoreRegistry;
-import org.eclipse.rse.core.RSECorePlugin;
 import org.eclipse.rse.core.model.IHost;
-import org.eclipse.rse.core.model.ISystemRegistry;
-import org.eclipse.rse.files.ui.dialogs.SystemRemoteArchiveDialog;
 import org.eclipse.rse.files.ui.dialogs.SystemRemoteFileDialog;
 import org.eclipse.rse.files.ui.dialogs.SystemRemoteFolderDialog;
-import org.eclipse.rse.internal.files.ui.resources.SystemRemoteEditManager;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.rse.ui.SystemBasePlugin;
-import org.eclipse.rse.ui.dialogs.SystemRemoteResourceDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.custom.StyledTextPrintOptions;
-import org.eclipse.swt.internal.gtk.GdkColor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
@@ -195,41 +182,40 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	
 	private void createComboBoxForParam(Parameter parameter, int horizontalSpan) {
 		List<String> selectOptions = parameter.getSelectOptionValues();
-		Combo currentCombo = HPCUtils.createCombo(composite);
+		Combo currentCombo = Utils.createCombo(composite);
 
 		// Layout stuff
 		GridData comboLayoutData = new GridData();
 		comboLayoutData.horizontalSpan = horizontalSpan;
 		currentCombo.setLayoutData(comboLayoutData);
 		
-		// Misc stuff
+		// Event handling stuff
 		currentCombo.addListener(SWT.Selection, this);
 		widgets.add((Widget) currentCombo);
 
 		// Populate
 		currentCombo.setData(parameter);
-		String[] selectOptionsArr = HPCUtils.stringListToArray(selectOptions);
-		currentCombo.setItems(selectOptionsArr);
-		Option selectedOption = parameter.getSelectedOption();
-		if (selectedOption != null) {
-			String selectedOptionValue = selectedOption.getValue();
-			currentCombo.setText(selectedOptionValue);
+		currentCombo.setItems(HPCUtils.stringListToArray(selectOptions));
+		if (parameter.getSelectedOption() != null) {
+			currentCombo.setText(parameter.getSelectedOption().getValue());
 		}
 	}
 
 	private Text createTextFieldForParam(Parameter parameter, int horizontalSpan) {
-		String defaultText = parameter.getValue(); 
 		Text textField = new Text(this.composite, SWT.BORDER);
-		textField.setText(defaultText);
+		textField.setText(parameter.getValue());
+
 		// Connect the widget to it's corresponding parameter
 		textField.setData(parameter);
 		textField.addListener(SWT.KeyUp, this);
 		widgets.add((Widget) textField);
+
 		GridData textGridData = new GridData(GridData.FILL_HORIZONTAL);
 		textGridData.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
 		textGridData.horizontalSpan = horizontalSpan;
 		textGridData.widthHint = 248;
 		textField.setLayoutData(textGridData);
+
 		return textField;
 	}
 	

@@ -1,6 +1,5 @@
 package net.bioclipse.hpc.wizards;
 
-import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -9,15 +8,11 @@ import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.handlers.WizardHandler;
 
 public class SelectToolGroupPage extends WizardPage {
 
@@ -46,7 +41,7 @@ public class SelectToolGroupPage extends WizardPage {
 
 		String labelText = "Tool group:";
 		createLabelWithText(composite, labelText);
-		comboToolGroup = HPCUtils.createCombo(composite);
+		comboToolGroup = Utils.createCombo(composite);
 
 		String[] toolGroups = ToolConfigDomain.getInstance().getToolGroupNames();
 		if (toolGroups.length > 0) {

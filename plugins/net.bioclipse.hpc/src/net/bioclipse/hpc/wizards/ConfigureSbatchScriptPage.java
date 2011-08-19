@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import net.bioclipse.hpc.business.HPCUtils;
-import net.bioclipse.hpc.domains.application.HPCApplication;
-import net.bioclipse.hpc.domains.toolconfig.Option;
-import net.bioclipse.hpc.domains.toolconfig.Parameter;
-import net.bioclipse.hpc.domains.toolconfig.Tool;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -66,6 +62,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		setControl(composite);
 	}
 
+	@SuppressWarnings("unchecked")
 	void onEnterPage() {
 		// Don't redraw wizard page on second visit
 		if (!this.initialized) {
@@ -78,7 +75,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 
 			// Get user info, to use for writing the SBATCH config
 			Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
-			String username = (String) userInfo.get("username");
+			// String username = (String) userInfo.get("username");
 			List<String> projects = (List<String>) userInfo.get("projects");
 
 			// Get various info used for writing SBATCH config
@@ -167,7 +164,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	}
 
 	private void createComboBox(String identifier, List<String> optionValues, int horizontalSpan, String defValue) {
-		Combo currentCombo = HPCUtils.createCombo(composite);
+		Combo currentCombo = Utils.createCombo(composite);
 		currentCombo.setData(identifier);
 
 		// Layout stuff
