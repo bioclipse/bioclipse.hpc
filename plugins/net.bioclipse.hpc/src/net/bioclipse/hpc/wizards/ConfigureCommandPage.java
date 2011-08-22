@@ -24,10 +24,12 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
@@ -123,15 +125,41 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 			}
 			
 			// This is a way to recognize fields for specifying "input data file"
+			// TODO Use more different kinds of widgets here
+			
+			int optionsCnt = parameter.getSelectOptions().size();
+			
 			if (type.equals("data")) {
 				createSelectRemoteFileForParam(parameter);
-			} else if (type.equals("select")) {
+			} else if (type.equals("select") && optionsCnt < 4) {
+				createRadioButtonsForParam(parameter, 2);
+			} else if (type.equals("select") && optionsCnt >= 4) {
 				createComboBoxForParam(parameter, 2);
 			} else {
 				createTextFieldForParam(parameter, 2);
 			} 
 		} else if (paramType.equals("output")) {
 			createOutputFileNameWidgets(parameter);
+		}
+	}
+
+	private void createRadioButtonsForParam(Parameter parameter, int i) {
+		List<String> selectOptions = parameter.getSelectOptionValues();
+		Group radioGroup = new Group(composite, SWT.HORIZONTAL);
+		radioGroup.setLayout(new RowLayout());
+		// radioGroup.setText(parameter.getName());
+
+		GridData layoutData = new GridData();
+		layoutData.horizontalSpan = i;
+		radioGroup.setLayoutData(layoutData);
+		
+		for (String optionValue : selectOptions) {
+			
+			Button btn = new Button(radioGroup, SWT.RADIO);
+			btn.setText(optionValue);
+			// Event handling stuff
+			btn.addListener(SWT.Selection, this);
+			btn.setData(parameter);
 		}
 	}
 

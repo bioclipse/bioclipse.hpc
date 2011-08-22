@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.internal.RadioMenu;
 
 public class Utils {
 
@@ -15,5 +16,5 @@ public class Utils {
 		combo.setLayoutData(gridData);
 		return combo;
 	}
-	
+
 }
