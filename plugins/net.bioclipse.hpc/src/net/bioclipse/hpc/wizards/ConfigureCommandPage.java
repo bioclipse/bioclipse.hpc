@@ -154,12 +154,13 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		radioGroup.setLayoutData(layoutData);
 		
 		for (String optionValue : selectOptions) {
-			
 			Button btn = new Button(radioGroup, SWT.RADIO);
 			btn.setText(optionValue);
 			// Event handling stuff
 			btn.addListener(SWT.Selection, this);
+			btn.addListener(SWT.MouseUp, this);
 			btn.setData(parameter);
+			widgets.add(btn);
 		}
 	}
 
@@ -309,7 +310,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
+		if (event.type == SWT.Selection || event.type == SWT.KeyUp || event.type == SWT.MouseUp) {
 			String tempCommand = currentTool.getCompleteCommand();
 			for (Widget widget : this.widgets) {
 				// Get the new value from the widget
@@ -318,6 +319,8 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					newValue = ((Combo) widget).getText();
 				} else if (widget instanceof Text) {
 					newValue = ((Text) widget).getText();
+				} else if (widget instanceof Button && ((Button) widget).getSelection()) {
+					newValue = ((Button) widget).getText();
 				} else {
 					System.out.println("Could not set newValue");
 				}
