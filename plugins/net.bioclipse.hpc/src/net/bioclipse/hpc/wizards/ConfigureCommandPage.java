@@ -158,7 +158,6 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 			btn.setText(optionValue);
 			// Event handling stuff
 			btn.addListener(SWT.Selection, this);
-			btn.addListener(SWT.MouseUp, this);
 			btn.setData(parameter);
 			widgets.add(btn);
 		}
@@ -310,7 +309,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		if (event.type == SWT.Selection || event.type == SWT.KeyUp || event.type == SWT.MouseUp) {
+		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
 			String tempCommand = currentTool.getCompleteCommand();
 			for (Widget widget : this.widgets) {
 				// Get the new value from the widget
