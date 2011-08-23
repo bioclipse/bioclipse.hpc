@@ -43,43 +43,93 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          id="org.eclipse.rse"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.rse.core"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.core.source"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.dstore"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.dstore"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.dstore.source"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.ftp"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.ftp"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.ftp.source"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.local"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.local"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.local.source"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.sdk"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.ssh"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.ssh"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.ssh.source"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.telnet"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.telnet"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.telnet.source"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.terminals"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.terminals"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.rse.terminals.source"
+         version="0.0.0"/>
+
    <requires>
       <import feature="net.bioclipse.core_feature" version="2.4.0" match="greaterOrEqual"/>
    </requires>
-
-   <plugin
-         id="com.hp.hpl.jena"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.bioclipse.statistics"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.bioclipse.statistics.jama"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.bioclipse.chart"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="com.hp.hpl.jena.arq"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="org.apache.xerces"
@@ -110,13 +160,6 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          unpack="false"/>
 
    <plugin
-         id="com.hp.hpl.jena.tdb"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="net.bioclipse.hpc"
          download-size="0"
          install-size="0"
@@ -124,266 +167,35 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.rse"
+         id="net.bioclipse.webservices"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.rse.connectorservice.dstore"
+         id="javax.mail"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.rse.connectorservice.local"
+         id="org.eclipse.jsch.core"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.rse.connectorservice.ssh"
+         id="org.eclipse.jsch.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.rse.connectorservice.telnet"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.doc.user"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.dstore.security"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.efs"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.efs.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.files.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.importexport"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.processes.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.services"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.services.dstore"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.services.files.ftp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.services.local"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.services.ssh"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.services.telnet"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.shells.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.files.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.files.dstore"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.files.ftp"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.files.local"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.files.ssh"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.processes.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.processes.dstore"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.processes.local"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.processes.shell.linux"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.shells.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.shells.dstore"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.shells.local"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.shells.ssh"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.shells.telnet"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.terminals.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.subsystems.terminals.ssh"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.terminals.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.rse.ui"
+         id="com.jcraft.jsch"
          download-size="0"
          install-size="0"
          version="0.0.0"

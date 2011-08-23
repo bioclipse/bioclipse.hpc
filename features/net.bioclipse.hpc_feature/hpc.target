@@ -48,6 +48,40 @@
 <unit id="org.eclipse.pde.junit.runtime.standalone.feature.group" version="1.0.0.v20100831"/>
 <repository location="http://download.eclipse.org/releases/helios"/>
 </location>
+<location id="org.eclipse.rse" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.local.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ssh" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.core" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.telnet" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.dstore" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.telnet.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.sdk" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.local" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.dstore.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ssh.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.terminals.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ftp" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.terminals" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.core.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ftp.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.tm.terminal" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.local.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ssh" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.core" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.telnet" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.dstore" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.telnet.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.sdk" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.local" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.dstore.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ssh.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.terminals.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ftp" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.terminals" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.core.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.rse.ftp.source" path="${eclipse_home}" type="Feature"/>
+<location id="org.eclipse.tm.terminal" path="${eclipse_home}" type="Feature"/>
 </locations>
 <environment>
 <os>linux</os>
