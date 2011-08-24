@@ -48,19 +48,11 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.rse.core.source"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.rse.dstore"
          version="0.0.0"/>
 
    <includes
          id="org.eclipse.rse.dstore"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.dstore.source"
          version="0.0.0"/>
 
    <includes
@@ -72,19 +64,11 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.rse.ftp.source"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.rse.local"
          version="0.0.0"/>
 
    <includes
          id="org.eclipse.rse.local"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.local.source"
          version="0.0.0"/>
 
    <includes
@@ -100,10 +84,6 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.rse.ssh.source"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.rse.telnet"
          version="0.0.0"/>
 
@@ -112,19 +92,11 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.rse.telnet.source"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.rse.terminals"
          version="0.0.0"/>
 
    <includes
          id="org.eclipse.rse.terminals"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.terminals.source"
          version="0.0.0"/>
 
    <requires>
