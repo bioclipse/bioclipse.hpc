@@ -2,7 +2,7 @@
 <feature
       id="net.bioclipse.hpc_site"
       label="Bioclipse-HPC Update Site"
-      version="1.0.0.qualifier"
+      version="2.5.0.qualifier"
       provider-name="The Bioclipse Team">
 
    <description url="http://www.example.com/description">
@@ -19,7 +19,7 @@
 
    <includes
          id="net.bioclipse.hpc_feature"
-         version="0.0.0"/>
+         version="2.5.0.qualifier"/>
 
    <requires>
       <import feature="net.bioclipse.core_feature" version="2.5.0.qualifier"/>
