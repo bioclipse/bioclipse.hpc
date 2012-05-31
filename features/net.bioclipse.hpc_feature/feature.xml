@@ -52,19 +52,7 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.rse.dstore"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.rse.ftp"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.ftp"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.local"
          version="0.0.0"/>
 
    <includes
@@ -80,19 +68,7 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.rse.ssh"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.rse.telnet"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.telnet"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.terminals"
          version="0.0.0"/>
 
    <includes
