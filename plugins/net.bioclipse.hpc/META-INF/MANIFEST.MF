@@ -31,5 +31,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.rse.services
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.log4j,
- org.eclipse.jface.databinding.viewers
+ org.eclipse.jface.databinding.viewers,
+ org.eclipse.swt.graphics
 Bundle-ActivationPolicy: lazy
