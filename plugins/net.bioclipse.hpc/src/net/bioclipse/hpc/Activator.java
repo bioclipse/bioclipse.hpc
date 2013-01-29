@@ -65,7 +65,7 @@ public class Activator extends AbstractUIPlugin {
 
         jsFinderTracker.open();
         
-        // Create an applicatoin object
+        // Create an application object
         application = new HPCApplication();
         
         HPCUtils.getApplication().readGalaxyToolConfigFiles();
@@ -73,6 +73,10 @@ public class Activator extends AbstractUIPlugin {
         // Need to set this here to, since initializeDefaultPreferences() is not always run
         HPCUtils.getApplication().setDefaultPreferences();
         
+        /*
+         * TODO: Start with IStartup and org.eclipse.ui.startup instead:
+         * http://help.eclipse.org/juno/index.jsp?topic=%2Forg.eclipse.platform.doc.isv%2Freference%2Fextension-points%2Forg_eclipse_ui_startup.html
+         * 
         boolean showPrefDialogOnStartup = getPreferenceStore().getBoolean("showdialogonstartup");
         if (showPrefDialogOnStartup) {
         	Dialog mainPrefsDialog = new HPCMainPreferencesDialog(HPCUtils.getApplication().getShell());
@@ -80,6 +84,7 @@ public class Activator extends AbstractUIPlugin {
         } else {
         	System.out.println("DEBUG: Preferences dialog set to not start..."); // TODO Remove debug code
         }
+        */
         
     }
 
