@@ -17,9 +17,10 @@ public class ExecScriptAsBatchJobAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		String filePath = HPCUtils.getFileAbsolutePathFromSelection((IStructuredSelection) selection);
+		String commandString = "sbatch " + filePath;
 		System.out.println("File path: " + filePath);
 		HPCApplication app = HPCUtils.getApplication();
-		System.out.print("Executing remote command:\n" + app.execRemoteCommand("sbatch " + filePath));
+		System.out.print("Executing remote command (" + commandString + "):\n" + app.execRemoteCommand(commandString));
 	}
 
 	@Override
