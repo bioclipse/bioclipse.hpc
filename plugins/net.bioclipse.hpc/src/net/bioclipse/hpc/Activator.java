@@ -16,7 +16,6 @@ import net.bioclipse.hpc.business.IJavaHPCManager;
 import net.bioclipse.hpc.business.IHPCManager;
 import net.bioclipse.hpc.domains.application.HPCApplication;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
-import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
@@ -28,6 +27,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.prefs.PreferencesService;
 import org.osgi.util.tracker.ServiceTracker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Activator class controls the plug-in life cycle
@@ -37,7 +38,7 @@ public class Activator extends AbstractUIPlugin {
     // Domain specific Application object
     public static HPCApplication application;
 
-    private static final Logger logger = Logger.getLogger(Activator.class);
+    private static final Logger logger = LoggerFactory.getLogger(Activator.class);
 
     // The shared instance
     private static Activator plugin;

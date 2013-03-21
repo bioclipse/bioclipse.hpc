@@ -46,7 +46,6 @@ import net.bioclipse.hpc.views.ProjInfoView;
 import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.managers.business.IBioclipseManager;
 
-import org.apache.log4j.Logger;
 import org.eclipse.rse.core.*;
 import org.eclipse.rse.core.model.IHost;
 import org.eclipse.rse.core.model.ISystemRegistry;
@@ -54,10 +53,12 @@ import org.eclipse.rse.core.model.SystemStartHere;
 import org.eclipse.rse.core.subsystems.ISubSystem;
 import org.eclipse.rse.subsystems.shells.core.*;
 import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HPCManager implements IBioclipseManager {
 
-	private static final Logger logger = Logger.getLogger(HPCManager.class);
+	private static final Logger logger = LoggerFactory.getLogger(HPCManager.class);
 	public final HPCApplication application = getApplication();
 
 	/**
