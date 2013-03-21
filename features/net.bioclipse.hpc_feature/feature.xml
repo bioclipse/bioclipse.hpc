@@ -39,132 +39,29 @@ Jena includes software developed by the Apache Software Foundation (http://www.a
 Jena is built on top of other sub-systems which we gratefully acknowledge: details of these systems and their version numbers.
    </license>
 
-   <includes
-         id="org.eclipse.rse"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.core"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.dstore"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.ftp"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.local"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.sdk"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.ssh"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.telnet"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.rse.terminals"
-         version="0.0.0"/>
-
    <requires>
-      <import feature="net.bioclipse.core_feature" version="2.5.0.qualifier" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="net.bioclipse.core"/>
+      <import plugin="net.bioclipse.scripting"/>
+      <import plugin="org.springframework.bundle.spring.aop"/>
+      <import plugin="net.sf.cglib"/>
+      <import plugin="org.springframework.osgi.aopalliance.osgi"/>
+      <import plugin="org.eclipse.rse.subsystems.shells.core"/>
+      <import plugin="org.eclipse.rse.core"/>
+      <import plugin="org.eclipse.rse.files.ui"/>
+      <import plugin="org.eclipse.rse.shells.ui"/>
+      <import plugin="org.eclipse.rse.ui"/>
+      <import plugin="org.eclipse.rse.subsystems.files.core"/>
+      <import plugin="org.eclipse.rse.subsystems.files.ssh"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.rse.services"/>
+      <import plugin="org.eclipse.jface.databinding"/>
+      <import plugin="org.eclipse.swt"/>
    </requires>
 
    <plugin
-         id="org.apache.xerces"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.xml.resolver"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.xml.serializer"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="javax.xml"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="net.bioclipse.hpc"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="net.bioclipse.webservices"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="javax.mail"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.jsch.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.jsch.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.jcraft.jsch"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.search"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.debug.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.debug.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
