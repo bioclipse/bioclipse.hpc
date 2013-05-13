@@ -65,7 +65,10 @@ public class HPCApplication extends AbstractModelObject {
 		if (hpcHost == null) {
 			System.out.println("No active HPC host!");
 		} else {
-			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost);
+			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
+			if (cmdss == null) {
+				System.out.println("Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!");
+			}
 			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
 			try {
 				allOutput = "";
@@ -100,6 +103,7 @@ public class HPCApplication extends AbstractModelObject {
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
+				// TODO: Trigger an appropriate error message!
 				System.out.println("Could not extract XML for jobinfo! Are you logged in?!");
 			}
 		} else {
@@ -192,7 +196,7 @@ public class HPCApplication extends AbstractModelObject {
 		commandOutput = execRemoteCommand("fimsproxy -t modulesforbin -c " + currentBinary);
 
 		String clusterInfoXmlString = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
-		if (clusterInfoXmlString != null) {
+		if (clusterInfoXmlString != null) {	
 			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
 			NodeList modForBinNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/modulesforbinary/module", clusterInfoXmlDoc);
 

@@ -58,8 +58,8 @@ public class JobInfoView extends ViewPart {
 	private XmlDataProviderFactory xmlDataProvider = new XmlDataProviderFactory();
 	TreeViewer treeViewer;
 	
-	public JobInfoView() {
-	}
+	// Constructor
+	public JobInfoView() {}
 
 	/**
 	 * Create contents of the view part.
