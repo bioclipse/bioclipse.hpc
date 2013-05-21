@@ -1,5 +1,9 @@
 package net.bioclipse.hpc.domains.toolconfig;
 
+/**
+ * Class representing a parameter option in a galaxy tool configuration
+ * @author samuel
+ */
 public class Option {
 	private String m_value;
 	private Boolean m_selected;

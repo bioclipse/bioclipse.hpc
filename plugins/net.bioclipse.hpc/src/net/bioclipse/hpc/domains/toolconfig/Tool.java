@@ -7,6 +7,10 @@ import java.util.Map;
 
 import net.bioclipse.hpc.business.HPCUtils;
 
+/**
+ * Class representing a Galaxy tool (configuration)
+ * @author Samuel Lampa
+ */
 public class Tool {
 	private String m_name;
 	private String m_description;

@@ -1,5 +1,9 @@
 package net.bioclipse.hpc.domains.toolconfig;
 
+/**
+ * Class representing a group of Galaxy tool configurations
+ * @author samuel
+ */
 import java.util.ArrayList;
 import java.util.List;
 

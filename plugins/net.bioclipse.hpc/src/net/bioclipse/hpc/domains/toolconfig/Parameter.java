@@ -3,6 +3,10 @@ package net.bioclipse.hpc.domains.toolconfig;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class representing a parameter in a galaxy tool configuration
+ * @author samuel
+ */
 public class Parameter {
 	// For distinguishing "normal" and "output" type params
 	private String m_paramType;

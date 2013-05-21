@@ -16,6 +16,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * "Integrator" object to keep track of the domain of Galaxy Tool configurations.
+ * @author Samuel Lampa
+ */
 public class ToolConfigDomain {
 	private Map<String,ToolGroup> m_toolGroups;
 	final int PARAMTYPE_NORMAL = 1;
