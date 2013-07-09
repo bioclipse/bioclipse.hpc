@@ -20,12 +20,13 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Factory class with methods for parsing and storing of the the original XML 
+ * content as well as the parsed form (in form of W3C DOM objects), for creating
+ * content and label providers, and for creating columns.
+ */
 public class XmlDataProviderFactory {
-	/**
-	 * Factory class with methods for parsing and storing of the the original XML 
-	 * content as well as the parsed form (in form of W3C DOM objects), for creating
-	 * content and label providers, and for creating columns.
-	 */
+
 	private List<XmlRowCollection> fRowCollections = new ArrayList<XmlRowCollection>();
 	private List<TreeViewerColumn> fColumns = new ArrayList<TreeViewerColumn>();
 	private String fRawXmlContent;
