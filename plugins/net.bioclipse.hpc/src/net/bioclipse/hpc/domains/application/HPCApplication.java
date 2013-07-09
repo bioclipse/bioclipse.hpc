@@ -34,12 +34,15 @@ import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class HPCApplication extends AbstractModelObject {
 	private List _selectedFiles;
+	private static final Logger logger = LoggerFactory.getLogger(HPCApplication.class);
 
 	public HPCApplication() {
 		_selectedFiles = new ArrayList();
@@ -51,10 +54,15 @@ public class HPCApplication extends AbstractModelObject {
 			// Run the command in a visible shell
 			RemoteCommandHelpers.runUniversalCommand(getShell(), command, ".", cmdss); //$NON-NLS-1$
 		} else {
-			MessageDialog.openError(getShell(), "No command subsystem", "Found no command subsystem");
+			logger.error("(RSE) Command subsystem not found");
 		}
 	}
 
+	/**
+	 * Execute a remote command via SSH
+	 * @param String command
+	 * @return String allOutput
+	 */
 	public String execRemoteCommand(String command) {
 		IHost hpcHost;
 		String temp = "";
@@ -63,11 +71,11 @@ public class HPCApplication extends AbstractModelObject {
 		hpcHost = getHPCHost();
 
 		if (hpcHost == null) {
-			System.out.println("No active HPC host!");
+			logger.error("No active HPC hosts!");
 		} else {
 			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
 			if (cmdss == null) {
-				System.out.println("Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!");
+				logger.error("Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!");
 			}
 			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
 			try {
@@ -79,7 +87,7 @@ public class HPCApplication extends AbstractModelObject {
 					temp = simpleCommandOp.readLine(true);
 					// if (temp != "") {
 					allOutput += temp;
-					// System.out.println("Output from : " + temp);
+					// logger.debug("Output from : " + temp);
 					// }
 					// try {
 					// 	Thread.sleep(0);
@@ -98,38 +106,38 @@ public class HPCApplication extends AbstractModelObject {
 		// find the right view
 		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
 		if (jobInfoView!=null) {
-			String rawContent = execRemoteCommand("fimsproxy -t jobinfo");
-			String jobInfoXml = getMatch("<infodocument>.*?</infodocument>", rawContent);
+			String rawContent = execRemoteCommand("~/opt/clusterapi/jobs -f xml");
+			String jobInfoXml = getMatch("<clusterapi>.*?</clusterapi>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
-				// TODO: Trigger an appropriate error message!
-				System.out.println("Could not extract XML for jobinfo! Are you logged in?!");
+				logger.error("Could not extract XML for jobinfo! Are you logged in?!");
 			}
 		} else {
-			System.out.println("No View found!");
+			logger.error("Job view not found!");
 		}
 	}
 
 	public void updateProjInfoView() {
 		String commandOutput;
 
-		System.out.println("Button was clicked!");
-		// find the right view
+		logger.debug("Button was clicked!"); // FIXME: Remove
+
+		// Find the right view
 		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
-			System.out.println("Found projInfoView: " + projInfoView);
+			logger.debug("Found projInfoView: " + projInfoView);
 
-			commandOutput = execRemoteCommand("fimsproxy -t projinfo");
+			commandOutput = execRemoteCommand("fimsproxy -t projinfo"); // FIXME: Replace with clusterapi call
 
 			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
 			if (projInfoXml != null) {
 				projInfoView.setContentsFromXML(projInfoXml);
 			} else {
-				System.out.println("Could not extract XML for projinfo!");
+				logger.error("Could not extract XML for projinfo!");
 			}
 		} else {
-			System.out.println("No View found!");
+			logger.error("Projinfo view not found!");
 		}
 	}
 
@@ -137,7 +145,7 @@ public class HPCApplication extends AbstractModelObject {
 		String commandOutput;
 		HashMap<String,Object> userInfo = new HashMap<String,Object>();
 
-		commandOutput = execRemoteCommand("fimsproxy -t userinfo");
+		commandOutput = execRemoteCommand("fimsproxy -t userinfo"); // FIXME: Replace with clusterapi call
 
 		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
 		if (userInfoXmlString != null) {
@@ -154,7 +162,7 @@ public class HPCApplication extends AbstractModelObject {
 			}
 			userInfo.put("projects", projects);
 		} else {
-			System.out.println("Could not extract XML for userinfo!");
+			logger.error("Could not extract XML for userinfo!");
 		}
 		return userInfo;
 	}
@@ -184,7 +192,7 @@ public class HPCApplication extends AbstractModelObject {
 			}
 			clusterInfo.put("partitions", partitions);
 		} else {
-			System.out.println("Could not extract XML for clusterinfo!");
+			logger.error("Could not extract XML for clusterinfo!");
 		}
 		return clusterInfo;
 	}	
@@ -207,7 +215,7 @@ public class HPCApplication extends AbstractModelObject {
 				modulesForBinary.add(modForBinStr);
 			}
 		} else {
-			System.out.println("Could not extract XML for modules for binary " + currentBinary + "!");
+			logger.error("Could not extract XML for modules for binary " + currentBinary + "!");
 		}
 		return modulesForBinary;
 	}
@@ -241,10 +249,10 @@ public class HPCApplication extends AbstractModelObject {
 
 	protected IRemoteFile getFirstSelectedRemoteFile() {
 		if (_selectedFiles.size() > 0) {
-			System.out.println("### No Selected file! ###");
+			logger.error("No file selected");
 			return (IRemoteFile)_selectedFiles.get(0);
 		}
-		System.out.println("### No Selected file! ###");
+		logger.error("No file selected");
 		return null;
 	}
 
@@ -261,16 +269,15 @@ public class HPCApplication extends AbstractModelObject {
 	/* Utility methods */
 
 	/**
-	 * Find an RSE host which is currently connected to the
-	 * the kalkyl cluster, by checking the hostname of each host
-	 * @return
+	 * Find the RSE host which is currently connected to the cluster configured in preferences
+	 * @return String hpcHost
 	 */
 	public IHost getHPCHost() {
 		IHost hpcHost = null;
 		ISystemRegistry reg = SystemStartHere.getSystemRegistry();
 		IHost[] hosts = reg.getHosts();
 		if (hosts.length == 0) {
-			System.out.println("No host names found!");
+			logger.error("No host names found!");
 		}
 
 		for (IHost host : hosts) {
