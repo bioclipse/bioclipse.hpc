@@ -16,7 +16,7 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.w3c.dom.Document;

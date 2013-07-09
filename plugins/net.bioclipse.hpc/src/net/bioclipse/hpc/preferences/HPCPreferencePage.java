@@ -1,7 +1,7 @@
 package net.bioclipse.hpc.preferences;
 
 import net.bioclipse.hpc.business.HPCManager;
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 
 import net.bioclipse.hpc.Activator;
 

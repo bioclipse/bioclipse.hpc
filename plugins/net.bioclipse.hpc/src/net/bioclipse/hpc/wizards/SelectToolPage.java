@@ -1,6 +1,6 @@
 package net.bioclipse.hpc.wizards;
 
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.viewers.IStructuredSelection;

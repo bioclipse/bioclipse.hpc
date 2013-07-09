@@ -3,7 +3,7 @@ package net.bioclipse.hpc.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;

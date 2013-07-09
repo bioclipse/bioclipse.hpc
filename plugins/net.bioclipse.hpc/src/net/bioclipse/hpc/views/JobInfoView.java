@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCManagerFactory;
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlContentProvider;
 import net.bioclipse.hpc.xmldisplay.XmlDataProviderFactory;

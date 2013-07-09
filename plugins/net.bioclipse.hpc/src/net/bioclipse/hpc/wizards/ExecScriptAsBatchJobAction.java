@@ -1,7 +1,7 @@
 package net.bioclipse.hpc.wizards;
 
-import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.domains.application.HPCApplication;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;

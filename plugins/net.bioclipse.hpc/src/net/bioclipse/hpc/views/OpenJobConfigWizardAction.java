@@ -1,6 +1,6 @@
 package net.bioclipse.hpc.views;
 
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 
 import org.eclipse.jface.action.IAction;

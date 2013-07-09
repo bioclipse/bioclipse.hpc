@@ -8,7 +8,7 @@ import java.util.Map;
 
 import javax.xml.xpath.XPathConstants;
 
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.w3c.dom.Document;

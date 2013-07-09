@@ -10,11 +10,11 @@
  ******************************************************************************/
 package net.bioclipse.hpc;
 
-import net.bioclipse.hpc.business.HPCUtils;
 import net.bioclipse.hpc.business.IJavaScriptHPCManager;
 import net.bioclipse.hpc.business.IJavaHPCManager;
 import net.bioclipse.hpc.business.IHPCManager;
 import net.bioclipse.hpc.domains.application.HPCApplication;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.preference.IPreferenceStore;

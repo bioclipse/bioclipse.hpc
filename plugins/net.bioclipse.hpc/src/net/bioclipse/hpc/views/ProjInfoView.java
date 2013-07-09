@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import javax.management.openmbean.CompositeData;
 
 import net.bioclipse.hpc.business.HPCManager;
-import net.bioclipse.hpc.business.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
 
