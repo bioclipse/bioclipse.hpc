@@ -3,18 +3,20 @@ package net.bioclipse.hpc.xmldisplay;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.bioclipse.hpc.Activator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
 public class XmlRow {
-	/**
-	 * 
-	 */
-
 	private XmlRowCollection fParentRowCollection = null;
 	private Node node = null;
 	private List<String> labels = new ArrayList<String>();
+	
+    private static final Logger logger = LoggerFactory.getLogger(Activator.class);	
 
 	public Node getNode() {
 		return node;
@@ -30,7 +32,7 @@ public class XmlRow {
 		if (index < labels.size()) {
 			label = labels.get(index);
 		} else {
-			System.err.println("Index larger than number of labels, in XmlRow.getLabel: " + Integer.toString(index));
+			logger.error("Index larger than number of labels, in XmlRow.getLabel: " + Integer.toString(index));
 		}
 		return label;
 	}

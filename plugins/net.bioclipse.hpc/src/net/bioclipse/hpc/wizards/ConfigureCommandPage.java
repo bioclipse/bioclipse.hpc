@@ -7,6 +7,7 @@ import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
+import net.bioclipse.hpc.views.ProjInfoView;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -34,6 +35,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigureCommandPage extends WizardPage implements Listener {
 
@@ -46,6 +49,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	Tool currentTool;
 	List<Widget> widgets;
 	boolean initialized;
+	private static final Logger logger = LoggerFactory.getLogger(ConfigureCommandPage.class);
 	
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 3");
@@ -86,7 +90,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				String commandString = currentTool.getCompleteCommand();
 				createResultingCommandTextbox(commandString);
 			} else {
-				System.out.println("Tool with name '" + selectedToolName + "' not found.");
+				logger.error("Tool with name '" + selectedToolName + "' not found.");
 			}
 			
 		    this.composite.pack();
@@ -201,7 +205,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 						textField.setText(file.getAbsolutePath());
 						textField.notifyListeners(SWT.KeyUp, new Event());
 					} else {
-						System.out.println("No valid file selected!");
+						logger.error("No valid file selected!");
 					}
 				}
 			}
@@ -286,7 +290,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 						outputFolder.setText(file.getAbsolutePath());
 						outputFolder.notifyListeners(SWT.KeyUp, new Event());
 					} else {
-						System.out.println("No valid file selected!");
+						logger.error("No valid file selected!");
 					}
 				}
 			}
@@ -321,7 +325,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				} else if (widget instanceof Button && ((Button) widget).getSelection()) {
 					newValue = ((Button) widget).getText();
 				} else {
-					System.out.println("Could not set newValue");
+					logger.error("Could not set newValue");
 				}
 
 				Object data = widget.getData();
@@ -336,7 +340,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 							tempCommand = tempCommand.replace("$" + parameter.getName(), newValue);
 							commandText.setText(tempCommand);
 						} else {
-							// System.out.println("ERROR: Parameter or widget value was null");
+							// logger.error("Parameter or widget value was null");
 						}
 					}
 				} else if (data instanceof String && ((String) data).equals("Output filename")) {

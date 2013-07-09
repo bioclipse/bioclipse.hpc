@@ -7,10 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.bioclipse.hpc.wizards.ExecScriptAsBatchJobAction;
+
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -28,6 +32,7 @@ public class XmlDataProviderFactory {
 	private NodeList fNodeList;
 	private Document fXmlDocument;
 	private Map<String, String> fColumnLabelMappings = new HashMap<String, String>();
+	private static final Logger logger = LoggerFactory.getLogger(XmlDataProviderFactory.class);	
 	
 	public XmlDataProviderFactory() {
 	}
@@ -62,10 +67,10 @@ public class XmlDataProviderFactory {
 					Node labelAttr = tempNodeAttrs.getNamedItem("label");
 					String colIdStr = colidAttr.getNodeValue();
 					String labelStr = labelAttr.getNodeValue();
-					System.out.println("Column ID: " + colIdStr + ", Label: " + labelStr); // TODO: Remove debug-code
+					logger.debug("Column ID: " + colIdStr + ", Label: " + labelStr); // TODO: Remove debug-code
 					fColumnLabelMappings.put(colIdStr, labelStr);
 				} catch (Exception e) {
-					System.out.println("Could not find attributes in columnlabelmappings/mapping!");
+					logger.error("Could not find attributes in columnlabelmappings/mapping!");
 					e.printStackTrace();
 				}
 			}
@@ -95,7 +100,7 @@ public class XmlDataProviderFactory {
 		}
 		for (Map.Entry<String, XmlRowCollection> entry : rowCollections.entrySet()) {
 			String cat = entry.getKey();
-			System.out.println("Cat to add: " + cat);
+			logger.debug("Cat to add: " + cat);
 			XmlRowCollection tempRowCollection = entry.getValue();
 			getRowCollections().add(tempRowCollection);
 		}

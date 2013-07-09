@@ -17,14 +17,18 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
+import net.bioclipse.hpc.wizards.ExecScriptAsBatchJobAction;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XmlUtils {
+	private static final Logger logger = LoggerFactory.getLogger(ExecScriptAsBatchJobAction.class);	
 	
 	public static Document parseXmlToDocument(String rawXmlContent) {
 		Document resultXmlDocument = null;
@@ -44,10 +48,10 @@ public class XmlUtils {
 		try {
 			resultXmlDocument = builder.parse(xmlContentIS);
 		} catch (SAXException e) {
-			System.out.println("SAX Exception:");
+			logger.error("SAX Exception: " + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("IO Exception:");
+			logger.error("IO Exception: " + e.getMessage());
 			e.printStackTrace();
 		}
 		

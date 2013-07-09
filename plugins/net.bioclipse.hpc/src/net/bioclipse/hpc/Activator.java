@@ -83,7 +83,7 @@ public class Activator extends AbstractUIPlugin {
         	Dialog mainPrefsDialog = new HPCMainPreferencesDialog(HPCUtils.getApplication().getShell());
         	mainPrefsDialog.open();
         } else {
-        	System.out.println("DEBUG: Preferences dialog set to not start..."); // TODO Remove debug code
+        	logger.debug("Preferences dialog set to not start..."); // TODO Remove debug code
         }
         */
         

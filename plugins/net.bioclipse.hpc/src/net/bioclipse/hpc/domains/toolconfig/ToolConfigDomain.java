@@ -11,6 +11,8 @@ import javax.xml.xpath.XPathConstants;
 import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -24,6 +26,7 @@ public class ToolConfigDomain {
 	private Map<String,ToolGroup> m_toolGroups;
 	final int PARAMTYPE_NORMAL = 1;
 	final int PARAMTYPE_OUTPUT = 2;
+	private static final Logger logger = LoggerFactory.getLogger(ToolConfigDomain.class); 
 	
 	private static ToolConfigDomain instance = new ToolConfigDomain();
 	
@@ -72,7 +75,7 @@ public class ToolConfigDomain {
 		int xmlFilesCount = 0;
 
 		if (!toolsFolder.isDirectory()) {
-			System.out.println("ERROR: Galaxy toolconfig folder not a directory: " + toolsFolderPath);
+			logger.error("The path set as galaxy toolconfig folder is not a directory: " + toolsFolderPath);
 		} else {
 			// Get a list of the individual tool folders, from the over-arching
 			// tools folder (located under Galaxy's root rolder)
@@ -99,12 +102,11 @@ public class ToolConfigDomain {
 						}
 					}
 				} else {
-					System.out.println("Current tool folder is not a directory: " + toolFolder.getName());
+					logger.error("Current tool folder is not a directory: " + toolFolder.getName());
 				}
 			}
-			String timeStamp = HPCUtils.currentTime(); 
 			// TODO: Don't use hard-coded file name
-			System.out.println(timeStamp + " INFO  [net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain] Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
+			logger.debug("Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
 		}
 	}
 
@@ -153,7 +155,7 @@ public class ToolConfigDomain {
 			tool.setAttributes(attributes);
 
 		} catch (Exception e) {
-			System.err.println("Error: " + e.getMessage());
+			logger.error(e.getMessage());
 		}
 		return tool;
 	}

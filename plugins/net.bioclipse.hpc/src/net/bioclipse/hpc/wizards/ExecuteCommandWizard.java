@@ -13,6 +13,8 @@ import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFileSubSystem;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
@@ -22,6 +24,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	protected IWorkbench workbench;
 	// workbench selection when the wizard was started
 	protected IStructuredSelection selection;
+	private static final Logger logger = LoggerFactory.getLogger(ExecuteCommandWizard.class);	
 
 	public ExecuteCommandWizard() {
 		// TODO Auto-generated constructor stub
@@ -43,7 +46,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 
 	public void addPages() {
 		// TODO: Clean up test code
-		System.out.println("Selected file path: " + HPCUtils.getFileAbsolutePathFromSelection(selection));
+		logger.debug("Selected file path: " + HPCUtils.getFileAbsolutePathFromSelection(selection));
 
 		SelectToolGroupPage toolGroupPage = new SelectToolGroupPage(workbench, selection);
 		addPage(toolGroupPage);

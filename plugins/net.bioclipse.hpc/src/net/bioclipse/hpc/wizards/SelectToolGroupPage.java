@@ -1,5 +1,6 @@
 package net.bioclipse.hpc.wizards;
 
+import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -13,8 +14,11 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SelectToolGroupPage extends WizardPage {
+	private static final Logger logger = LoggerFactory.getLogger(SelectToolGroupPage.class);
 
 	public Combo comboToolGroup;
 
@@ -47,7 +51,7 @@ public class SelectToolGroupPage extends WizardPage {
 		if (toolGroups.length > 0) {
 			setItemsOfCombo(toolGroups);
 		} else {
-			System.err.println("Error: No galaxy tool definitions loaded. Are the XML files in place?");
+			logger.error("No galaxy tool definitions loaded. Are the XML files in place?");
 		}
 
 		// set the composite as the control for this page

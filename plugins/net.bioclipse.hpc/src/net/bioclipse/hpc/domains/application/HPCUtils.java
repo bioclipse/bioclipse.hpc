@@ -27,10 +27,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 public class HPCUtils {
-
+	private static final Logger logger = LoggerFactory.getLogger(HPCUtils.class);
+	
 	public static HPCApplication getApplication() {
 		Activator plugin = Activator.getDefault();
 		HPCApplication application = plugin.application;

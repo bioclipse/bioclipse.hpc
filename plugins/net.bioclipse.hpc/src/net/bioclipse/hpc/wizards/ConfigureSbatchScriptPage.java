@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
+import net.bioclipse.hpc.views.ProjInfoView;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -19,6 +20,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.IWorkbench;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	// These are set in the constructor
@@ -32,6 +35,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	List<Widget> widgets;
 
 	boolean initialized = false;
+	private static final Logger logger = LoggerFactory.getLogger(ConfigureSbatchScriptPage.class);
 
 	String sbatchTemplate = 
 		"#SBATCH -A [project]\n" +
@@ -109,7 +113,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 						maxNodesStringList.add(nodeNoStr);
 					}
 				} else {
-					System.out.println("ERROR: MaxCPUs is zero!");
+					logger.error("MaxCPUs is zero!");
 				}
 			}
 			createComboBox("noofnodes", maxNodesStringList, 2);
@@ -126,7 +130,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 						maxCpusStringList.add(cpuNoStr);
 					}
 				} else {
-					System.out.println("ERROR: MaxCPUs is zero!");
+					logger.error("MaxCPUs is zero!");
 				}
 			}
 			createComboBox("noofcpus", maxCpusStringList, 2);
@@ -232,7 +236,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 				} else if (widget instanceof Text) {
 					newValue = ((Text) widget).getText();
 				} else {
-					System.out.println("Could not set newValue");
+					logger.error("Could not set newValue");
 				}
 				
 				if (newValue != null && !newValue.equals("")) {
@@ -251,7 +255,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 						newSbatchText = newSbatchText.replace("[" + id + "]", newValue);
 						sbatchStyledText.setText(newSbatchText);
 					}
-					System.out.println(id + " = " + newValue);
+					logger.debug(id + " = " + newValue);
 				}
 			}
 

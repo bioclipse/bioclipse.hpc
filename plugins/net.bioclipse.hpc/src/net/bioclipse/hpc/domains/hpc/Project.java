@@ -3,7 +3,11 @@ package net.bioclipse.hpc.domains.hpc;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import net.bioclipse.hpc.domains.application.AbstractModelObject;
+import net.bioclipse.hpc.domains.application.HPCApplication;
 
 
 public class Project extends AbstractModelObject {
@@ -11,6 +15,7 @@ public class Project extends AbstractModelObject {
 	private String groupUsedHours;
 	private String groupCurrentAllocation;
 	private List/* <ProjInfoPerson> */projInfoPersons = new ArrayList();
+	private static final Logger logger = LoggerFactory.getLogger(Project.class);
 	
 	public void ProjInfoGroup(String groupName) {
 		setGroupName(groupName);
@@ -18,7 +23,7 @@ public class Project extends AbstractModelObject {
 	
 	public void addPersonToGroup(Person person) {
 		projInfoPersons.add(person);
-		System.out.println("Added person to group: " + person.getName()); // TODO: Debug-code
+		logger.debug("Added person to group: " + person.getName()); 
 	}
 
 	public List getProjInfoPersons() {

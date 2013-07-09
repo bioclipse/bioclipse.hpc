@@ -12,6 +12,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HPCMainPreferencesDialog extends Dialog {
 	public StringFieldEditor hostName;
@@ -21,6 +23,8 @@ public class HPCMainPreferencesDialog extends Dialog {
 	
 	public FieldEditorPreferencePage page;
 
+    private static final Logger logger = LoggerFactory.getLogger(HPCMainPreferencesDialog.class);
+	
 	protected HPCMainPreferencesDialog(Shell parentShell) {
 		super(parentShell);
 		
@@ -83,7 +87,7 @@ public class HPCMainPreferencesDialog extends Dialog {
     
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
-        	System.out.println("OK button is pressed ..."); // TODO Remove debug code
+        	logger.debug("OK button is pressed ..."); // TODO Remove debug code
         	IPreferenceStore store = Activator.getDefault().getPreferenceStore();
         	
         	hostName.setPreferenceStore(store);

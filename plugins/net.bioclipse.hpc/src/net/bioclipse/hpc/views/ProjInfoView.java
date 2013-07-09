@@ -43,13 +43,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.custom.TableTree;
 import org.eclipse.jface.viewers.TableTreeViewer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ProjInfoView extends ViewPart {
+	public static final String ID = "net.bioclipse.hpc.views.ProjInfoView"; //$NON-NLS-1$
 
 	private List _selectedFiles;
 	private ProjInfoContentModel contentModel = new ProjInfoContentModel();
 	private TableTreeViewer tableTreeViewer;
-	public static final String ID = "net.bioclipse.hpc.views.ProjInfoView"; //$NON-NLS-1$
+	private static final Logger logger = LoggerFactory.getLogger(ProjInfoView.class); 
 
 	public ProjInfoView() {
 		// Nothing here
@@ -114,7 +117,7 @@ public class ProjInfoView extends ViewPart {
 	public void setContentsFromXML(String xmlString) {
 		// Why am I not doing this with XPath expressions, such as in the JobInfoView?
 		// ... and should this XML format dependent stuff really be stored here?
-		System.out.println("XML String:\n" + xmlString);
+		logger.debug("XML String:\n" + xmlString);
 		List<String> groupXMLParts = HPCUtils.getMatches("<groupinfo>.*?</groupinfo>", xmlString);
 		contentModel.clearProjInfoGroups();
 		for (String g : groupXMLParts) {
