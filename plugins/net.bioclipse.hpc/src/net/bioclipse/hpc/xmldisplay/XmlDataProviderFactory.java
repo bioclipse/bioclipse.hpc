@@ -35,8 +35,7 @@ public class XmlDataProviderFactory {
 	private Map<String, String> fColumnLabelMappings = new HashMap<String, String>();
 	private static final Logger logger = LoggerFactory.getLogger(XmlDataProviderFactory.class);	
 	
-	public XmlDataProviderFactory() {
-	}
+	public XmlDataProviderFactory() {}
 	
 	/**
 	 * 	Do some XPath parsing here, á la 
