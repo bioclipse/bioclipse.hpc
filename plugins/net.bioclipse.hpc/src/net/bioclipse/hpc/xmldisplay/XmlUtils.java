@@ -30,7 +30,12 @@ import org.xml.sax.SAXException;
 public class XmlUtils {
 	private static final Logger logger = LoggerFactory.getLogger(ExecScriptAsBatchJobAction.class);	
 	
-	public static Document parseXmlToDocument(String rawXmlContent) {
+	/**
+	 * 
+	 * @param rawXmlContent
+	 * @return
+	 */
+	public static Document xmlToDOMDocument(String rawXmlContent) {
 		Document resultXmlDocument = null;
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true); // never forget this!
@@ -39,8 +44,7 @@ public class XmlUtils {
 		try {
 			builder = factory.newDocumentBuilder();
 		} catch (ParserConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			logger.error(e1.getMessage());
 		}
 
 		InputStream xmlContentIS = IOUtils.toInputStream(rawXmlContent);
@@ -49,10 +53,8 @@ public class XmlUtils {
 			resultXmlDocument = builder.parse(xmlContentIS);
 		} catch (SAXException e) {
 			logger.error("SAX Exception: " + e.getMessage());
-			e.printStackTrace();
 		} catch (IOException e) {
 			logger.error("IO Exception: " + e.getMessage());
-			e.printStackTrace();
 		}
 		
 		return resultXmlDocument;
@@ -67,7 +69,7 @@ public class XmlUtils {
 		// Convert to String
 		String fileContent = HPCUtils.arrayToString(fileContentLines); 
 		// Parse to Xml Document
-		Document xmlDoc = XmlUtils.parseXmlToDocument(fileContent);
+		Document xmlDoc = XmlUtils.xmlToDOMDocument(fileContent);
 		return xmlDoc;
 	}
 	

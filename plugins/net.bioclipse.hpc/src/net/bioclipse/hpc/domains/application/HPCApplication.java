@@ -149,7 +149,7 @@ public class HPCApplication extends AbstractModelObject {
 
 		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
 		if (userInfoXmlString != null) {
-			Document userInfoXmlDoc = XmlUtils.parseXmlToDocument(userInfoXmlString);
+			Document userInfoXmlDoc = XmlUtils.xmlToDOMDocument(userInfoXmlString);
 			String userName = (String) XmlUtils.evalXPathExpr("/userinfo/username", userInfoXmlDoc, XPathConstants.STRING);
 			userInfo.put("username", userName);
 			NodeList projectsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/userinfo/projects/project", userInfoXmlDoc);
@@ -175,7 +175,7 @@ public class HPCApplication extends AbstractModelObject {
 
 		String clusterInfoXmlString = getMatch("<clusterinfo>.*</clusterinfo>", commandOutput);
 		if (clusterInfoXmlString != null) {
-			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
+			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXmlString);
 			String maxNodes = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
 			String maxCpus = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
 			clusterInfo.put("maxnodes", maxNodes);
@@ -205,7 +205,7 @@ public class HPCApplication extends AbstractModelObject {
 
 		String clusterInfoXmlString = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
 		if (clusterInfoXmlString != null) {	
-			Document clusterInfoXmlDoc = XmlUtils.parseXmlToDocument(clusterInfoXmlString);
+			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXmlString);
 			NodeList modForBinNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/modulesforbinary/module", clusterInfoXmlDoc);
 
 			List<Node> modForBinListOfNodes = XmlUtils.nodeListToListOfNodes(modForBinNodeList);

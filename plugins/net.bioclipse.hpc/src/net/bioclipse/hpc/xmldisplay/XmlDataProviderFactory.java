@@ -48,7 +48,7 @@ public class XmlDataProviderFactory {
 		setRawXmlContent(newRawXmlContent);
 
 		String rawXmlContent = getRawXmlContent();
-		Document xmlDoc = XmlUtils.parseXmlToDocument(rawXmlContent);
+		Document xmlDoc = XmlUtils.xmlToDOMDocument(rawXmlContent);
 		setXmlDocument(xmlDoc);
 		
 		createColumnLabelMappings((NodeList) XmlUtils.evalXPathExprToNodeList("infodocument/columnlabelmappings/mapping", getXmlDocument()));
