@@ -164,19 +164,15 @@ public class HPCApplication extends AbstractModelObject {
 	public Map<String, Object> getClusterInfo() {
 		String commandOutput;
 		HashMap<String,Object> clusterInfo = new HashMap<String,Object>();
-
-		commandOutput = execRemoteCommand("fimsproxy -t clusterinfo");
-
-		String clusterInfoXmlString = getMatch("<clusterinfo>.*</clusterinfo>", commandOutput);
+		commandOutput = execRemoteCommand("~/opt/clusterapi/clusters --current --format=xml");
+		String clusterInfoXmlString = getMatch("<clusterapi>.*</clusterapi>", commandOutput);
 		if (clusterInfoXmlString != null) {
 			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXmlString);
-			String maxNodes = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
-			String maxCpus = (String) XmlUtils.evalXPathExpr("/clusterinfo/maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
+			String maxNodes = (String) XmlUtils.evalXPathExpr("/clusterapi/clusters/cluster/@maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
+			String maxCpus = (String) XmlUtils.evalXPathExpr("/clusterapi/clusters/cluster/@maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
 			clusterInfo.put("maxnodes", maxNodes);
 			clusterInfo.put("maxcpus", maxCpus);
-
-			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/clusterinfo/partitions/partition", clusterInfoXmlDoc);
-
+			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/clusterapi/clusters/cluster/partitions/partition", clusterInfoXmlDoc);
 			// Easier to work with NodeList or List of Nodes? 
 			List<Node> partitionsNodes = XmlUtils.nodeListToListOfNodes(partitionsNodeList);
 			List<String> partitions = new ArrayList<String>();
