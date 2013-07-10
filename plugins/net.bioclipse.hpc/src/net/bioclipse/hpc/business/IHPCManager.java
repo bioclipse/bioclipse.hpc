@@ -50,7 +50,7 @@ public interface IHPCManager extends IBioclipseManager {
 			params="String command", 
 			methodSummary="Executes a command"
 	)
-	public void executeCommand(String command);
+	public String executeRemoteCommand(String command);
 
 	@Recorded
 	@PublishedMethod(

@@ -81,7 +81,7 @@ public class JobInfoView extends ViewPart {
 	}
 	
 	public void updateViewFromXml(String rawXmlContent) {
-		xmlDataProvider.setAndParseXmlContent(rawXmlContent);
+		xmlDataProvider.setAndParseXmlContent(rawXmlContent, "clusterapi/jobs/job");
 		XmlContentProvider aXmlContentProvider = xmlDataProvider.getContentProvider();
 		XmlLabelProvider aXmlLabelProvider = xmlDataProvider.getLabelProvider();
 		

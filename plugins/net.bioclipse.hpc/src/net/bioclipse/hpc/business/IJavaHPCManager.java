@@ -10,6 +10,4 @@
  ******************************************************************************/
 package net.bioclipse.hpc.business;
 
-public interface IJavaHPCManager extends IHPCManager {
-
-}
+public interface IJavaHPCManager extends IHPCManager {}

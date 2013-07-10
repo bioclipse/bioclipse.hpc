@@ -12,6 +12,8 @@ public class ProjInfoContentModel {
 		// Nothing
 	}
 
+	// --------- Getters and setters --------------
+	
 	public List<Project> getProjInfoGroups() {
 		return projInfoGroups;
 	}

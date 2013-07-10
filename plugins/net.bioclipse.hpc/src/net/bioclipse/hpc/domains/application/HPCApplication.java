@@ -9,18 +9,14 @@ import java.util.regex.Pattern;
 
 import javax.xml.xpath.XPathConstants;
 
+import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.JobInfoView;
 import net.bioclipse.hpc.views.ProjInfoView;
-import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
-import net.bioclipse.hpc.Activator;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.rse.core.model.IHost;
 import org.eclipse.rse.core.model.ISystemRegistry;
 import org.eclipse.rse.core.model.SystemStartHere;
@@ -32,7 +28,6 @@ import org.eclipse.rse.subsystems.shells.core.model.SimpleCommandOperation;
 import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
 import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,21 +36,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class HPCApplication extends AbstractModelObject {
-	private List _selectedFiles;
+	private List<IRemoteFile> _selectedFiles;
 	private static final Logger logger = LoggerFactory.getLogger(HPCApplication.class);
 
 	public HPCApplication() {
-		_selectedFiles = new ArrayList();
-	}
-
-	public void executeCommand(String command) {
-		IRemoteCmdSubSystem cmdss = getRemoteCmdSubSystem();
-		if (cmdss != null && cmdss.isConnected()) {
-			// Run the command in a visible shell
-			RemoteCommandHelpers.runUniversalCommand(getShell(), command, ".", cmdss); //$NON-NLS-1$
-		} else {
-			logger.error("(RSE) Command subsystem not found");
-		}
+		_selectedFiles = new ArrayList<IRemoteFile>();
 	}
 
 	/**
@@ -64,18 +49,26 @@ public class HPCApplication extends AbstractModelObject {
 	 * @return String allOutput
 	 */
 	public String execRemoteCommand(String command) {
+		String errMsg;
 		IHost hpcHost;
 		String temp = "";
 		String allOutput = "";
-
 		hpcHost = getHPCHost();
 
 		if (hpcHost == null) {
-			logger.error("No active HPC hosts!");
+			errMsg = "No active HPC hosts!";
+			logger.error(errMsg);
+			return errMsg;
+		} else if (hpcHost.isOffline()) {
+			errMsg = "You must log in before executing remote commands!";
+			logger.error(errMsg);
+			return errMsg;
 		} else {
 			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
 			if (cmdss == null) {
-				logger.error("Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!");
+				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!";
+				logger.error(errMsg);
+				return errMsg;
 			}
 			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
 			try {
@@ -96,17 +89,20 @@ public class HPCApplication extends AbstractModelObject {
 					// }
 				}
 			} catch (Exception commandError) {
-				commandError.printStackTrace();
+				errMsg = "Could not execute command! Are you logged in?";
+				logger.error(errMsg + ", Exception message: " + commandError.getMessage());
+				return errMsg;
 			}
 		}
 		return allOutput;
 	}
 
 	public void updateJobInfoView() {
-		// find the right view
+		// Find the right view
 		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
-		if (jobInfoView!=null) {
-			String rawContent = execRemoteCommand("~/opt/clusterapi/jobs -f xml");
+		if (jobInfoView != null) {
+			String rawContent = execRemoteCommand("~/opt/clusterapi/jobs -f xml"); // TODO: Get path from preferences
+			// Extract the XML part from the other terminal output (including "message of the day"-text)
 			String jobInfoXml = getMatch("<clusterapi>.*?</clusterapi>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
@@ -120,14 +116,12 @@ public class HPCApplication extends AbstractModelObject {
 
 	public void updateProjInfoView() {
 		String commandOutput;
-
 		logger.debug("Button was clicked!"); // FIXME: Remove
 
 		// Find the right view
 		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
 			logger.debug("Found projInfoView: " + projInfoView);
-
 			commandOutput = execRemoteCommand("fimsproxy -t projinfo"); // FIXME: Replace with clusterapi call
 
 			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
@@ -266,7 +260,7 @@ public class HPCApplication extends AbstractModelObject {
 		return result;
 	}
 
-	/* Utility methods */
+	/* ------------ Utility methods ------------ */
 
 	/**
 	 * Find the RSE host which is currently connected to the cluster configured in preferences
@@ -303,6 +297,5 @@ public class HPCApplication extends AbstractModelObject {
 		store.setDefault("username", "anonymous");
 		store.setDefault("galaxytoolconfigpath", "/var/www/galaxy/tools");	
 		store.setDefault("showdialogonstartup", true);
-	}
-
+	}	
 }

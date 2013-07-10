@@ -13,6 +13,4 @@ package net.bioclipse.hpc.business;
 import net.bioclipse.managers.business.IBioclipseJSManager;
 
 public interface IJavaScriptHPCManager
-       extends IHPCManager, IBioclipseJSManager {
-
-}
+       extends IHPCManager, IBioclipseJSManager {}

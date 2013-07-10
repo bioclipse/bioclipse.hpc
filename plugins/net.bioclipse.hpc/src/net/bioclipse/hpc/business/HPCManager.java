@@ -54,10 +54,6 @@ public class HPCManager implements IBioclipseManager {
 	public List<String> getModulesForBinary(String binaryName) {
 		return application.getModulesForBinary(binaryName);
 	}
-	
-	public void executeCommand(String command) {
-		application.executeCommand(command);
-	}
 
 	public void readToolConfigFiles(String folderPath) {
 		application.readToolConfigFiles(folderPath);
@@ -69,6 +65,10 @@ public class HPCManager implements IBioclipseManager {
 	
 	public void updateJobInfoView() {
 		application.updateJobInfoView();
+	}
+	
+	public String executeRemoteCommand(String command) {
+		return application.execRemoteCommand(command);
 	}
 	
 	protected HPCApplication getApplication() {

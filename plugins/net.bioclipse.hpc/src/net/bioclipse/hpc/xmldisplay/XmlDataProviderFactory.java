@@ -44,15 +44,14 @@ public class XmlDataProviderFactory {
 	 *
 	 * @param newRawXmlContent
 	 */
-	public void setAndParseXmlContent(String newRawXmlContent) {
+	public void setAndParseXmlContent(String newRawXmlContent, String xpathExprForItems) {
 		setRawXmlContent(newRawXmlContent);
 
 		String rawXmlContent = getRawXmlContent();
 		Document xmlDoc = XmlUtils.xmlToDOMDocument(rawXmlContent);
 		setXmlDocument(xmlDoc);
 		
-		createColumnLabelMappings((NodeList) XmlUtils.evalXPathExprToNodeList("infodocument/columnlabelmappings/mapping", getXmlDocument()));
-		setNodeList((NodeList) XmlUtils.evalXPathExprToNodeList("infodocument/item", getXmlDocument()));
+		setNodeList((NodeList) XmlUtils.evalXPathExprToNodeList(xpathExprForItems, getXmlDocument()));
 		createRowCollectionsFromNodeList(getNodeList());
 	}
 
