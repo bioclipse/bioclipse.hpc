@@ -101,7 +101,7 @@ public class HPCApplication extends AbstractModelObject {
 		// Find the right view
 		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
 		if (jobInfoView != null) {
-			String rawContent = execRemoteCommand("~/opt/clusterapi/jobs -f xml"); 
+			String rawContent = execRemoteCommand("simpleapi jobs"); 
 			// Extract the XML part from the other terminal output (including "message of the day"-text)
 			String jobInfoXml = getMatch("<simpleapi>.*?</simpleapi>", rawContent);
 			if (jobInfoXml != null) {
