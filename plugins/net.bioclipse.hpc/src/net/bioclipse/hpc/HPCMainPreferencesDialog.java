@@ -15,19 +15,20 @@ import org.eclipse.swt.widgets.Shell;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class that manages settings in the preferences menu in Bioclipse
+ * @author Samuel Lampa <samuel.lampa@gmail.com>
+ */
 public class HPCMainPreferencesDialog extends Dialog {
 	public StringFieldEditor hostName;
 	public StringFieldEditor userName;
 	public DirectoryFieldEditor galaxyToolConfigPath;
 	public BooleanFieldEditor showPrefDialogOnStartup;
-	
 	public FieldEditorPreferencePage page;
-
     private static final Logger logger = LoggerFactory.getLogger(HPCMainPreferencesDialog.class);
 	
 	protected HPCMainPreferencesDialog(Shell parentShell) {
-		super(parentShell);
-		
+		super(parentShell);		
 	}
 	
     @Override
@@ -67,8 +68,7 @@ public class HPCMainPreferencesDialog extends Dialog {
             	addField(hostName);
         		addField(userName);
         		addField(galaxyToolConfigPath);
-        		addField(showPrefDialogOnStartup);
-        		
+        		addField(showPrefDialogOnStartup);        		
             }
             
         	@Override
