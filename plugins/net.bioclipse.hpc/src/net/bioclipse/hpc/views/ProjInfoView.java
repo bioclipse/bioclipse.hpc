@@ -129,7 +129,7 @@ public class ProjInfoView extends ViewPart {
 			projInfoGroup.setGroupUsedHours(groupUsedHours);
 			projInfoGroup.setGroupCurrentAllocation(groupCurrentAllocation);
 			
-			List<String> userXMLParts = HPCUtils.getMatches("<user>.*?</user>", xmlString);
+			List<String> userXMLParts = HPCUtils.getMatches("<user>.*?</user>", g);
 			for (String s : userXMLParts) {
 				String userName = HPCUtils.getMatch("<name>(.*?)</name>", s, 1);
 				String usedHours = HPCUtils.getMatch("<time>(.*?)</time>", s, 1);
