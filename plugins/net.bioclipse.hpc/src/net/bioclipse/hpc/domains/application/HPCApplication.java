@@ -121,9 +121,9 @@ public class HPCApplication extends AbstractModelObject {
 		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
 			logger.debug("Found projInfoView: " + projInfoView);
-			commandOutput = execRemoteCommand("simpleapi projinfo"); // FIXME: Replace with simpleapi call
+			commandOutput = execRemoteCommand("simpleapi projinfo");
 
-			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
+			String projInfoXml = getMatch("<simpleapi>.*</simpleapi>", commandOutput);
 			if (projInfoXml != null) {
 				projInfoView.setContentsFromXML(projInfoXml);
 			} else {
@@ -138,7 +138,7 @@ public class HPCApplication extends AbstractModelObject {
 		String commandOutput;
 		HashMap<String,Object> userInfo = new HashMap<String,Object>();
 
-		commandOutput = execRemoteCommand("simpleapi userinfo"); // FIXME: Replace with simpleapi call
+		commandOutput = execRemoteCommand("simpleapi userinfo");
 
 		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
 		if (userInfoXmlString != null) {
