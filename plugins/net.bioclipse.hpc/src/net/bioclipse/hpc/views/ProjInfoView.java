@@ -114,22 +114,22 @@ public class ProjInfoView extends ViewPart {
 		initializeMenu();
 	}
 
-	public void setContentsFromXML(String xmlString) {
+	public void setContentsFromXML(String fullXmlStr) {
 		// Why am I not doing this with XPath expressions, such as in the JobInfoView?
 		// ... and should this XML format dependent stuff really be stored here?
-		logger.debug("XML String:\n" + xmlString);
-		List<String> groupXMLParts = HPCUtils.getMatches("<groupinfo>.*?</groupinfo>", xmlString);
+		logger.debug("XML String:\n" + fullXmlStr);
+		List<String> groupXMLParts = HPCUtils.getMatches("<groupinfo>.*?</groupinfo>", fullXmlStr);
 		contentModel.clearProjInfoGroups();
-		for (String g : groupXMLParts) {
+		for (String groupXmlStr : groupXMLParts) {
 			Project projInfoGroup = new Project();
-			String groupName = HPCUtils.getMatch("<name>(.*?)</name>", g, 1);
-			String groupUsedHours = HPCUtils.getMatch("<time>(.*?)</time>", g, 1);
-			String groupCurrentAllocation = HPCUtils.getMatch("<allocation>(.*?)</allocation>", g, 1);
+			String groupName = HPCUtils.getMatch("<name>(.*?)</name>", groupXmlStr, 1);
+			String groupUsedHours = HPCUtils.getMatch("<time>(.*?)</time>", groupXmlStr, 1);
+			String groupCurrentAllocation = HPCUtils.getMatch("<allocation>(.*?)</allocation>", groupXmlStr, 1);
 			projInfoGroup.setGroupName(groupName);
 			projInfoGroup.setGroupUsedHours(groupUsedHours);
 			projInfoGroup.setGroupCurrentAllocation(groupCurrentAllocation);
 			
-			List<String> userXMLParts = HPCUtils.getMatches("<user>.*?</user>", g);
+			List<String> userXMLParts = HPCUtils.getMatches("<user>.*?</user>", groupXmlStr);
 			for (String s : userXMLParts) {
 				String userName = HPCUtils.getMatch("<name>(.*?)</name>", s, 1);
 				String usedHours = HPCUtils.getMatch("<time>(.*?)</time>", s, 1);
