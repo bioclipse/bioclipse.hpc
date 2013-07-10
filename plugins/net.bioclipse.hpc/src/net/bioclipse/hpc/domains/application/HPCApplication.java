@@ -101,9 +101,9 @@ public class HPCApplication extends AbstractModelObject {
 		// Find the right view
 		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
 		if (jobInfoView != null) {
-			String rawContent = execRemoteCommand("~/opt/clusterapi/jobs -f xml"); // TODO: Get path from preferences
+			String rawContent = execRemoteCommand("~/opt/clusterapi/jobs -f xml"); 
 			// Extract the XML part from the other terminal output (including "message of the day"-text)
-			String jobInfoXml = getMatch("<clusterapi>.*?</clusterapi>", rawContent);
+			String jobInfoXml = getMatch("<simpleapi>.*?</simpleapi>", rawContent);
 			if (jobInfoXml != null) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
@@ -116,13 +116,12 @@ public class HPCApplication extends AbstractModelObject {
 
 	public void updateProjInfoView() {
 		String commandOutput;
-		logger.debug("Button was clicked!"); // FIXME: Remove
 
 		// Find the right view
 		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
 			logger.debug("Found projInfoView: " + projInfoView);
-			commandOutput = execRemoteCommand("fimsproxy -t projinfo"); // FIXME: Replace with clusterapi call
+			commandOutput = execRemoteCommand("simpleapi projinfo"); // FIXME: Replace with simpleapi call
 
 			String projInfoXml = getMatch("<projinfo>.*</projinfo>", commandOutput);
 			if (projInfoXml != null) {
@@ -139,7 +138,7 @@ public class HPCApplication extends AbstractModelObject {
 		String commandOutput;
 		HashMap<String,Object> userInfo = new HashMap<String,Object>();
 
-		commandOutput = execRemoteCommand("fimsproxy -t userinfo"); // FIXME: Replace with clusterapi call
+		commandOutput = execRemoteCommand("simpleapi userinfo"); // FIXME: Replace with simpleapi call
 
 		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
 		if (userInfoXmlString != null) {
@@ -164,15 +163,15 @@ public class HPCApplication extends AbstractModelObject {
 	public Map<String, Object> getClusterInfo() {
 		String commandOutput;
 		HashMap<String,Object> clusterInfo = new HashMap<String,Object>();
-		commandOutput = execRemoteCommand("~/opt/clusterapi/clusters --current --format=xml");
-		String clusterInfoXmlString = getMatch("<clusterapi>.*</clusterapi>", commandOutput);
+		commandOutput = execRemoteCommand("simpleapi clusterinfo");
+		String clusterInfoXmlString = getMatch("<simpleapi>.*</simpleapi>", commandOutput);
 		if (clusterInfoXmlString != null) {
 			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXmlString);
-			String maxNodes = (String) XmlUtils.evalXPathExpr("/clusterapi/clusters/cluster/@maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
-			String maxCpus = (String) XmlUtils.evalXPathExpr("/clusterapi/clusters/cluster/@maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
+			String maxNodes = (String) XmlUtils.evalXPathExpr("/simpleapi/clusterinfo/maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
+			String maxCpus = (String) XmlUtils.evalXPathExpr("/simpleapi/clusterinfo/maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
 			clusterInfo.put("maxnodes", maxNodes);
 			clusterInfo.put("maxcpus", maxCpus);
-			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/clusterapi/clusters/cluster/partitions/partition", clusterInfoXmlDoc);
+			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/simpleapi/clusterinfo/partitions/partition", clusterInfoXmlDoc);
 			// Easier to work with NodeList or List of Nodes? 
 			List<Node> partitionsNodes = XmlUtils.nodeListToListOfNodes(partitionsNodeList);
 			List<String> partitions = new ArrayList<String>();
@@ -191,7 +190,7 @@ public class HPCApplication extends AbstractModelObject {
 		String commandOutput;
 		List<String> modulesForBinary = new ArrayList<String>();
 
-		commandOutput = execRemoteCommand("fimsproxy -t modulesforbin -c " + currentBinary);
+		commandOutput = execRemoteCommand("fimsproxy -t modulesforbin -c " + currentBinary); // FIXME: Replace with simpleapi call
 
 		String clusterInfoXmlString = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
 		if (clusterInfoXmlString != null) {	
