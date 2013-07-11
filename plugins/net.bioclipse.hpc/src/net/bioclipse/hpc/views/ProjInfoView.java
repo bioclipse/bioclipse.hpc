@@ -11,6 +11,9 @@ import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
+import net.bioclipse.hpc.views.projinfo.ProjInfoContentModel;
+import net.bioclipse.hpc.views.projinfo.ProjInfoContentProvider;
+import net.bioclipse.hpc.views.projinfo.ProjInfoProjectLabelProvider;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.core.runtime.Platform;
@@ -63,9 +66,9 @@ public class ProjInfoView extends ViewPart {
 		tableTreeViewer.refresh();
 	}
 
-	private void updateContentModelFromXml(String fullXml) {
+	private void updateContentModelFromXml(String rawXmlContent) {
 		// Get groupInfo from XML
-		List<String> groupXmlStrings = XmlUtils.extractTags("groupinfo", fullXml);
+		List<String> groupXmlStrings = XmlUtils.extractTags("groupinfo", rawXmlContent);
 
 		// Clear content of contentModel
 		contentModel.clearProjInfoGroups();

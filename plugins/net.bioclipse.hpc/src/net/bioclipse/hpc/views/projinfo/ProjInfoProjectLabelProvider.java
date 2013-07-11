@@ -1,4 +1,4 @@
-package net.bioclipse.hpc.views;
+package net.bioclipse.hpc.views.projinfo;
 
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;

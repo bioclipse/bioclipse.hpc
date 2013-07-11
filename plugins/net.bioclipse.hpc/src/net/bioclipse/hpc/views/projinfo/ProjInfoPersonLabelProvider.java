@@ -1,4 +1,4 @@
-package net.bioclipse.hpc.views;
+package net.bioclipse.hpc.views.projinfo;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

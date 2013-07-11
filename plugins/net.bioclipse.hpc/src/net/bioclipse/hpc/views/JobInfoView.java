@@ -6,6 +6,9 @@ import java.util.List;
 import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCManagerFactory;
 import net.bioclipse.hpc.domains.application.HPCUtils;
+import net.bioclipse.hpc.views.jobinfo.JobInfoContentModel;
+import net.bioclipse.hpc.views.jobinfo.JobInfoContentProvider;
+import net.bioclipse.hpc.views.jobinfo.JobInfoLabelProvider;
 import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlContentProvider;
 import net.bioclipse.hpc.xmldisplay.XmlDataProviderFactory;
@@ -13,6 +16,7 @@ import net.bioclipse.hpc.xmldisplay.XmlLabelProvider;
 import net.bioclipse.hpc.xmldisplay.XmlRootNode;
 import net.bioclipse.hpc.xmldisplay.XmlRow;
 import net.bioclipse.hpc.xmldisplay.XmlRowCollection;
+import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -81,24 +85,19 @@ public class JobInfoView extends ViewPart {
 	}
 	
 	public void updateViewFromXml(String rawXmlContent) {
-		xmlDataProvider.setAndParseXmlContent(rawXmlContent, "/simpleapi/jobs/job");
-		XmlContentProvider aXmlContentProvider = xmlDataProvider.getContentProvider();
-		XmlLabelProvider aXmlLabelProvider = xmlDataProvider.getLabelProvider();
-		
-		if ( xmlDataProvider.getColumns().size() == 0 ) {
-			xmlDataProvider.createColumnsForTreeViewer(treeViewer);
-		}
-		
-		List<XmlRowCollection> rowCollections = xmlDataProvider.getContent();
+		// Set content and label providers
+		treeViewer.setContentProvider(new JobInfoContentProvider());
+		treeViewer.setLabelProvider(new JobInfoLabelProvider());
 
-		treeViewer.setContentProvider(aXmlContentProvider);
-		treeViewer.setLabelProvider(aXmlLabelProvider);
+		// Create the content model instance
+		JobInfoContentModel contentModel = new JobInfoContentModel();
+		
+		// Populate the content model with data from the XML
+		String jobsXml = XmlUtils.extractTag("jobs", rawXmlContent);
+		
+		
+		treeViewer.setInput(contentModel);		
 
-		XmlRootNode rootNode = new XmlRootNode();
-		rootNode.setXmlRowCollections(rowCollections);
-		
-		treeViewer.setInput(rootNode);
-		
 		treeViewer.refresh();
 	}
 

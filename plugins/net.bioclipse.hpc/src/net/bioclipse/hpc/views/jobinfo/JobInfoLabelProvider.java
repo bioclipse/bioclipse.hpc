@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.bioclipse.hpc.views;
+package net.bioclipse.hpc.views.jobinfo;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
