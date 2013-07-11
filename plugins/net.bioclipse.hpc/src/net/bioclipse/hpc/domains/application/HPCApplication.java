@@ -195,7 +195,7 @@ public class HPCApplication extends AbstractModelObject {
 	/**
 	 * Gets the Command subsystem associated with the current host
 	 */
-	protected IRemoteCmdSubSystem getRemoteCmdSubSystem() {
+	private IRemoteCmdSubSystem getRemoteCmdSubSystem() {
 		IHost myHost = getSubSystem().getHost();
 		IRemoteCmdSubSystem[] subsys = RemoteCommandHelpers.getCmdSubSystems(myHost);
 		for (int i = 0; i < subsys.length; i++) {
