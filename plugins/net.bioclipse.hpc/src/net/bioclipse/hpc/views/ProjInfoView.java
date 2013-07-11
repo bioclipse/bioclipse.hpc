@@ -66,7 +66,8 @@ public class ProjInfoView extends ViewPart {
 	public void createPartControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.V_SCROLL);
 		container.setLayout(new GridLayout(1, false));
-		
+
+		// Create update button
 		Button btnUpdate = new Button(container, SWT.NONE);
 		btnUpdate.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -100,9 +101,9 @@ public class ProjInfoView extends ViewPart {
 	      TableColumn column = table.getColumn(i);
 	      column.pack();
 	      // Make columns sortable (doesn't work for TableTreeViewer though)
-//	      ColumnSortListener sortListen = new ColumnSortListener();
-//	      sortListen.setTable(table);
-//	      column.addListener(SWT.Selection, sortListen);
+	      // ColumnSortListener sortListen = new ColumnSortListener();
+	      // sortListen.setTable(table);
+	      // column.addListener(SWT.Selection, sortListen);
 	    }
 	    
 	    // Turn on the header and the lines
@@ -146,8 +147,7 @@ public class ProjInfoView extends ViewPart {
 	}
 
 	private void updateProjectInfoTable() {
-		HPCManager hpcManagerObj = new HPCManager();
-		hpcManagerObj.updateProjInfoView();
+		HPCUtils.getApplication().updateProjInfoView();
 	}
 
 	protected IRemoteFile getFirstSelectedRemoteFile() {
