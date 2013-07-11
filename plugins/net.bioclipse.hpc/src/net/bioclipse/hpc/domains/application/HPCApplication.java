@@ -7,15 +7,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.xml.xpath.XPathConstants;
-
 import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.JobInfoView;
 import net.bioclipse.hpc.views.ProjInfoView;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.rse.core.model.IHost;
 import org.eclipse.rse.core.model.ISystemRegistry;
@@ -49,60 +46,6 @@ public class HPCApplication extends AbstractModelObject {
 		_selectedFiles = new ArrayList<IRemoteFile>();
 	}
 
-	/**
-	 * Execute a remote command via SSH
-	 * @param String command
-	 * @return String allOutput
-	 */
-	public String execRemoteCommand(String command) {
-		String errMsg;
-		IHost hpcHost;
-		String temp = "";
-		String allOutput = "";
-		hpcHost = getHPCHost();
-
-		if (hpcHost == null) {
-			errMsg = "No active HPC hosts!";
-			logger.error(errMsg);
-			return errMsg;
-		} else if (hpcHost.isOffline()) {
-			errMsg = "You must log in before executing remote commands!";
-			logger.error(errMsg);
-			return errMsg;
-		} else {
-			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
-			if (cmdss == null) {
-				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!";
-				logger.error(errMsg);
-				return errMsg;
-			}
-			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
-			try {
-				allOutput = "";
-				temp = "";
-				simpleCommandOp.runCommand(command, true);
-				while (temp != null) {
-					temp = null;
-					temp = simpleCommandOp.readLine(true);
-					// if (temp != "") {
-					allOutput += temp;
-					// logger.debug("Output from : " + temp);
-					// }
-					// try {
-					// 	Thread.sleep(0);
-					// } catch (Exception sleepError) {
-					// sleepError.printStackTrace();
-					// }
-				}
-			} catch (Exception commandError) {
-				errMsg = "Could not execute command! Are you logged in?";
-				logger.error(errMsg + ", Exception message: " + commandError.getMessage());
-				return errMsg;
-			}
-		}
-		return allOutput;
-	}
-
 	public void updateJobInfoView() {
 		JobInfoView jobInfoView = getJobInfoView();
 
@@ -116,11 +59,6 @@ public class HPCApplication extends AbstractModelObject {
 		} else {
 			logger.error("Job view not found!");
 		}
-	}
-
-	private JobInfoView getJobInfoView() {
-		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
-		return jobInfoView;
 	}
 
 	public void updateProjInfoView() {
@@ -137,11 +75,6 @@ public class HPCApplication extends AbstractModelObject {
 		} else {
 			logger.error("Projinfo view not found!");
 		}
-	}
-
-	private ProjInfoView getProjInfoView() {
-		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
-		return projInfoView;
 	}
 
 	public Map<String,Object> getUserInfo() {
@@ -225,48 +158,6 @@ public class HPCApplication extends AbstractModelObject {
 	}
 
 	/**
-	 * Gets the Command subsystem associated with the current host
-	 */
-	protected IRemoteCmdSubSystem getRemoteCmdSubSystem() {
-		IHost myHost = getSubSystem().getHost();
-		IRemoteCmdSubSystem[] subsys = RemoteCommandHelpers.getCmdSubSystems(myHost);
-		for (int i = 0; i < subsys.length; i++) {
-			if (subsys[i].getSubSystemConfiguration().supportsCommands()) {
-				return subsys[i];
-			}
-		}
-		return null;
-	}
-
-
-	protected ISubSystem getSubSystem() {
-		return getFirstSelectedRemoteFile().getParentRemoteFileSubSystem();
-	}
-
-	public Shell getShell() {
-		return SystemBasePlugin.getActiveWorkbenchShell();
-	}
-
-	protected IRemoteFile getFirstSelectedRemoteFile() {
-		if (_selectedFiles.size() > 0) {
-			logger.error("No file selected");
-			return (IRemoteFile)_selectedFiles.get(0);
-		}
-		logger.error("No file selected");
-		return null;
-	}
-
-	protected String getMatch(String regexPattern, String text) {
-		String result = null;
-		Pattern p = Pattern.compile(regexPattern);
-		Matcher m = p.matcher(text);
-		if (m.find()) {
-			result = m.group();
-		}
-		return result;
-	}
-	
-	/**
 	 * Convenience function for retrieveing info from the Cluster, via it's API
 	 * @param infoType
 	 * @return commandOutput
@@ -299,10 +190,116 @@ public class HPCApplication extends AbstractModelObject {
 		apiOutput = getMatch("<simpleapi>.*?</simpleapi>", commandOutput);
 		
 		return apiOutput;
+	}	
+	
+	/**
+	 * Gets the Command subsystem associated with the current host
+	 */
+	protected IRemoteCmdSubSystem getRemoteCmdSubSystem() {
+		IHost myHost = getSubSystem().getHost();
+		IRemoteCmdSubSystem[] subsys = RemoteCommandHelpers.getCmdSubSystems(myHost);
+		for (int i = 0; i < subsys.length; i++) {
+			if (subsys[i].getSubSystemConfiguration().supportsCommands()) {
+				return subsys[i];
+			}
+		}
+		return null;
 	}
+
+
+	private ISubSystem getSubSystem() {
+		return getFirstSelectedRemoteFile().getParentRemoteFileSubSystem();
+	}
+
+	private Shell getShell() {
+		return SystemBasePlugin.getActiveWorkbenchShell();
+	}
+
+	private IRemoteFile getFirstSelectedRemoteFile() {
+		if (_selectedFiles.size() > 0) {
+			logger.error("No file selected");
+			return (IRemoteFile)_selectedFiles.get(0);
+		}
+		logger.error("No file selected");
+		return null;
+	}
+
+	private String getMatch(String regexPattern, String text) {
+		String result = null;
+		Pattern p = Pattern.compile(regexPattern);
+		Matcher m = p.matcher(text);
+		if (m.find()) {
+			result = m.group();
+		}
+		return result;
+	}
+	
+	private JobInfoView getJobInfoView() {
+		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
+		return jobInfoView;
+	}
+
+	private ProjInfoView getProjInfoView() {
+		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
+		return projInfoView;
+	}	
 
 	/* ------------ Utility methods ------------ */
 
+	/**
+	 * Execute a remote command via SSH
+	 * @param String command
+	 * @return String allOutput
+	 */
+	public String execRemoteCommand(String command) {
+		String errMsg;
+		IHost hpcHost;
+		String temp = "";
+		String allOutput = "";
+		hpcHost = getHPCHost();
+
+		if (hpcHost == null) {
+			errMsg = "No active HPC hosts!";
+			logger.error(errMsg);
+			return errMsg;
+		} else if (hpcHost.isOffline()) {
+			errMsg = "You must log in before executing remote commands!";
+			logger.error(errMsg);
+			return errMsg;
+		} else {
+			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
+			if (cmdss == null) {
+				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!";
+				logger.error(errMsg);
+				return errMsg;
+			}
+			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
+			try {
+				allOutput = "";
+				temp = "";
+				simpleCommandOp.runCommand(command, true);
+				while (temp != null) {
+					temp = null;
+					temp = simpleCommandOp.readLine(true);
+					// if (temp != "") {
+					allOutput += temp;
+					// logger.debug("Output from : " + temp);
+					// }
+					// try {
+					//     Thread.sleep(0);
+					// } catch (Exception sleepError) {
+					//     sleepError.printStackTrace();
+					// }
+				}
+			} catch (Exception commandError) {
+				errMsg = "Could not execute command! Are you logged in?";
+				logger.error(errMsg + ", Exception message: " + commandError.getMessage());
+				return errMsg;
+			}
+		}
+		return allOutput;
+	}
+	
 	/**
 	 * Find the RSE host which is currently connected to the cluster configured in preferences
 	 * @return String hpcHost
