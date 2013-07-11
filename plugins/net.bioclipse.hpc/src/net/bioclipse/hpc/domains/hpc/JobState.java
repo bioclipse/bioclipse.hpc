@@ -5,17 +5,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class JobState {
-	final String STATE_PENDING = "PENDING";
-	final String STATE_RUNNING = "RUNNING";
-	final String STATE_SUSPENDED = "SUSPENDED";
-	final String STATE_CANCELLED = "CANCELLED";
-	final String STATE_COMPLETING = "COMPLETING";
-	final String STATE_COMPLETED = "COMPLETED";
-	final String STATE_CONFIGURING = "CONFIGURING";
-	final String STATE_FAILED = "FAILED";
-	final String STATE_TIMEOUT = "TIMEOUT";
-	final String STATE_PREEMPTED = "PREEMPTED";
-	final String STATE_NODE_FAIL = "NODE_FAIL";
+	final public static String STATE_PENDING = "PENDING";
+	final public static String STATE_RUNNING = "RUNNING";
+	final public static String STATE_SUSPENDED = "SUSPENDED";
+	final public static String STATE_CANCELLED = "CANCELLED";
+	final public static String STATE_COMPLETING = "COMPLETING";
+	final public static String STATE_COMPLETED = "COMPLETED";
+	final public static String STATE_CONFIGURING = "CONFIGURING";
+	final public static String STATE_FAILED = "FAILED";
+	final public static String STATE_TIMEOUT = "TIMEOUT";
+	final public static String STATE_PREEMPTED = "PREEMPTED";
+	final public static String STATE_NODE_FAIL = "NODE_FAIL";
 
 	final List<String> ALLOWED_JOB_STATES = new ArrayList<String>(Arrays.asList(
 			STATE_PENDING,
