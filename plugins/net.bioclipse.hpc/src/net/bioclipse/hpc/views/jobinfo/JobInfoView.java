@@ -1,4 +1,4 @@
-package net.bioclipse.hpc.views;
+package net.bioclipse.hpc.views.jobinfo;
 
 import java.util.Iterator;
 import java.util.List;
@@ -6,9 +6,6 @@ import java.util.List;
 import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.business.HPCManagerFactory;
 import net.bioclipse.hpc.domains.application.HPCUtils;
-import net.bioclipse.hpc.views.jobinfo.JobInfoContentModel;
-import net.bioclipse.hpc.views.jobinfo.JobInfoContentProvider;
-import net.bioclipse.hpc.views.jobinfo.JobInfoLabelProvider;
 import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
 import net.bioclipse.hpc.xmldisplay.XmlContentProvider;
 import net.bioclipse.hpc.xmldisplay.XmlDataProviderFactory;

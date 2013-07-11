@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 
 import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
-import net.bioclipse.hpc.views.JobInfoView;
 import net.bioclipse.hpc.views.ProjInfoView;
+import net.bioclipse.hpc.views.jobinfo.JobInfoView;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.preference.IPreferenceStore;

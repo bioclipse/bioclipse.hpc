@@ -21,7 +21,7 @@
             name="Project Info">
       </view>
       <view
-            class="net.bioclipse.hpc.views.JobInfoView"
+            class="net.bioclipse.hpc.views.jobinfo.JobInfoView"
             id="net.bioclipse.hpc.views.JobInfoView"
             name="JobInfo">
       </view>
