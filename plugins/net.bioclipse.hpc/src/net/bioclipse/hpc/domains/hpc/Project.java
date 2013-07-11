@@ -14,7 +14,7 @@ public class Project extends AbstractModelObject {
 	private String groupName;
 	private String groupUsedHours;
 	private String groupCurrentAllocation;
-	private List/* <ProjInfoPerson> */projInfoPersons = new ArrayList();
+	private List/* <ProjInfoPerson> */projInfoPersons = new ArrayList(); // TODO: Why not let this list be typed?
 	private static final Logger logger = LoggerFactory.getLogger(Project.class);
 	
 	public void ProjInfoGroup(String groupName) {
