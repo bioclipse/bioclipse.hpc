@@ -8,9 +8,7 @@ import net.bioclipse.hpc.domains.hpc.Project;
 public class ProjInfoContentModel {
 	private List/* <ProjInfoGroup> */projInfoGroups = new ArrayList();
 	
-	public void ProjInfoContentModel() {
-		// Nothing
-	}
+	public ProjInfoContentModel() {}
 
 	// --------- Getters and setters --------------
 	

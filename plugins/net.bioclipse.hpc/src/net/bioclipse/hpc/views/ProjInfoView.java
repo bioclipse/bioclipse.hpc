@@ -58,24 +58,6 @@ public class ProjInfoView extends ViewPart {
 		contentModel = new ProjInfoContentModel();
 	}
 
-	/**
-	 * Create contents of the view part.
-	 * @param parent
-	 */
-	@Override
-	public void createPartControl(Composite parent) {
-		Composite container = new Composite(parent, SWT.V_SCROLL);
-		container.setLayout(new GridLayout(1, false));
-
-		createUpdateButton(container);
-		tableTreeViewer = createTableTreeViewerInComposite(container);
-		configureTableTreeViewer(tableTreeViewer);
-	    
-		createActions();
-		initializeToolBar();
-		initializeMenu();
-	}
-
 	public void updateViewFromXml(String xmlString) {
 		updateContentModelFromXml(xmlString);
 		tableTreeViewer.refresh();
@@ -161,6 +143,24 @@ public class ProjInfoView extends ViewPart {
 	    table.setLinesVisible(true);
 	}
 
+	/**
+	 * Create contents of the view part.
+	 * @param parent
+	 */
+	@Override
+	public void createPartControl(Composite parent) {
+		Composite container = new Composite(parent, SWT.V_SCROLL);
+		container.setLayout(new GridLayout(1, false));
+
+		createUpdateButton(container);
+		tableTreeViewer = createTableTreeViewerInComposite(container);
+		configureTableTreeViewer(tableTreeViewer);
+	    
+		createActions();
+		initializeToolBar();
+		initializeMenu();
+	}
+	
 	private TableTreeViewer createTableTreeViewerInComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
