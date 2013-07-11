@@ -130,6 +130,7 @@ public class HPCApplication extends AbstractModelObject {
 		return clusterInfo;
 	}
 
+	// TODO: Refactor in similar way as the same funcitons in this class!
 	public List<String> getModulesForBinary(String currentBinary) {
 		String commandOutput;
 		List<String> modulesForBinary = new ArrayList<String>();
@@ -142,7 +143,7 @@ public class HPCApplication extends AbstractModelObject {
 			NodeList modForBinNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/modulesforbinary/module", clusterInfoXmlDoc);
 
 			List<Node> modForBinListOfNodes = XmlUtils.nodeListToListOfNodes(modForBinNodeList);
-			List<String> partitions = new ArrayList<String>();
+			List<String> partitions = new ArrayList<String>(); // FIXME: Why isn't this one used?
 			for (Node modForBinNode : modForBinListOfNodes) {
 				String modForBinStr = modForBinNode.getTextContent();
 				modulesForBinary.add(modForBinStr);

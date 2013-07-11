@@ -11,10 +11,7 @@ import org.eclipse.ui.IViewPart;
 public class UpdateJobInfoViewAction implements IViewActionDelegate {
 
 	@Override
-	public void run(IAction arg0) {
-		// TODO Auto-generated method stub
-
-	}
+	public void run(IAction arg0) {}
 
 	@Override
 	public void selectionChanged(IAction arg0, ISelection arg1) {
@@ -22,9 +19,6 @@ public class UpdateJobInfoViewAction implements IViewActionDelegate {
 	}
 
 	@Override
-	public void init(IViewPart arg0) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void init(IViewPart arg0) {}
 
 }
