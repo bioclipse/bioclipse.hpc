@@ -21,32 +21,31 @@ class ProjInfoPersonLabelProvider implements ITableLabelProvider {
     // Create the image
   }
   
-  public Image getColumnImage(Object arg0, int arg1) {
+  public Image getColumnImage(Object obj, int arg1) {
 	  Image image = null;
-	  // do nothing ...
+	  // TODO: Return an image!
 	  return image;
   }
 
   /**
    * Gets the text for the specified column
    * 
-   * @param arg0
+   * @param personObj
    *            the player
-   * @param arg1
+   * @param colIdx
    *            the column
    * @return String
    */
-  public String getColumnText(Object arg0, int arg1) {
-	  Person person = (Person) arg0;
-	  switch (arg1) {
+  public String getColumnText(Object personObj, int colIdx) {
+	  switch (colIdx) {
 	  case 0:
-		  return person.getName();
+		  return ((Person) personObj).getName();
 	  case 1:
-		  return person.getUsedHours();
+		  return ((Person) personObj).getUsedHours();
 	  case 2:
-		  return person.getCurrentAllocation();
+		  return ((Person) personObj).getCurrentAllocation();
 	  }
-	  return "Empty text";
+	  return "";
   }
 
   /**
