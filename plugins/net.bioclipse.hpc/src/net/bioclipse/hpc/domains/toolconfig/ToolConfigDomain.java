@@ -114,10 +114,10 @@ public class ToolConfigDomain {
 		Tool tool = new Tool();
 		try {
 			// XPath Expressions
-			String name = (String) XmlUtils.evalXPathExpr("/tool/@name", xmlDoc, XPathConstants.STRING);
-			String description = (String) XmlUtils.evalXPathExpr("/tool/description", xmlDoc, XPathConstants.STRING);
-			String command = (String) XmlUtils.evalXPathExpr("/tool/command", xmlDoc, XPathConstants.STRING);
-			String interpreter = (String) XmlUtils.evalXPathExpr("/tool/command/@interpreter", xmlDoc, XPathConstants.STRING);
+			String name = (String) XmlUtils.evalXPathExprToString("/tool/@name", xmlDoc, XPathConstants.STRING);
+			String description = (String) XmlUtils.evalXPathExprToString("/tool/description", xmlDoc, XPathConstants.STRING);
+			String command = (String) XmlUtils.evalXPathExprToString("/tool/command", xmlDoc, XPathConstants.STRING);
+			String interpreter = (String) XmlUtils.evalXPathExprToString("/tool/command/@interpreter", xmlDoc, XPathConstants.STRING);
 
 			tool.setName(name);
 			tool.setDescription(description);

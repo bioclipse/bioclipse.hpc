@@ -38,6 +38,12 @@ import org.w3c.dom.NodeList;
 public class HPCApplication extends AbstractModelObject {
 	private List<IRemoteFile> _selectedFiles;
 	private static final Logger logger = LoggerFactory.getLogger(HPCApplication.class);
+	private enum InfoType {
+		USERINFO,
+		CLUSTERINFO,
+		PROJINFO,
+		JOBINFO
+	}
 
 	public HPCApplication() {
 		_selectedFiles = new ArrayList<IRemoteFile>();
@@ -98,13 +104,11 @@ public class HPCApplication extends AbstractModelObject {
 	}
 
 	public void updateJobInfoView() {
-		// Find the right view
-		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
+		JobInfoView jobInfoView = getJobInfoView();
+
 		if (jobInfoView != null) {
-			String rawContent = execRemoteCommand("simpleapi jobs"); 
-			// Extract the XML part from the other terminal output (including "message of the day"-text)
-			String jobInfoXml = getMatch("<simpleapi>.*?</simpleapi>", rawContent);
-			if (jobInfoXml != null) {
+			String jobInfoXml = getInfoFromCluster(InfoType.JOBINFO);
+			if (jobInfoXml != null && !(jobInfoXml.equals(""))) {
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
 				logger.error("Could not extract XML for jobinfo! Are you logged in?!");
@@ -114,77 +118,84 @@ public class HPCApplication extends AbstractModelObject {
 		}
 	}
 
+	private JobInfoView getJobInfoView() {
+		JobInfoView jobInfoView = (JobInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(JobInfoView.ID);
+		return jobInfoView;
+	}
+
 	public void updateProjInfoView() {
-		String commandOutput;
+		ProjInfoView projInfoView = getProjInfoView();
 
-		// Find the right view
-		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
 		if (projInfoView!=null) {
-			logger.debug("Found projInfoView: " + projInfoView);
-			commandOutput = execRemoteCommand("simpleapi projinfo");
-
-			String projInfoXml = getMatch("<simpleapi>.*</simpleapi>", commandOutput);
-			if (projInfoXml != null) {
+			String projInfoXml = getInfoFromCluster(InfoType.PROJINFO);
+			if (projInfoXml != null && !(projInfoXml.equals(""))) {
 				projInfoView.updateViewFromXml(projInfoXml);
 			} else {
-				logger.error("Could not extract XML for projinfo!");
+				logger.error("Could not extract XML for projinfo! Are you logged in?!");
+				// TODO: Show message to user!
 			}
 		} else {
 			logger.error("Projinfo view not found!");
 		}
 	}
 
+	private ProjInfoView getProjInfoView() {
+		ProjInfoView projInfoView = (ProjInfoView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(ProjInfoView.ID);
+		return projInfoView;
+	}
+
 	public Map<String,Object> getUserInfo() {
-		String commandOutput;
-		HashMap<String,Object> userInfo = new HashMap<String,Object>();
+		HashMap<String,Object> userInfo = null;
 
-		commandOutput = execRemoteCommand("simpleapi userinfo");
+		String userInfoXml = getInfoFromCluster(InfoType.USERINFO);
+		if (userInfoXml != null) {
 
-		String userInfoXmlString = getMatch("<userinfo>.*</userinfo>", commandOutput);
-		if (userInfoXmlString != null) {
-			Document userInfoXmlDoc = XmlUtils.xmlToDOMDocument(userInfoXmlString);
-			String userName = (String) XmlUtils.evalXPathExpr("/userinfo/username", userInfoXmlDoc, XPathConstants.STRING);
+			// Convert from XML to DOM Document
+			Document userInfoXmlDoc = XmlUtils.xmlToDOMDocument(userInfoXml);
+
+			// Extract info from DOM Document
+			String userName = (String) XmlUtils.evalXPathExprToString("/simpleapi/userinfo/username", userInfoXmlDoc);
+			List<String> projects = XmlUtils.evalXPathExprToListOfStrings("/simpleapi/userinfo/projects/project", userInfoXmlDoc);
+
+			// Store extracted info in userInfo HashMap
+			userInfo = new HashMap<String,Object>();
 			userInfo.put("username", userName);
-			NodeList projectsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/userinfo/projects/project", userInfoXmlDoc);
-			// Easier to work with NodeList or List of Nodes? 
-			List<Node> projectNodes = XmlUtils.nodeListToListOfNodes(projectsNodeList);
-			List<String> projects = new ArrayList<String>();
-			for (Node node : projectNodes) {
-				String nodeVal = node.getTextContent();
-				projects.add(nodeVal);
-			}
 			userInfo.put("projects", projects);
+			
 		} else {
 			logger.error("Could not extract XML for userinfo!");
 		}
 		return userInfo;
 	}
 
+	/**
+	 * Get a HashMap structure containing some basic information about the cluster
+	 * currently connected to.
+	 * @return
+	 */
 	public Map<String, Object> getClusterInfo() {
-		String commandOutput;
-		HashMap<String,Object> clusterInfo = new HashMap<String,Object>();
-		commandOutput = execRemoteCommand("simpleapi clusterinfo");
-		String clusterInfoXmlString = getMatch("<simpleapi>.*</simpleapi>", commandOutput);
-		if (clusterInfoXmlString != null) {
-			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXmlString);
-			String maxNodes = (String) XmlUtils.evalXPathExpr("/simpleapi/clusterinfo/maxnodes", clusterInfoXmlDoc, XPathConstants.STRING);
-			String maxCpus = (String) XmlUtils.evalXPathExpr("/simpleapi/clusterinfo/maxcpus", clusterInfoXmlDoc, XPathConstants.STRING);
+		HashMap<String,Object> clusterInfo = null;
+		String clusterInfoXml = getInfoFromCluster(InfoType.CLUSTERINFO);
+
+		if (clusterInfoXml != null) {
+			Document clusterInfoDoc = XmlUtils.xmlToDOMDocument(clusterInfoXml);
+			
+			// Extract info from DOM Document
+			String maxNodes = (String) XmlUtils.evalXPathExprToString("/simpleapi/clusterinfo/maxnodes", clusterInfoDoc);
+			String maxCpus = (String) XmlUtils.evalXPathExprToString("/simpleapi/clusterinfo/maxcpus", clusterInfoDoc);
+			List<String> partitions = XmlUtils.evalXPathExprToListOfStrings("/simpleapi/clusterinfo/partitions/partition", clusterInfoDoc);
+
+			// Put the above extracted info into a HashMap
+			clusterInfo = new HashMap<String,Object>(); // New empty hashmap
 			clusterInfo.put("maxnodes", maxNodes);
 			clusterInfo.put("maxcpus", maxCpus);
-			NodeList partitionsNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/simpleapi/clusterinfo/partitions/partition", clusterInfoXmlDoc);
-			// Easier to work with NodeList or List of Nodes? 
-			List<Node> partitionsNodes = XmlUtils.nodeListToListOfNodes(partitionsNodeList);
-			List<String> partitions = new ArrayList<String>();
-			for (Node partition : partitionsNodes) {
-				String partitionNodeVal = partition.getTextContent();
-				partitions.add(partitionNodeVal);
-			}
 			clusterInfo.put("partitions", partitions);
+
 		} else {
 			logger.error("Could not extract XML for clusterinfo!");
 		}
 		return clusterInfo;
-	}	
+	}
 
 	public List<String> getModulesForBinary(String currentBinary) {
 		String commandOutput;
@@ -192,9 +203,9 @@ public class HPCApplication extends AbstractModelObject {
 
 		commandOutput = execRemoteCommand("fimsproxy -t modulesforbin -c " + currentBinary); // FIXME: Replace with simpleapi call
 
-		String clusterInfoXmlString = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
-		if (clusterInfoXmlString != null) {	
-			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXmlString);
+		String clusterInfoXml = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
+		if (clusterInfoXml != null) {	
+			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXml);
 			NodeList modForBinNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/modulesforbinary/module", clusterInfoXmlDoc);
 
 			List<Node> modForBinListOfNodes = XmlUtils.nodeListToListOfNodes(modForBinNodeList);
@@ -253,6 +264,41 @@ public class HPCApplication extends AbstractModelObject {
 			result = m.group();
 		}
 		return result;
+	}
+	
+	/**
+	 * Convenience function for retrieveing info from the Cluster, via it's API
+	 * @param infoType
+	 * @return commandOutput
+	 */
+	private String getInfoFromCluster(InfoType infoType) {
+		String infoTypeStr;
+		String commandOutput;
+		String apiOutput;
+		
+		switch(infoType) {
+			case USERINFO:
+				infoTypeStr = "userinfo";
+				break;
+			case CLUSTERINFO:
+				infoTypeStr = "clusterinfo";
+				break;
+			case PROJINFO:
+				infoTypeStr = "projinfo";
+				break;
+			case JOBINFO:
+				infoTypeStr = "jobinfo";
+				break;
+			default:
+				infoTypeStr = "";
+				break;
+		}
+		
+		commandOutput = execRemoteCommand("simpleapi " + infoTypeStr);
+		// Extract the API part from the messy terminal output
+		apiOutput = getMatch("<simpleapi>.*?</simpleapi>", commandOutput);
+		
+		return apiOutput;
 	}
 
 	/* ------------ Utility methods ------------ */

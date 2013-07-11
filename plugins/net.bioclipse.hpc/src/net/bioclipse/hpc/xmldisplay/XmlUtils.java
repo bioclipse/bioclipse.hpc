@@ -73,14 +73,14 @@ public class XmlUtils {
 		return xmlDoc;
 	}
 	
-	public static Object evalXPathExpr(String pathExpr, Document xmlDocument, QName returnType) {
+	public static Object evalXPathExprToString(String pathExpr, Document xmlDocument) {
 		XPathFactory xPathFactory = XPathFactory.newInstance();
 		XPath xpathObj = xPathFactory.newXPath();
 		XPathExpression expr;
 		Object result = null;
 		try {
 			expr = xpathObj.compile(pathExpr);
-			result = expr.evaluate(xmlDocument, returnType);
+			result = expr.evaluate(xmlDocument, XPathConstants.STRING);
 		} catch (XPathExpressionException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -130,6 +130,22 @@ public class XmlUtils {
 		}
 		childNode = null;
 		return childNode;
+	}
+
+	public static List<String> nodeListToListOfContentStrings(NodeList nodeList) {
+		List<Node> nodes = nodeListToListOfNodes(nodeList);
+		List<String> contentStrings = new ArrayList<String>();			
+		for (Node node : nodes) {
+			String nodeValue = node.getTextContent();
+			contentStrings.add(nodeValue);
+		}
+		return contentStrings;
+	}
+
+	public static List<String> evalXPathExprToListOfStrings(String xPathExpr, Document domDocument) {
+		NodeList nodeList = (NodeList) evalXPathExprToNodeList(xPathExpr, domDocument);
+		List<String> strings = XmlUtils.nodeListToListOfContentStrings(nodeList);
+		return strings;
 	}
 
 }
