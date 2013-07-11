@@ -65,5 +65,19 @@ public class JobState {
 	public void addJob(Job job) {
 		this.jobs.add(job);
 	}
+
+	/**
+	 * @return the jobState
+	 */
+	public String getJobState() {
+		return jobState;
+	}
+
+	/**
+	 * @param jobState the jobState to set
+	 */
+	public void setJobState(String jobState) {
+		this.jobState = jobState;
+	}
 	
 }

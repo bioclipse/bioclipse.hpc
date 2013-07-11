@@ -1,49 +1,28 @@
 package net.bioclipse.hpc.views.projinfo;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.management.openmbean.CompositeData;
-
-import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.rse.core.model.IHost;
-import org.eclipse.rse.core.model.ISystemRegistry;
-import org.eclipse.rse.core.model.SystemStartHere;
-import org.eclipse.rse.shells.ui.RemoteCommandHelpers;
+import org.eclipse.jface.viewers.TableTreeViewer;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
-import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileEmpty;
-import org.eclipse.rse.subsystems.shells.core.model.SimpleCommandOperation;
-import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.swt.widgets.TrayItem;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.custom.TableTree;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.custom.TableTree;
-import org.eclipse.jface.viewers.TableTreeViewer;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,9 +64,9 @@ public class ProjInfoView extends ViewPart {
 
 	private Person createPersonFromXml(String userXml) {
 		// Extract info from Xml
-		String userName = XmlUtils.extractTag("name", userXml);
-		String usedHrs = XmlUtils.extractTag("time", userXml);
-		String curAlloc = XmlUtils.extractTag("allocation", userXml);
+		String userName = XmlUtils.extractTagContent("name", userXml);
+		String usedHrs = XmlUtils.extractTagContent("time", userXml);
+		String curAlloc = XmlUtils.extractTagContent("allocation", userXml);
 
 		// Create new Person object and populate
 		Person person = new Person();
@@ -100,9 +79,9 @@ public class ProjInfoView extends ViewPart {
 
 	private Project createProjectFromXml(String groupXml) {
 		// Extract info from XML
-		String grpName = XmlUtils.extractTag("name", groupXml);
-		String grpUsedHrs = XmlUtils.extractTag("time", groupXml);
-		String grpCurAlloc = XmlUtils.extractTag("allocation", groupXml);
+		String grpName = XmlUtils.extractTagContent("name", groupXml);
+		String grpUsedHrs = XmlUtils.extractTagContent("time", groupXml);
+		String grpCurAlloc = XmlUtils.extractTagContent("allocation", groupXml);
 
 		// Create new Project object and populate
 		Project project = new Project();
@@ -124,7 +103,7 @@ public class ProjInfoView extends ViewPart {
 	    // Set up the table
 	    Table table = tableTreeViewer.getTableTree().getTable();
 	    new TableColumn(table, SWT.LEFT).setText("Name");
-	    new TableColumn(table, SWT.LEFT).setText("Used hours");
+	    new TableColumn(table, SWT.RIGHT).setText("Used hours");
 	    new TableColumn(table, SWT.RIGHT).setText("Current allocation");
 	    tableTreeViewer.expandAll();
 	    

@@ -3,6 +3,10 @@
  */
 package net.bioclipse.hpc.views.jobinfo;
 
+import net.bioclipse.hpc.domains.hpc.JobState;
+import net.bioclipse.hpc.domains.hpc.Project;
+import net.bioclipse.hpc.views.projinfo.ProjInfoContentModel;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -11,32 +15,15 @@ import org.eclipse.jface.viewers.Viewer;
  *
  */
 public class JobInfoContentProvider implements ITreeContentProvider {
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
-	 */
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
-	 */
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-
-	}
+	private static final Object[] EMPTY_OBJ = new Object[] {};
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getElements(java.lang.Object)
 	 */
 	@Override
 	public Object[] getElements(Object inputElement) {
-		// TODO Auto-generated method stub
-		return null;
+	    // Returns all the ProjInfoGroups in the model
+	    return ((JobInfoContentModel) inputElement).getJobStates().toArray();
 	}
 
 	/* (non-Javadoc)
@@ -44,26 +31,34 @@ public class JobInfoContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		// TODO Auto-generated method stub
-		return null;
+	    if (parentElement instanceof JobState) {
+	        return ((JobState) parentElement).getJobs().toArray();
+	    }
+	    // Jobs have no children, so don't return anything for them.
+	    return EMPTY_OBJ;
 	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
-	 */
-	@Override
-	public Object getParent(Object element) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+	
+	/*
+	 * Check if this element has children
 	 */
 	@Override
 	public boolean hasChildren(Object element) {
-		// TODO Auto-generated method stub
-		return false;
+		return getChildren(element).length > 0;
+	}
+
+	
+	// =================== UNIMPLEMENTED STUFF BELOW ===================
+	
+	
+	@Override
+	public void dispose() {}
+
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
+
+	@Override
+	public Object getParent(Object element) {
+		return null;
 	}
 
 }

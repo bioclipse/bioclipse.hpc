@@ -1,5 +1,6 @@
 package net.bioclipse.hpc.views.jobinfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.bioclipse.hpc.domains.hpc.JobState;
@@ -11,11 +12,20 @@ public class JobInfoContentModel {
 	 * Constructor
 	 */
 	public JobInfoContentModel() {
+		// Initialize the jobStates list
+		jobStates = new ArrayList<JobState>();
+		
 		// Add some default jobStates
-		addJobState(new JobState(JobState.STATE_RUNNING));
-		addJobState(new JobState(JobState.STATE_PENDING));
+		JobState jobStateRunning = new JobState(JobState.STATE_RUNNING);
+		JobState jobStatePending = new JobState(JobState.STATE_PENDING);
+		addJobState(jobStateRunning);
+		addJobState(jobStatePending);
 	}
 
+	public void clearJobStates() {
+		jobStates.clear();
+	}
+	
 	/**
 	 * @return the jobStates
 	 */
@@ -35,6 +45,15 @@ public class JobInfoContentModel {
 	 */
 	public void addJobState(JobState jobState) {
 		this.jobStates.add(jobState);
+	}
+
+	public JobState getJobStateByJobStateString(String jobStateStr) {
+		for (JobState jobState : jobStates) {
+			if (jobState.getJobState().equals(jobStateStr)) {
+				return jobState;
+			}
+		}
+		return null;
 	}
 
 }

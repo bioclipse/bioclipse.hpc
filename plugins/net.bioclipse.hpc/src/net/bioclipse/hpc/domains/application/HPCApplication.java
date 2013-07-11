@@ -142,9 +142,8 @@ public class HPCApplication extends AbstractModelObject {
 		String clusterInfoXml = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
 		if (clusterInfoXml != null) {	
 			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXml);
-			NodeList modForBinNodeList = (NodeList) XmlUtils.evalXPathExprToNodeList("/modulesforbinary/module", clusterInfoXmlDoc);
-
-			List<Node> modForBinListOfNodes = XmlUtils.nodeListToListOfNodes(modForBinNodeList);
+			
+			List<Node> modForBinListOfNodes = XmlUtils.evalXPathExprToListOfNodes("/modulesforbinary/module", clusterInfoXmlDoc);
 			List<String> partitions = new ArrayList<String>(); // FIXME: Why isn't this one used?
 			for (Node modForBinNode : modForBinListOfNodes) {
 				String modForBinStr = modForBinNode.getTextContent();

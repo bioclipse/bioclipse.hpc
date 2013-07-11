@@ -63,8 +63,7 @@ public class JobInfoLabelProvider implements ITableLabelProvider {
 	 */
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		return "Empty text!";
 	}
 
 }

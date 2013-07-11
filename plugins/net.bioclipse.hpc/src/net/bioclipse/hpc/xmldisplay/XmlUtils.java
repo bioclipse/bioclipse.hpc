@@ -149,14 +149,25 @@ public class XmlUtils {
 	}
 
 	public static String extractTag(String tagName, String fullXmlStr) {
-		String xmlTag = HPCUtils.getMatch("<" + tagName + ">(.*?)</" + tagName + ">", fullXmlStr, 1);
+		String xmlTag = HPCUtils.getMatch("<" + tagName + ">.*?</" + tagName + ">", fullXmlStr, 1);
 		return xmlTag;
 	}
-
+	
 	public static List<String> extractTags(String tagName, String fullXmlStr) {
 		String xmlTagPattern = "<" + tagName + ">.*?</" + tagName + ">";
 		List<String> xmlTagStrings = HPCUtils.getMatches(xmlTagPattern, fullXmlStr);
 		return xmlTagStrings;
+	}
+
+	public static String extractTagContent(String tagName, String fullXmlStr) {
+		String xmlTag = HPCUtils.getMatch("<" + tagName + ">(.*?)</" + tagName + ">", fullXmlStr, 1);
+		return xmlTag;
+	}
+
+	public static List<Node> evalXPathExprToListOfNodes(String xPathExpr, Document xmlData) {
+		NodeList nodeList = (NodeList) evalXPathExprToNodeList(xPathExpr, xmlData);
+		List<Node> listOfNodes = nodeListToListOfNodes(nodeList);
+		return listOfNodes;
 	}
 
 }

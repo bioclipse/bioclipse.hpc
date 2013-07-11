@@ -1,66 +1,39 @@
 package net.bioclipse.hpc.views.jobinfo;
 
-import java.util.Iterator;
 import java.util.List;
 
-import net.bioclipse.hpc.business.HPCManager;
-import net.bioclipse.hpc.business.HPCManagerFactory;
-import net.bioclipse.hpc.domains.application.HPCUtils;
-import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
-import net.bioclipse.hpc.xmldisplay.XmlContentProvider;
+import net.bioclipse.hpc.domains.hpc.Job;
+import net.bioclipse.hpc.domains.hpc.JobState;
+import net.bioclipse.hpc.views.projinfo.ProjInfoView;
 import net.bioclipse.hpc.xmldisplay.XmlDataProviderFactory;
-import net.bioclipse.hpc.xmldisplay.XmlLabelProvider;
-import net.bioclipse.hpc.xmldisplay.XmlRootNode;
-import net.bioclipse.hpc.xmldisplay.XmlRow;
-import net.bioclipse.hpc.xmldisplay.XmlRowCollection;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.rse.core.IRSECoreRegistry;
-import org.eclipse.rse.core.IRSESystemType;
-import org.eclipse.rse.core.IRSESystemTypeConstants;
-import org.eclipse.rse.core.IRSESystemTypeProvider;
-import org.eclipse.rse.core.RSECorePlugin;
-import org.eclipse.rse.core.SystemResourceHelpers;
-import org.eclipse.rse.core.model.IHost;
-import org.eclipse.rse.core.model.ISystemRegistry;
-import org.eclipse.rse.core.subsystems.IConnectorService;
-import org.eclipse.rse.core.subsystems.ISubSystem;
-import org.eclipse.rse.files.ui.dialogs.SystemRemoteFileDialog;
-import org.eclipse.rse.files.ui.resources.ISystemRemoteResource;
-import org.eclipse.rse.internal.subsystems.files.ssh.SftpRemoteFile;
-import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileServiceSubSystem;
-import org.eclipse.rse.subsystems.files.core.servicesubsystem.FileSubSystemInputStream;
-import org.eclipse.rse.subsystems.files.core.servicesubsystem.IFileServiceSubSystem;
-import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
-import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFileSubSystem;
-import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFile;
-import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileSubSystem;
-import org.eclipse.rse.ui.SystemBasePlugin;
-import org.eclipse.rse.ui.dialogs.ISystemPromptDialog;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.ui.part.ViewPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 public class JobInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.hpc.views.JobInfoView"; //$NON-NLS-1$
-	private XmlDataProviderFactory xmlDataProvider = new XmlDataProviderFactory();
-	TreeViewer treeViewer;
+	private JobInfoContentModel contentModel;
+	private TreeViewer treeViewer;
+	private static final Logger logger = LoggerFactory.getLogger(ProjInfoView.class); 
 	
 	// Constructor
-	public JobInfoView() {}
+	public JobInfoView() {
+		// Create the content model instance
+		contentModel = new JobInfoContentModel();		
+	}
 
 	/**
 	 * Create contents of the view part.
@@ -86,16 +59,51 @@ public class JobInfoView extends ViewPart {
 		treeViewer.setContentProvider(new JobInfoContentProvider());
 		treeViewer.setLabelProvider(new JobInfoLabelProvider());
 
-		// Create the content model instance
-		JobInfoContentModel contentModel = new JobInfoContentModel();
 		
-		// Populate the content model with data from the XML
-		String jobsXml = XmlUtils.extractTag("jobs", rawXmlContent);
-		
-		
-		treeViewer.setInput(contentModel);		
+		Document xmlDoc = XmlUtils.xmlToDOMDocument(rawXmlContent);
+		if (xmlDoc != null) {
+			List<Node> jobDOMNodes = XmlUtils.evalXPathExprToListOfNodes("/simpleapi/jobinfo/jobs/job", xmlDoc);			
 
-		treeViewer.refresh();
+			if (!jobDOMNodes.isEmpty()) {
+				for (Node jobNode : jobDOMNodes) {
+					NamedNodeMap attributes = jobNode.getAttributes();
+
+					// Extract info from DOM structure
+					String id = attributes.getNamedItem("id").getNodeValue();
+					String partition = attributes.getNamedItem("partition").getNodeValue();
+					String name = attributes.getNamedItem("name").getNodeValue();
+					String userName = attributes.getNamedItem("username").getNodeValue();
+					String state = attributes.getNamedItem("state").getNodeValue();
+					String timeElapsed = attributes.getNamedItem("time_elapsed").getNodeValue();
+					int nodesCount = Integer.parseInt(attributes.getNamedItem("nodescnt").getNodeValue());
+					String nodeList = attributes.getNamedItem("nodelist").getNodeValue();
+					
+					Job job = new Job(); 
+					job.setId(id);
+					job.setPartition(partition);
+					job.setName(name);
+					job.setUserName(userName);
+					job.setState(state);
+					job.setTimeElapsed(timeElapsed);
+					job.setNodesCount(nodesCount);
+					job.setNodelist(nodeList);
+					
+					JobState jobState = contentModel.getJobStateByJobStateString(state); // FIXME: Crashes here
+					if (jobState != null) {
+						jobState.addJob(job);					
+					} else {
+						logger.error("Could not find a job state object for state: " + state + "!");
+					}
+				}
+				
+				treeViewer.setInput(contentModel); // FIXME: Input is not correctly set here, so CRASHES
+				treeViewer.refresh();				
+			} else {
+				logger.error("Didn't get any jobs to parse!");
+			}
+		} else {
+			logger.error("Could not parse XML to DOM document!");
+		}
 	}
 
 	/**
@@ -126,16 +134,12 @@ public class JobInfoView extends ViewPart {
 		// Set the focus
 	}
 
-	public void setContentsFromXML(String projInfoXml) {
-		// TODO Auto-generated method stub (Is this ever used?)
+	public JobInfoContentModel getContentModel() {
+		return contentModel;
 	}
 
-	public XmlDataProviderFactory getContentModel() {
-		return xmlDataProvider;
-	}
-
-	public void setContentModel(XmlDataProviderFactory newXmlDataProvider) {
-		this.xmlDataProvider = newXmlDataProvider;
+	public void setContentModel(JobInfoContentModel contentModel) {
+		this.contentModel = contentModel;
 	}
 
 }
