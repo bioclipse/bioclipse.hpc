@@ -52,6 +52,8 @@ public class HPCApplication extends AbstractModelObject {
 		if (jobInfoView != null) {
 			String jobInfoXml = getInfoFromCluster(InfoType.JOBINFO);
 			if (jobInfoXml != null && !(jobInfoXml.equals(""))) {
+				// TODO: Get a List/HashMap structure instead, so that it can be used
+				// to put out to the console as well, not just for updating the view.
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
 				logger.error("Could not extract XML for jobinfo! Are you logged in?!");

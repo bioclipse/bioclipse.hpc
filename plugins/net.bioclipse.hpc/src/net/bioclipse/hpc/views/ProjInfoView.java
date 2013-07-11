@@ -11,6 +11,7 @@ import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
+import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.IMenuManager;
@@ -48,14 +49,13 @@ import org.slf4j.LoggerFactory;
 
 public class ProjInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.hpc.views.ProjInfoView"; //$NON-NLS-1$
-
 	private List _selectedFiles;
-	private ProjInfoContentModel contentModel = new ProjInfoContentModel();
+	private ProjInfoContentModel contentModel;
 	private TableTreeViewer tableTreeViewer;
 	private static final Logger logger = LoggerFactory.getLogger(ProjInfoView.class); 
 
 	public ProjInfoView() {
-		// Nothing here
+		contentModel = new ProjInfoContentModel();
 	}
 
 	/**
@@ -67,22 +67,72 @@ public class ProjInfoView extends ViewPart {
 		Composite container = new Composite(parent, SWT.V_SCROLL);
 		container.setLayout(new GridLayout(1, false));
 
-		// Create update button
-		Button btnUpdate = new Button(container, SWT.NONE);
-		btnUpdate.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updateProjectInfoTable();
-			}
-		});
-		btnUpdate.setText("Update");
+		createUpdateButton(container);
+		tableTreeViewer = createTableTreeViewerInComposite(container);
+		configureTableTreeViewer(tableTreeViewer);
+	    
+		createActions();
+		initializeToolBar();
+		initializeMenu();
+	}
 
-		Composite composite = new Composite(container, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		composite.setLayout(new FillLayout());
-		
-		tableTreeViewer = new TableTreeViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
-	    // Set the content and label providers
+	public void updateViewFromXml(String xmlString) {
+		updateContentModelFromXml(xmlString);
+		tableTreeViewer.refresh();
+	}
+
+	private void updateContentModelFromXml(String fullXml) {
+		// Get groupInfo from XML
+		List<String> groupXmlStrings = XmlUtils.extractTags("groupinfo", fullXml);
+
+		// Clear content of contentModel
+		contentModel.clearProjInfoGroups();
+
+		// Parse groupInfo XML strings into Project obmects and add to content model
+		for (String groupXml : groupXmlStrings) {
+			Project project = createProjectFromXml(groupXml);
+			// Parse info for each individual user
+			List<String> userXmlStrings = XmlUtils.extractTags("user", groupXml);
+			for (String userXml : userXmlStrings) {
+				Person person = createPersonFromXml(userXml);
+				project.addPersonToGroup(person);
+			}
+			contentModel.addProjInfoGroup(project);
+		}
+	}
+
+	private Person createPersonFromXml(String userXml) {
+		// Extract info from Xml
+		String userName = XmlUtils.extractTag("name", userXml);
+		String usedHrs = XmlUtils.extractTag("time", userXml);
+		String curAlloc = XmlUtils.extractTag("allocation", userXml);
+
+		// Create new Person object and populate
+		Person person = new Person();
+		person.setName(userName);
+		person.setUsedHours(usedHrs);
+		person.setCurrentAllocation(curAlloc);
+
+		return person;
+	}
+
+	private Project createProjectFromXml(String groupXml) {
+		// Extract info from XML
+		String grpName = XmlUtils.extractTag("name", groupXml);
+		String grpUsedHrs = XmlUtils.extractTag("time", groupXml);
+		String grpCurAlloc = XmlUtils.extractTag("allocation", groupXml);
+
+		// Create new Project object and populate
+		Project project = new Project();
+		project.setGroupName(grpName);
+		project.setGroupUsedHours(grpUsedHrs);
+		project.setGroupCurrentAllocation(grpCurAlloc);
+
+		return project;
+	}
+	
+	private void configureTableTreeViewer(TableTreeViewer tableTreeViewer) {
+		// Set the content and label providers
 		tableTreeViewer.setContentProvider(new ProjInfoContentProvider());
 		tableTreeViewer.setLabelProvider(new ProjInfoProjectLabelProvider());
 		tableTreeViewer.setInput(this.getContentModel());
@@ -109,42 +159,26 @@ public class ProjInfoView extends ViewPart {
 	    // Turn on the header and the lines
 	    table.setHeaderVisible(true);
 	    table.setLinesVisible(true);
-	    
-		createActions();
-		initializeToolBar();
-		initializeMenu();
 	}
 
-	public void updateViewFromXml(String fullXmlStr) {
-		// Why am I not doing this with XPath expressions, such as in the JobInfoView?
-		// ... and should this XML format dependent stuff really be stored here?
-		logger.debug("XML String:\n" + fullXmlStr);
-		List<String> groupXMLParts = HPCUtils.getMatches("<groupinfo>.*?</groupinfo>", fullXmlStr);
-		contentModel.clearProjInfoGroups();
-		for (String groupXmlStr : groupXMLParts) {
-			Project projInfoGroup = new Project();
-			String groupName = HPCUtils.getMatch("<name>(.*?)</name>", groupXmlStr, 1);
-			String groupUsedHours = HPCUtils.getMatch("<time>(.*?)</time>", groupXmlStr, 1);
-			String groupCurrentAllocation = HPCUtils.getMatch("<allocation>(.*?)</allocation>", groupXmlStr, 1);
-			projInfoGroup.setGroupName(groupName);
-			projInfoGroup.setGroupUsedHours(groupUsedHours);
-			projInfoGroup.setGroupCurrentAllocation(groupCurrentAllocation);
-			
-			List<String> userXMLParts = HPCUtils.getMatches("<user>.*?</user>", groupXmlStr);
-			for (String s : userXMLParts) {
-				String userName = HPCUtils.getMatch("<name>(.*?)</name>", s, 1);
-				String usedHours = HPCUtils.getMatch("<time>(.*?)</time>", s, 1);
-				String currentAllocation = HPCUtils.getMatch("<allocation>(.*?)</allocation>", s, 1);
-				Person p = new Person();
-				p.setName(userName);
-				p.setUsedHours(usedHours);
-				p.setCurrentAllocation(currentAllocation);
-				projInfoGroup.addPersonToGroup(p);
-			}
-			contentModel.addProjInfoGroup(projInfoGroup);
-		}
-		tableTreeViewer.refresh();
+	private TableTreeViewer createTableTreeViewerInComposite(Composite container) {
+		Composite composite = new Composite(container, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		composite.setLayout(new FillLayout());
+		tableTreeViewer = new TableTreeViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		return tableTreeViewer;
 	}
+
+	private void createUpdateButton(Composite container) {
+		Button btnUpdate = new Button(container, SWT.NONE);
+		btnUpdate.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateProjectInfoTable();
+			}
+		});
+		btnUpdate.setText("Update");
+	}	
 
 	private void updateProjectInfoTable() {
 		HPCUtils.getApplication().updateProjInfoView();

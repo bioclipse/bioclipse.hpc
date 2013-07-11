@@ -148,4 +148,15 @@ public class XmlUtils {
 		return strings;
 	}
 
+	public static String extractTag(String tagName, String fullXmlStr) {
+		String xmlTag = HPCUtils.getMatch("<" + tagName + ">(.*?)</" + tagName + ">", fullXmlStr, 1);
+		return xmlTag;
+	}
+
+	public static List<String> extractTags(String tagName, String fullXmlStr) {
+		String xmlTagPattern = "<" + tagName + ">.*?</" + tagName + ">";
+		List<String> xmlTagStrings = HPCUtils.getMatches(xmlTagPattern, fullXmlStr);
+		return xmlTagStrings;
+	}
+
 }
