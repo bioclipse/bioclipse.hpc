@@ -1,4 +1,4 @@
-package net.bioclipse.hpc.views;
+package net.bioclipse.hpc.views.projinfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,6 @@ import net.bioclipse.hpc.business.HPCManager;
 import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
-import net.bioclipse.hpc.views.projinfo.ProjInfoContentModel;
-import net.bioclipse.hpc.views.projinfo.ProjInfoContentProvider;
-import net.bioclipse.hpc.views.projinfo.ProjInfoProjectLabelProvider;
 import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.core.runtime.Platform;

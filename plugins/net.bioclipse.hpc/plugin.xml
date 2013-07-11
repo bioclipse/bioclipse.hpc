@@ -16,7 +16,7 @@
             name="HPC Category">
       </category>
       <view
-            class="net.bioclipse.hpc.views.ProjInfoView"
+            class="net.bioclipse.hpc.views.projinfo.ProjInfoView"
             id="net.bioclipse.hpc.views.ProjInfoView"
             name="Project Info">
       </view>

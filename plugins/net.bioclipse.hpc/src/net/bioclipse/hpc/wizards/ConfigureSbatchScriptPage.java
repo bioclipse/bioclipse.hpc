@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
-import net.bioclipse.hpc.views.ProjInfoView;
+import net.bioclipse.hpc.views.projinfo.ProjInfoView;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
