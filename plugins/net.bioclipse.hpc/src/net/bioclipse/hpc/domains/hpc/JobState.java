@@ -1,6 +1,7 @@
 package net.bioclipse.hpc.domains.hpc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class JobState {
@@ -16,13 +17,33 @@ public class JobState {
 	final String STATE_PREEMPTED = "PREEMPTED";
 	final String STATE_NODE_FAIL = "NODE_FAIL";
 
+	final List<String> ALLOWED_JOB_STATES = new ArrayList<String>(Arrays.asList(
+			STATE_PENDING,
+			STATE_RUNNING,
+			STATE_SUSPENDED,
+			STATE_CANCELLED,
+			STATE_COMPLETING,
+			STATE_COMPLETED,
+			STATE_CONFIGURING,
+			STATE_FAILED,
+			STATE_TIMEOUT,
+			STATE_PREEMPTED,
+			STATE_NODE_FAIL ));
+	
+	private String jobState;
 	private List<Job> jobs;
 
 	/**
 	 * Constructor
 	 */
-	public JobState() {
+	public JobState(String jobState) {
 		jobs = new ArrayList<Job>();
+
+		if (ALLOWED_JOB_STATES.contains(jobState)) {
+			this.jobState = jobState;			
+		} else {
+			this.jobState = "";
+		}
 	}
 
 	// ------------ Getters and setters ------------
