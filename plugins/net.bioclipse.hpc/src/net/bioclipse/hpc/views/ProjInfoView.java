@@ -161,11 +161,30 @@ public class ProjInfoView extends ViewPart {
 		initializeMenu();
 	}
 	
+	// FIXME: It seems, from the JobInfo view, that a TreeViewer will do equally well
+	//        as a TableTreViewer, so should change!
 	private TableTreeViewer createTableTreeViewerInComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
+		// Configure the layout
+		int horizAlignment = SWT.FILL;
+		int vertAlignment = SWT.FILL;
+		boolean grabExcessHorizSpace = true;
+		boolean grabExcessVertSpace = true;
+		int horizSpan = 1;
+		int vertSpan = 1;
+		
+		composite.setLayoutData(new GridData(horizAlignment, 
+											 vertAlignment, 
+											 grabExcessHorizSpace, 
+											 grabExcessVertSpace, 
+											 horizSpan, 
+											 vertSpan));
 		composite.setLayout(new FillLayout());
-		tableTreeViewer = new TableTreeViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		
+		int tableTreeViewerStyle = SWT.BORDER | SWT.FULL_SELECTION;
+		tableTreeViewer = new TableTreeViewer(composite, tableTreeViewerStyle);
+
 		return tableTreeViewer;
 	}
 
