@@ -114,7 +114,7 @@ public class ProjInfoView extends ViewPart {
 		initializeMenu();
 	}
 
-	public void setContentsFromXML(String fullXmlStr) {
+	public void updateViewFromXml(String fullXmlStr) {
 		// Why am I not doing this with XPath expressions, such as in the JobInfoView?
 		// ... and should this XML format dependent stuff really be stored here?
 		logger.debug("XML String:\n" + fullXmlStr);

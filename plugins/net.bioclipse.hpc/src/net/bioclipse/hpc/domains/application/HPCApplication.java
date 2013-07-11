@@ -125,7 +125,7 @@ public class HPCApplication extends AbstractModelObject {
 
 			String projInfoXml = getMatch("<simpleapi>.*</simpleapi>", commandOutput);
 			if (projInfoXml != null) {
-				projInfoView.setContentsFromXML(projInfoXml);
+				projInfoView.updateViewFromXml(projInfoXml);
 			} else {
 				logger.error("Could not extract XML for projinfo!");
 			}
