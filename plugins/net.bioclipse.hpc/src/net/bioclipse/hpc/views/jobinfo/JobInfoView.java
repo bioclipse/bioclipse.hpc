@@ -66,7 +66,11 @@ public class JobInfoView extends ViewPart {
 		{
 			TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
 			TreeColumn aTreeColumn = treeViewerColumn.getColumn();
-			aTreeColumn.setWidth(80);
+			if (label.equals("Id")) {
+				aTreeColumn.setWidth(140);
+			} else {
+				aTreeColumn.setWidth(80);				
+			}
 			aTreeColumn.setText(label);			
 		}
 

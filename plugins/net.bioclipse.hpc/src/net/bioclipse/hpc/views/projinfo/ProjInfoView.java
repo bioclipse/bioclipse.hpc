@@ -172,7 +172,7 @@ public class ProjInfoView extends ViewPart {
 	      // column.addListener(SWT.Selection, sortListen);
 	    }
 
-	    col1.setWidth(120);
+	    col1.setWidth(120	);
 	    
 	    // Turn on the header and the lines
 	    table.setHeaderVisible(true);

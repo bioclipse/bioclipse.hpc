@@ -51,7 +51,7 @@ public class JobInfoLabelProvider implements ITableLabelProvider {
 
 		logger.info("Abs path: " + new File(".").getAbsolutePath());
 
-		clockImg = new Image(null, ImageRetriever.class.getResourceAsStream("clock.png"));
+		clockImg = new Image(null, ImageRetriever.class.getResourceAsStream("clock2.png"));
 		cogImg = new Image(null, ImageRetriever.class.getResourceAsStream("cog.png"));
 		playImg = new Image(null, ImageRetriever.class.getResourceAsStream("control_play.png"));		
 	}
