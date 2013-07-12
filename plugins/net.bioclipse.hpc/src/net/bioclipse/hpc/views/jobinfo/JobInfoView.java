@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.bioclipse.hpc.domains.application.XmlUtils;
 import net.bioclipse.hpc.domains.hpc.Job;
 import net.bioclipse.hpc.domains.hpc.JobState;
 import net.bioclipse.hpc.views.projinfo.ProjInfoView;
-import net.bioclipse.hpc.xmldisplay.XmlDataProviderFactory;
-import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -33,7 +32,7 @@ public class JobInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.hpc.views.JobInfoView"; //$NON-NLS-1$
 	private JobInfoContentModel contentModel;
 	private TreeViewer treeViewer;
-	private static final Logger logger = LoggerFactory.getLogger(ProjInfoView.class); 
+	private static final Logger logger = LoggerFactory.getLogger(ProjInfoView.class);
 	
 	// Constructor
 	public JobInfoView() {
@@ -118,8 +117,9 @@ public class JobInfoView extends ViewPart {
 						logger.error("Could not find a job state object for state: " + state + "!");
 					}
 				}
-				
-				treeViewer.refresh();				
+				treeViewer.refresh();
+				treeViewer.expandAll();
+
 			} else {
 				logger.error("Didn't get any jobs to parse!");
 			}

@@ -3,9 +3,9 @@ package net.bioclipse.hpc.views.projinfo;
 import java.util.List;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
+import net.bioclipse.hpc.domains.application.XmlUtils;
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
-import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -40,6 +40,7 @@ public class ProjInfoView extends ViewPart {
 	public void updateViewFromXml(String xmlString) {
 		updateContentModelFromXml(xmlString);
 		tableTreeViewer.refresh();
+	    tableTreeViewer.expandAll();		
 	}
 
 	private void updateContentModelFromXml(String rawXmlContent) {
@@ -156,10 +157,11 @@ public class ProjInfoView extends ViewPart {
 	    
 	    // Set up the columns
 	    Table table = tableTreeViewer.getTableTree().getTable();
-	    new TableColumn(table, SWT.LEFT).setText("Name");
+	    TableColumn col1 = new TableColumn(table, SWT.LEFT);
+	    col1.setText("Name");
+	    col1.setWidth(200);
 	    new TableColumn(table, SWT.RIGHT).setText("Used hours");
 	    new TableColumn(table, SWT.RIGHT).setText("Current allocation");
-	    tableTreeViewer.expandAll();
 	    
 	    // Pack the columns
 	    for (int i = 0, n = table.getColumnCount(); i < n; i++) {

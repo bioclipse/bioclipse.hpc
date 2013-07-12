@@ -1,4 +1,4 @@
-package net.bioclipse.hpc.xmldisplay;
+package net.bioclipse.hpc.domains.application;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.wizards.ExecScriptAsBatchJobAction;
 
 import org.apache.commons.io.IOUtils;

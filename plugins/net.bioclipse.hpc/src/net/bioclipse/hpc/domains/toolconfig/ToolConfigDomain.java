@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.xml.xpath.XPathConstants;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
-import net.bioclipse.hpc.xmldisplay.XmlUtils;
+import net.bioclipse.hpc.domains.application.XmlUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 
 import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.wizards.ExecuteCommandWizard;
-import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;

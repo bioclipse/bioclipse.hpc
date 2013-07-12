@@ -11,7 +11,6 @@ import net.bioclipse.hpc.Activator;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.jobinfo.JobInfoView;
 import net.bioclipse.hpc.views.projinfo.ProjInfoView;
-import net.bioclipse.hpc.xmldisplay.XmlUtils;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.rse.core.model.IHost;

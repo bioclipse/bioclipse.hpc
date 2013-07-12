@@ -11,8 +11,7 @@ Export-Package: net.bioclipse.hpc,
  net.bioclipse.hpc.business,
  net.bioclipse.hpc.domains.toolconfig,
  net.bioclipse.hpc.views,
- net.bioclipse.hpc.wizards,
- net.bioclipse.hpc.xmldisplay
+ net.bioclipse.hpc.wizards
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  net.bioclipse.core,
