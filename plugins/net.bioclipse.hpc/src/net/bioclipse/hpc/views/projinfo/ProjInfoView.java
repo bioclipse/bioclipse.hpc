@@ -159,7 +159,6 @@ public class ProjInfoView extends ViewPart {
 	    Table table = tableTreeViewer.getTableTree().getTable();
 	    TableColumn col1 = new TableColumn(table, SWT.LEFT);
 	    col1.setText("Name");
-	    col1.setWidth(200);
 	    new TableColumn(table, SWT.RIGHT).setText("Used hours");
 	    new TableColumn(table, SWT.RIGHT).setText("Current allocation");
 	    
@@ -172,6 +171,8 @@ public class ProjInfoView extends ViewPart {
 	      // sortListen.setTable(table);
 	      // column.addListener(SWT.Selection, sortListen);
 	    }
+
+	    col1.setWidth(120);
 	    
 	    // Turn on the header and the lines
 	    table.setHeaderVisible(true);
