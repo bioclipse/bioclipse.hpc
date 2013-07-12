@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import net.bioclipse.hpc.domains.hpc.Person;
+import net.bioclipse.hpc.domains.hpc.Project;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -14,10 +15,10 @@ import org.eclipse.swt.graphics.Image;
  * This class provides the labels for PlayerTable
  */
 
-class ProjInfoPersonLabelProvider implements ITableLabelProvider {
+class ProjInfoLabelProvider implements ITableLabelProvider {
 
   // Constructs a PlayerLabelProvider
-  public ProjInfoPersonLabelProvider() {
+  public ProjInfoLabelProvider() {
     // Create the image
   }
   
@@ -30,22 +31,37 @@ class ProjInfoPersonLabelProvider implements ITableLabelProvider {
   /**
    * Gets the text for the specified column
    * 
-   * @param personObj
+   * @param element
    *            the player
-   * @param colIdx
+   * @param columnIndex
    *            the column
    * @return String
    */
-  public String getColumnText(Object personObj, int colIdx) {
-	  switch (colIdx) {
-	  case 0:
-		  return ((Person) personObj).getName();
-	  case 1:
-		  return ((Person) personObj).getUsedHours();
-	  case 2:
-		  return ((Person) personObj).getCurrentAllocation();
-	  }
-	  return "";
+  public String getColumnText(Object element, int columnIndex) {
+	    if (element instanceof Person) {
+			switch (columnIndex) {
+				case 0:
+					return ((Person) element).getName();
+				case 1:
+					return ((Person) element).getUsedHours();
+				case 2:
+					return ((Person) element).getCurrentAllocation();
+				default:
+					return "";				  
+			}	    	
+  		} else if (element instanceof Project) {
+  			switch (columnIndex) {
+			  	case 0:
+			  		return ((Project) element).getGroupName();
+			  	case 1:
+			  		return ((Project) element).getGroupUsedHours();
+			  	case 2:
+			  		return ((Project) element).getGroupCurrentAllocation();
+		  		default:
+		  			return "";
+	  			}
+  		}
+	    return "";
   }
 
   /**

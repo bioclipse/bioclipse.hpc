@@ -152,7 +152,7 @@ public class ProjInfoView extends ViewPart {
 	private void configureTableTreeViewer(TableTreeViewer tableTreeViewer) {
 		// Set the content and label providers
 		tableTreeViewer.setContentProvider(new ProjInfoContentProvider());
-		tableTreeViewer.setLabelProvider(new ProjInfoProjectLabelProvider());
+		tableTreeViewer.setLabelProvider(new ProjInfoLabelProvider());
 		tableTreeViewer.setInput(this.getContentModel());
 	    
 	    // Set up the columns
