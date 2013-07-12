@@ -165,15 +165,14 @@ public class ProjInfoView extends ViewPart {
 	    // Pack the columns
 	    for (int i = 0, n = table.getColumnCount(); i < n; i++) {
 	      TableColumn column = table.getColumn(i);
-	      column.pack();
+	      column.setWidth(120);
+	      //column.pack();
 	      // Make columns sortable (doesn't work for TableTreeViewer though)
 	      // ColumnSortListener sortListen = new ColumnSortListener();
 	      // sortListen.setTable(table);
 	      // column.addListener(SWT.Selection, sortListen);
 	    }
 
-	    col1.setWidth(120	);
-	    
 	    // Turn on the header and the lines
 	    table.setHeaderVisible(true);
 	    table.setLinesVisible(true);

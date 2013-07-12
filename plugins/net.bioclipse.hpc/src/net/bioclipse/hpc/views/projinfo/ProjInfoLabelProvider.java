@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 
 import net.bioclipse.hpc.domains.hpc.Person;
 import net.bioclipse.hpc.domains.hpc.Project;
+import net.bioclipse.hpc.images.ImageRetriever;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -16,18 +17,15 @@ import org.eclipse.swt.graphics.Image;
  */
 
 class ProjInfoLabelProvider implements ITableLabelProvider {
+	private Image groupImg;
+	private Image userImg;
 
   // Constructs a PlayerLabelProvider
   public ProjInfoLabelProvider() {
-    // Create the image
+		groupImg = new Image(null, ImageRetriever.class.getResourceAsStream("group.png"));
+		userImg = new Image(null, ImageRetriever.class.getResourceAsStream("user.png"));
   }
   
-  public Image getColumnImage(Object obj, int arg1) {
-	  Image image = null;
-	  // TODO: Return an image!
-	  return image;
-  }
-
   /**
    * Gets the text for the specified column
    * 
@@ -63,6 +61,17 @@ class ProjInfoLabelProvider implements ITableLabelProvider {
   		}
 	    return "";
   }
+  
+  public Image getColumnImage(Object element, int columnIndex) {
+	  if (columnIndex == 0) {
+		  if (element instanceof Project) {
+			  return groupImg;
+		  } else if (element instanceof Person) {
+			  return userImg;
+		  }
+	  }
+	  return null;
+  }  
 
   /**
    * Adds a listener
