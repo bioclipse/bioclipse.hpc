@@ -25,7 +25,7 @@ public class ProjInfoProjectLabelProvider extends ProjInfoPersonLabelProvider {
    */
   public String getColumnText(Object obj, int colNo) {
     if (obj instanceof Person)
-      return super.getColumnText(obj, colNo);
+      return super.getColumnText(obj, colNo); // TODO: Why ... do I use two label provider classes, just for this?
     Project group = (Project) obj;
     switch (colNo) {
 	  case 0:

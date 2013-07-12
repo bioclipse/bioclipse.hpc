@@ -1,5 +1,7 @@
 package net.bioclipse.hpc.views.jobinfo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.bioclipse.hpc.domains.hpc.Job;
@@ -11,11 +13,15 @@ import net.bioclipse.hpc.xmldisplay.XmlUtils;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +54,27 @@ public class JobInfoView extends ViewPart {
 		Tree tree = treeViewer.getTree();
 		tree.setHeaderVisible(true);
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		// Must com
+		for (String label : new ArrayList<String>(Arrays.asList("Id", 
+				 												"Partition", 
+				 												"Name", 
+				 												"User name", 
+				 												"State", 
+				 												"Time elapsed", 
+				 												"# Nodes", 
+				 												"Node list"))) 
+		{
+			TreeViewerColumn treeViewerColumn = new TreeViewerColumn(treeViewer, SWT.NONE);
+			TreeColumn aTreeColumn = treeViewerColumn.getColumn();
+			aTreeColumn.setWidth(80);
+			aTreeColumn.setText(label);			
+		}
+
+		// Set content and label providers
+		treeViewer.setContentProvider(new JobInfoContentProvider());
+		treeViewer.setLabelProvider(new JobInfoLabelProvider());
+		treeViewer.setInput(contentModel); 
 		
 		createActions();
 		initializeToolBar();
@@ -55,11 +82,7 @@ public class JobInfoView extends ViewPart {
 	}
 	
 	public void updateViewFromXml(String rawXmlContent) {
-		// Set content and label providers
-		treeViewer.setContentProvider(new JobInfoContentProvider());
-		treeViewer.setLabelProvider(new JobInfoLabelProvider());
 
-		
 		Document xmlDoc = XmlUtils.xmlToDOMDocument(rawXmlContent);
 		if (xmlDoc != null) {
 			List<Node> jobDOMNodes = XmlUtils.evalXPathExprToListOfNodes("/simpleapi/jobinfo/jobs/job", xmlDoc);			
@@ -96,7 +119,6 @@ public class JobInfoView extends ViewPart {
 					}
 				}
 				
-				treeViewer.setInput(contentModel); // FIXME: Input is not correctly set here, so CRASHES
 				treeViewer.refresh();				
 			} else {
 				logger.error("Didn't get any jobs to parse!");
@@ -133,6 +155,8 @@ public class JobInfoView extends ViewPart {
 	public void setFocus() {
 		// Set the focus
 	}
+	
+	// ------------ Getters and setters ------------
 
 	public JobInfoContentModel getContentModel() {
 		return contentModel;

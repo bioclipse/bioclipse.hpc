@@ -92,36 +92,6 @@ public class ProjInfoView extends ViewPart {
 		return project;
 	}
 	
-	private void configureTableTreeViewer(TableTreeViewer tableTreeViewer) {
-		// Set the content and label providers
-		tableTreeViewer.setContentProvider(new ProjInfoContentProvider());
-		tableTreeViewer.setLabelProvider(new ProjInfoProjectLabelProvider());
-		tableTreeViewer.setInput(this.getContentModel());
-	    
-		TableTree tableTree = tableTreeViewer.getTableTree();
-		
-	    // Set up the table
-	    Table table = tableTreeViewer.getTableTree().getTable();
-	    new TableColumn(table, SWT.LEFT).setText("Name");
-	    new TableColumn(table, SWT.RIGHT).setText("Used hours");
-	    new TableColumn(table, SWT.RIGHT).setText("Current allocation");
-	    tableTreeViewer.expandAll();
-	    
-	    // Pack the columns
-	    for (int i = 0, n = table.getColumnCount(); i < n; i++) {
-	      TableColumn column = table.getColumn(i);
-	      column.pack();
-	      // Make columns sortable (doesn't work for TableTreeViewer though)
-	      // ColumnSortListener sortListen = new ColumnSortListener();
-	      // sortListen.setTable(table);
-	      // column.addListener(SWT.Selection, sortListen);
-	    }
-	    
-	    // Turn on the header and the lines
-	    table.setHeaderVisible(true);
-	    table.setLinesVisible(true);
-	}
-
 	/**
 	 * Create contents of the view part.
 	 * @param parent
@@ -139,6 +109,17 @@ public class ProjInfoView extends ViewPart {
 		initializeToolBar();
 		initializeMenu();
 	}
+	
+	private void createUpdateButton(Composite container) {
+		Button btnUpdate = new Button(container, SWT.NONE);
+		btnUpdate.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				updateProjectInfoTable();
+			}
+		});
+		btnUpdate.setText("Update");
+	}		
 	
 	// FIXME: It seems, from the JobInfo view, that a TreeViewer will do equally well
 	//        as a TableTreViewer, so should change!
@@ -166,16 +147,33 @@ public class ProjInfoView extends ViewPart {
 
 		return tableTreeViewer;
 	}
-
-	private void createUpdateButton(Composite container) {
-		Button btnUpdate = new Button(container, SWT.NONE);
-		btnUpdate.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updateProjectInfoTable();
-			}
-		});
-		btnUpdate.setText("Update");
+	
+	private void configureTableTreeViewer(TableTreeViewer tableTreeViewer) {
+		// Set the content and label providers
+		tableTreeViewer.setContentProvider(new ProjInfoContentProvider());
+		tableTreeViewer.setLabelProvider(new ProjInfoProjectLabelProvider());
+		tableTreeViewer.setInput(this.getContentModel());
+	    
+	    // Set up the columns
+	    Table table = tableTreeViewer.getTableTree().getTable();
+	    new TableColumn(table, SWT.LEFT).setText("Name");
+	    new TableColumn(table, SWT.RIGHT).setText("Used hours");
+	    new TableColumn(table, SWT.RIGHT).setText("Current allocation");
+	    tableTreeViewer.expandAll();
+	    
+	    // Pack the columns
+	    for (int i = 0, n = table.getColumnCount(); i < n; i++) {
+	      TableColumn column = table.getColumn(i);
+	      column.pack();
+	      // Make columns sortable (doesn't work for TableTreeViewer though)
+	      // ColumnSortListener sortListen = new ColumnSortListener();
+	      // sortListen.setTable(table);
+	      // column.addListener(SWT.Selection, sortListen);
+	    }
+	    
+	    // Turn on the header and the lines
+	    table.setHeaderVisible(true);
+	    table.setLinesVisible(true);
 	}	
 
 	private void updateProjectInfoTable() {
