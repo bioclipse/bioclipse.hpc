@@ -79,7 +79,6 @@ public class JobInfoView extends ViewPart {
 		treeViewer.setLabelProvider(new JobInfoLabelProvider());
 		treeViewer.setInput(contentModel); 
 		
-		createActions();
 		initializeToolBar();
 		initializeMenu();
 	}
@@ -130,13 +129,6 @@ public class JobInfoView extends ViewPart {
 		} else {
 			logger.error("Could not parse XML to DOM document!");
 		}
-	}
-
-	/**
-	 * Create the actions.
-	 */
-	private void createActions() {
-		// Create the actions
 	}
 
 	/**

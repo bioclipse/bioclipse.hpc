@@ -10,6 +10,8 @@ import net.bioclipse.hpc.domains.hpc.Project;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.TableTreeViewer;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableTree;
@@ -22,6 +24,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.part.ViewPart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +33,7 @@ public class ProjInfoView extends ViewPart {
 	public static final String ID = "net.bioclipse.hpc.views.ProjInfoView"; //$NON-NLS-1$
 	private List _selectedFiles;
 	private ProjInfoContentModel contentModel;
-	private TableTreeViewer tableTreeViewer;
+	private TreeViewer treeViewer;
 	private static final Logger logger = LoggerFactory.getLogger(ProjInfoView.class); 
 
 	public ProjInfoView() {
@@ -39,8 +42,8 @@ public class ProjInfoView extends ViewPart {
 
 	public void updateViewFromXml(String xmlString) {
 		updateContentModelFromXml(xmlString);
-		tableTreeViewer.refresh();
-	    tableTreeViewer.expandAll();		
+		treeViewer.refresh();
+	    treeViewer.expandAll();		
 	}
 
 	private void updateContentModelFromXml(String rawXmlContent) {
@@ -50,7 +53,7 @@ public class ProjInfoView extends ViewPart {
 		// Clear content of contentModel
 		contentModel.clearProjInfoGroups();
 
-		// Parse groupInfo XML strings into Project obmects and add to content model
+		// Parse groupInfo XML strings into Project objects and add to content model
 		for (String groupXml : groupXmlStrings) {
 			Project project = createProjectFromXml(groupXml);
 			// Parse info for each individual user
@@ -103,10 +106,14 @@ public class ProjInfoView extends ViewPart {
 		container.setLayout(new GridLayout(1, false));
 
 		createUpdateButton(container);
-		tableTreeViewer = createTableTreeViewerInComposite(container);
-		configureTableTreeViewer(tableTreeViewer);
-	    
-		createActions();
+		treeViewer = createTreeViewerInComposite(container);
+		configureTableTreeViewer(treeViewer);
+
+		// Set the content and label providers
+		treeViewer.setContentProvider(new ProjInfoContentProvider());
+		treeViewer.setLabelProvider(new ProjInfoLabelProvider());
+		treeViewer.setInput(this.getContentModel());
+		
 		initializeToolBar();
 		initializeMenu();
 	}
@@ -124,7 +131,7 @@ public class ProjInfoView extends ViewPart {
 	
 	// FIXME: It seems, from the JobInfo view, that a TreeViewer will do equally well
 	//        as a TableTreViewer, so should change!
-	private TableTreeViewer createTableTreeViewerInComposite(Composite container) {
+	private TreeViewer createTreeViewerInComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		
 		// Configure the layout
@@ -144,38 +151,28 @@ public class ProjInfoView extends ViewPart {
 		composite.setLayout(new FillLayout());
 		
 		int tableTreeViewerStyle = SWT.BORDER | SWT.FULL_SELECTION;
-		tableTreeViewer = new TableTreeViewer(composite, tableTreeViewerStyle);
-
-		return tableTreeViewer;
+		TreeViewer treeViewer = new TreeViewer(composite, tableTreeViewerStyle);
+		
+		return treeViewer;
 	}
 	
-	private void configureTableTreeViewer(TableTreeViewer tableTreeViewer) {
-		// Set the content and label providers
-		tableTreeViewer.setContentProvider(new ProjInfoContentProvider());
-		tableTreeViewer.setLabelProvider(new ProjInfoLabelProvider());
-		tableTreeViewer.setInput(this.getContentModel());
-	    
-	    // Set up the columns
-	    Table table = tableTreeViewer.getTableTree().getTable();
-	    TableColumn col1 = new TableColumn(table, SWT.LEFT);
-	    col1.setText("Name");
-	    new TableColumn(table, SWT.RIGHT).setText("Used hours");
-	    new TableColumn(table, SWT.RIGHT).setText("Current allocation");
-	    
-	    // Pack the columns
-	    for (int i = 0, n = table.getColumnCount(); i < n; i++) {
-	      TableColumn column = table.getColumn(i);
-	      column.setWidth(120);
-	      //column.pack();
-	      // Make columns sortable (doesn't work for TableTreeViewer though)
-	      // ColumnSortListener sortListen = new ColumnSortListener();
-	      // sortListen.setTable(table);
-	      // column.addListener(SWT.Selection, sortListen);
-	    }
-
+	private void configureTableTreeViewer(TreeViewer treeViewer) {
 	    // Turn on the header and the lines
-	    table.setHeaderVisible(true);
-	    table.setLinesVisible(true);
+		treeViewer.getTree().setHeaderVisible(true);
+		treeViewer.getTree().setLinesVisible(true);
+		
+	    // Set up the columns
+		TreeViewerColumn col1 = new TreeViewerColumn(treeViewer, SWT.LEFT);
+		TreeColumn col1Column = col1.getColumn();
+		col1Column.setText("Name");
+		col1Column.setWidth(120);
+	    new TreeViewerColumn(treeViewer, SWT.RIGHT).getColumn().setText("Used hours");
+	    new TreeViewerColumn(treeViewer, SWT.RIGHT).getColumn().setText("Current allocation");
+	    
+	    for (int i = 1; i<3; i++) {
+	    	TreeColumn col = treeViewer.getTree().getColumn(i);
+	    	col.setWidth(80);
+	    }
 	}	
 
 	private void updateProjectInfoTable() {
@@ -187,13 +184,6 @@ public class ProjInfoView extends ViewPart {
 			return (IRemoteFile) _selectedFiles.get(0);
 		}
 		return null;
-	}
-	
-	/**
-	 * Create the actions.
-	 */
-	private void createActions() {
-		// Create the actions
 	}
 
 	/**
