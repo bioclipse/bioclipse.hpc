@@ -18,12 +18,14 @@
       <view
             class="net.bioclipse.hpc.views.projinfo.ProjInfoView"
             id="net.bioclipse.hpc.views.ProjInfoView"
-            name="Project Info">
+            name="Project Info"
+            icon="src/net/bioclipse/hpc/images/group.gif">
       </view>
       <view
             class="net.bioclipse.hpc.views.jobinfo.JobInfoView"
             id="net.bioclipse.hpc.views.JobInfoView"
-            name="JobInfo">
+            name="JobInfo"
+            icon="src/net/bioclipse/hpc/images/jobs.gif">
       </view>
    </extension>
    

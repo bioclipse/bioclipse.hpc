@@ -22,8 +22,8 @@ class ProjInfoLabelProvider implements ITableLabelProvider {
 
   // Constructs a PlayerLabelProvider
   public ProjInfoLabelProvider() {
-		groupImg = new Image(null, ImageRetriever.class.getResourceAsStream("group.png"));
-		userImg = new Image(null, ImageRetriever.class.getResourceAsStream("user.png"));
+		groupImg = new Image(null, ImageRetriever.class.getResourceAsStream("group.gif"));
+		userImg = new Image(null, ImageRetriever.class.getResourceAsStream("person.gif"));
   }
   
   /**

@@ -38,9 +38,10 @@ public class JobInfoLabelProvider implements ITableLabelProvider {
 			"# Nodes", 
 			"Node list");
 	private HashMap<Integer,String> jobColumnLabelMap = new HashMap<Integer, String>();
-	private Image clockImg;
-	private Image cogImg;
-	private Image playImg;
+	private Image jobsPendingImg;
+	private Image jobPendningImg;
+	private Image jobsRunningImg;
+	private Image jobRunningImg;
 	private static final Logger logger = LoggerFactory.getLogger(ProjInfoView.class);
 	
 	public JobInfoLabelProvider() {
@@ -51,9 +52,11 @@ public class JobInfoLabelProvider implements ITableLabelProvider {
 
 		logger.info("Abs path: " + new File(".").getAbsolutePath());
 
-		clockImg = new Image(null, ImageRetriever.class.getResourceAsStream("clock2.png"));
-		cogImg = new Image(null, ImageRetriever.class.getResourceAsStream("cog.png"));
-		playImg = new Image(null, ImageRetriever.class.getResourceAsStream("control_play.png"));		
+		jobsPendingImg = new Image(null, ImageRetriever.class.getResourceAsStream("jobs_pending.gif"));
+		jobPendningImg = new Image(null, ImageRetriever.class.getResourceAsStream("job_pending.gif"));
+
+		jobsRunningImg = new Image(null, ImageRetriever.class.getResourceAsStream("jobs_running.gif"));		
+		jobRunningImg = new Image(null, ImageRetriever.class.getResourceAsStream("job_running.gif"));
 	}
 	
 	/* (non-Javadoc)
@@ -103,12 +106,16 @@ public class JobInfoLabelProvider implements ITableLabelProvider {
 		if (columnIndex == 0) {
 			if (element instanceof JobState) {
 				if (((JobState) element).getJobState().equals(JobState.STATE_RUNNING)) {
-					return playImg;
+					return jobsRunningImg;
 				} else if (((JobState) element).getJobState().equals(JobState.STATE_PENDING)) {
-					return clockImg;
+					return jobsPendingImg;
 				}
 			} else if (element instanceof Job) {
-				return cogImg;
+				if (((Job) element).getState().equals(JobState.STATE_PENDING)) {
+					return jobPendningImg;										
+				} else if (((Job) element).getState().equals(JobState.STATE_RUNNING)) {
+					return jobRunningImg;					
+				}
 			} 			
 		}
 		return null;
