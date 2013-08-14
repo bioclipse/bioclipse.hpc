@@ -53,7 +53,7 @@ public class HPCApplication extends AbstractModelObject {
 		_selectedFiles = new ArrayList<IRemoteFile>();
 	}
 
-	public void updateJobInfoView() {
+	public void refreshJobInfoView() {
 		JobInfoView jobInfoView = getJobInfoView();
 
 		if (jobInfoView != null) {
@@ -384,6 +384,8 @@ public class HPCApplication extends AbstractModelObject {
 	}
 
 	public void cancelJobWithId(String jobId) {
-		showInfoMessage("Not implemented!", "This action is not yet implemented!");
+		execRemoteCommand("scancel " + jobId);
+		showInfoMessage("Job cancelled", "Successfully cancelled job witn id " + jobId + "!");
+		refreshJobInfoView();
 	}	
 }

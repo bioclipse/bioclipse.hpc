@@ -97,7 +97,8 @@ public class JobInfoView extends ViewPart {
                         treeViewer.getControl().setMenu(menu);
                         getSite().registerContextMenu(menuMgr, treeViewer);
                         if (o instanceof Job){
-                            menuMgr.add(new JobInfoCancelJobAction());
+                        	String jobId = ((Job) o).getId();
+                            menuMgr.add(new JobInfoCancelJobAction(jobId));
                         } else {
                             menuMgr.removeAll();
                         }

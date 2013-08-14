@@ -64,7 +64,7 @@ public class HPCManager implements IBioclipseManager {
 	}
 	
 	public void updateJobInfoView() {
-		application.updateJobInfoView();
+		application.refreshJobInfoView();
 	}
 	
 	public String executeRemoteCommand(String command) {
