@@ -11,13 +11,13 @@ import org.eclipse.ui.IViewPart;
 public class UpdateJobInfoViewAction implements IViewActionDelegate {
 
 	@Override
-	public void run(IAction arg0) {}
-
-	@Override
-	public void selectionChanged(IAction arg0, ISelection arg1) {
+	public void run(IAction arg0) {
 		HPCUtils.getApplication().updateJobInfoView();
 	}
 
+	@Override
+	public void selectionChanged(IAction arg0, ISelection arg1) {}
+		
 	@Override
 	public void init(IViewPart arg0) {}
 

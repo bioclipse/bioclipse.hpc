@@ -26,6 +26,12 @@ public class JobInfoContentModel {
 		jobStates.clear();
 	}
 	
+	public void clearJobsinJobStates() {
+		for (JobState jobState : this.jobStates) {
+			jobState.clearJobs();
+		}
+	}
+	
 	/**
 	 * @return the jobStates
 	 */

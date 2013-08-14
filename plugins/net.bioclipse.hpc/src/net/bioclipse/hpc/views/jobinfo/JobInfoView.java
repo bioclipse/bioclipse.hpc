@@ -87,7 +87,8 @@ public class JobInfoView extends ViewPart {
 
 		Document xmlDoc = XmlUtils.xmlToDOMDocument(rawXmlContent);
 		if (xmlDoc != null) {
-			List<Node> jobDOMNodes = XmlUtils.evalXPathExprToListOfNodes("/simpleapi/jobinfo/jobs/job", xmlDoc);			
+			List<Node> jobDOMNodes = XmlUtils.evalXPathExprToListOfNodes("/simpleapi/jobinfo/jobs/job", xmlDoc);
+			contentModel.clearJobsinJobStates();
 
 			if (!jobDOMNodes.isEmpty()) {
 				for (Node jobNode : jobDOMNodes) {
@@ -120,12 +121,11 @@ public class JobInfoView extends ViewPart {
 						logger.error("Could not find a job state object for state: " + state + "!");
 					}
 				}
-				treeViewer.refresh();
-				treeViewer.expandAll();
-
 			} else {
-				logger.error("Didn't get any jobs to parse!");
+				logger.warn("Didn't get any jobs to parse!");
 			}
+			treeViewer.refresh();
+			treeViewer.expandAll();
 		} else {
 			logger.error("Could not parse XML to DOM document!");
 		}

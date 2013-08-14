@@ -65,6 +65,10 @@ public class JobState {
 	public void addJob(Job job) {
 		this.jobs.add(job);
 	}
+	
+	public void clearJobs() {
+		this.jobs.clear();
+	}
 
 	/**
 	 * @return the jobState
