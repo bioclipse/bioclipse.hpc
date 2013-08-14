@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.application.XmlUtils;
 import net.bioclipse.hpc.domains.hpc.Job;
 import net.bioclipse.hpc.domains.hpc.JobState;
@@ -122,6 +123,7 @@ public class JobInfoView extends ViewPart {
 					}
 				}
 			} else {
+				HPCUtils.getApplication().showInfoMessage("No jobs found", "Could not find any running or pending jobs.");
 				logger.warn("Didn't get any jobs to parse!");
 			}
 			treeViewer.refresh();

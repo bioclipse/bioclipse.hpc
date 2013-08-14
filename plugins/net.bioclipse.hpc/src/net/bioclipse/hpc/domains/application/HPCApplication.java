@@ -263,12 +263,21 @@ public class HPCApplication extends AbstractModelObject {
 
 	/* ------------ Utility methods ------------ */
 
-	public void showMessage(String title, String message) {
+	public void showErrorMessage(String title, String message) {
 	    MessageBox messageDialog = new MessageBox(getShell(), SWT.ERROR);
 	    messageDialog.setText(title);
 	    messageDialog.setMessage(message);
 	    int returnCode = messageDialog.open();
 	    logger.error("Error opening MessageBox: " + returnCode);
+	}
+	
+	public void showInfoMessage(String title, String message) {
+	    MessageBox messageDialog = new MessageBox(getShell(), 
+	            SWT.ICON_INFORMATION);
+        messageDialog.setText(title);
+        messageDialog.setMessage(message);
+        int returnCode = messageDialog.open();
+        System.out.println(returnCode);
 	}
 	
 	/**
@@ -289,6 +298,7 @@ public class HPCApplication extends AbstractModelObject {
 			return errMsg;
 		} else if (hpcHost.isOffline()) {
 			errMsg = "You must log in before executing remote commands!";
+			showErrorMessage("You are not logged in", errMsg);
 			logger.error(errMsg);
 			return errMsg;
 		} else {
@@ -317,9 +327,10 @@ public class HPCApplication extends AbstractModelObject {
 					// }
 				}
 			} catch (Exception commandError) {
-				errMsg = "Failed to execute a remote command! Are you logged in?";
-				showMessage("ERROR: Could not execute remot command", errMsg);
-				logger.warn(errMsg + ", Exception message: " + commandError.getMessage());
+				showErrorMessage("Error on executing remote command", "Failed to execute remote command!\nAre you logged in?");
+				errMsg = "Failed to execute a remote command: " + command;
+				logger.warn(errMsg);
+				logger.warn(commandError.getMessage());
 				return errMsg;
 			}
 		}
