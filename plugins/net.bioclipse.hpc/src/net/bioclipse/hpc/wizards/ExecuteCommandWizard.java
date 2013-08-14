@@ -82,13 +82,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		// scriptString = addLineToScript(command, scriptString, fileName);
 
 		HPCUtils.getApplication().execRemoteCommand(scriptString);
-
-		// Update the file browser, to show any newly created files
-		IRemoteFileSubSystem rfss = RemoteFileUtility.getFileSubSystem(HPCUtils.getApplication().getHPCHost());
-		SystemResourceChangeEvent refreshFileSubStystemEvent = new SystemResourceChangeEvent(this, 
-				ISystemResourceChangeEvents.EVENT_REFRESH_SELECTED_PARENT, rfss);
-		ISystemRegistry registry = SystemStartHere.getSystemRegistry();
-		registry.fireEvent(refreshFileSubStystemEvent);
+		HPCUtils.getApplication().updateFileBrowser();
 
 		return true;
 	}

@@ -13,16 +13,22 @@ import net.bioclipse.hpc.views.jobinfo.JobInfoView;
 import net.bioclipse.hpc.views.projinfo.ProjInfoView;
 
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.rse.core.events.ISystemResourceChangeEvents;
+import org.eclipse.rse.core.events.SystemResourceChangeEvent;
 import org.eclipse.rse.core.model.IHost;
 import org.eclipse.rse.core.model.ISystemRegistry;
 import org.eclipse.rse.core.model.SystemStartHere;
 import org.eclipse.rse.core.subsystems.ISubSystem;
 import org.eclipse.rse.shells.ui.RemoteCommandHelpers;
+import org.eclipse.rse.subsystems.files.core.model.RemoteFileUtility;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
+import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFileSubSystem;
 import org.eclipse.rse.subsystems.files.core.subsystems.RemoteFileEmpty;
 import org.eclipse.rse.subsystems.shells.core.model.SimpleCommandOperation;
 import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
 import org.eclipse.rse.ui.SystemBasePlugin;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -257,6 +263,14 @@ public class HPCApplication extends AbstractModelObject {
 
 	/* ------------ Utility methods ------------ */
 
+	public void showMessage(String title, String message) {
+	    MessageBox messageDialog = new MessageBox(getShell(), SWT.ERROR);
+	    messageDialog.setText(title);
+	    messageDialog.setMessage(message);
+	    int returnCode = messageDialog.open();
+	    logger.error("Error opening MessageBox: " + returnCode);
+	}
+	
 	/**
 	 * Execute a remote command via SSH
 	 * @param String command
@@ -303,8 +317,9 @@ public class HPCApplication extends AbstractModelObject {
 					// }
 				}
 			} catch (Exception commandError) {
-				errMsg = "Could not execute command! Are you logged in?";
-				logger.error(errMsg + ", Exception message: " + commandError.getMessage());
+				errMsg = "Failed to execute a remote command! Are you logged in?";
+				showMessage("ERROR: Could not execute remot command", errMsg);
+				logger.warn(errMsg + ", Exception message: " + commandError.getMessage());
 				return errMsg;
 			}
 		}
@@ -346,5 +361,14 @@ public class HPCApplication extends AbstractModelObject {
 		store.setDefault("username", "anonymous");
 		store.setDefault("galaxytoolconfigpath", "/var/www/galaxy/tools");	
 		store.setDefault("showdialogonstartup", true);
+	}
+
+	public void updateFileBrowser() {
+		// Update the file browser, to show any newly created files
+		IRemoteFileSubSystem rfss = RemoteFileUtility.getFileSubSystem(getHPCHost());
+		SystemResourceChangeEvent refreshFileSubStystemEvent = new SystemResourceChangeEvent(this, 
+				ISystemResourceChangeEvents.EVENT_REFRESH_SELECTED_PARENT, rfss);
+		ISystemRegistry registry = SystemStartHere.getSystemRegistry();
+		registry.fireEvent(refreshFileSubStystemEvent);
 	}	
 }
