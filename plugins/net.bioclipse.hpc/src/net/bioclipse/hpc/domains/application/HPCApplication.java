@@ -28,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -38,7 +39,8 @@ public class HPCApplication extends AbstractModelObject {
 		USERINFO,
 		CLUSTERINFO,
 		PROJINFO,
-		JOBINFO
+		JOBINFO,
+		MODULESFORBIN
 	}
 
 	public HPCApplication() {
@@ -131,27 +133,22 @@ public class HPCApplication extends AbstractModelObject {
 		return clusterInfo;
 	}
 
-	// TODO: Refactor in similar way as the same funcitons in this class!
-	public List<String> getModulesForBinary(String currentBinary) {
-		String commandOutput;
-		List<String> modulesForBinary = new ArrayList<String>();
-
-		commandOutput = execRemoteCommand("fimsproxy -t modulesforbin -c " + currentBinary); // FIXME: Replace with simpleapi call
-
-		String clusterInfoXml = getMatch("<modulesforbinary>.*</modulesforbinary>", commandOutput);
-		if (clusterInfoXml != null) {	
-			Document clusterInfoXmlDoc = XmlUtils.xmlToDOMDocument(clusterInfoXml);
-			
-			List<Node> modForBinListOfNodes = XmlUtils.evalXPathExprToListOfNodes("/modulesforbinary/module", clusterInfoXmlDoc);
-			List<String> partitions = new ArrayList<String>(); // FIXME: Why isn't this one used?
-			for (Node modForBinNode : modForBinListOfNodes) {
-				String modForBinStr = modForBinNode.getTextContent();
-				modulesForBinary.add(modForBinStr);
+	public List<String> getModulesForBinary(String binary) {
+		List<String> modulesForBin = new ArrayList<String>();
+		String xmlStr = getInfoFromCluster(InfoType.MODULESFORBIN);		
+		if (xmlStr != null) {	
+			Document xmlDoc = XmlUtils.xmlToDOMDocument(xmlStr);
+			List<Node> listOfModuleNodes = XmlUtils.evalXPathExprToListOfNodes("/simpleapi/modulesforbin/modules/module", xmlDoc);
+			for (Node moduleNode : listOfModuleNodes) {
+				NamedNodeMap attrs = moduleNode.getAttributes();
+				Node attr = attrs.getNamedItem("name");
+				String moduleStr = attr.getNodeValue();
+				modulesForBin.add(moduleStr);
 			}
 		} else {
-			logger.error("Could not extract XML for modules for binary " + currentBinary + "!");
+			logger.error("Could not extract XML for modules for binary " + binary + "!");
 		}
-		return modulesForBinary;
+		return modulesForBin;
 	}
 
 	public void readToolConfigFiles(String folderPath) {
@@ -180,6 +177,9 @@ public class HPCApplication extends AbstractModelObject {
 				break;
 			case JOBINFO:
 				infoTypeStr = "jobinfo";
+				break;
+			case MODULESFORBIN:
+				infoTypeStr = "modulesforbin";
 				break;
 			default:
 				infoTypeStr = "";
