@@ -87,26 +87,23 @@ public class JobInfoView extends ViewPart {
 		
 		// Create context menu
 		treeViewer.addSelectionChangedListener(
-	            new ISelectionChangedListener(){
-	                public void selectionChanged(SelectionChangedEvent event) {
-	                    if(event.getSelection() instanceof IStructuredSelection) {
-	                        IStructuredSelection selection = (IStructuredSelection)event.getSelection();            
-	                        Object o = selection.getFirstElement();     
-
-	                        MenuManager menuMgr = new MenuManager();
-
-	                        if (o instanceof Job){
-	                            Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
-	                            treeViewer.getControl().setMenu(menu);
-	                            getSite().registerContextMenu(menuMgr, treeViewer);
-	                            menuMgr.add(new JobInfoCancelJobAction());
-	                        }else {
-	                            //what ?
-	                        }
-	                    }
-
-	                }
-	            }   
+            new ISelectionChangedListener(){
+                public void selectionChanged(SelectionChangedEvent event) {
+                    if(event.getSelection() instanceof IStructuredSelection) {
+                        IStructuredSelection selection = (IStructuredSelection)event.getSelection();            
+                        Object o = selection.getFirstElement();     
+                        MenuManager menuMgr = new MenuManager();
+                        Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
+                        treeViewer.getControl().setMenu(menu);
+                        getSite().registerContextMenu(menuMgr, treeViewer);
+                        if (o instanceof Job){
+                            menuMgr.add(new JobInfoCancelJobAction());
+                        } else {
+                            menuMgr.removeAll();
+                        }
+                    }
+                }
+            }   
 	    );
 		
 		initializeToolBar();
