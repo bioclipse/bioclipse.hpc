@@ -111,7 +111,7 @@ public class JobInfoView extends ViewPart {
 		initializeMenu();
 	}
 	
-	public void updateViewFromXml(String rawXmlContent) {
+	public void updateViewFromXml(String rawXmlContent, boolean showMessageOnZeroJobs) {
 
 		Document xmlDoc = XmlUtils.xmlToDOMDocument(rawXmlContent);
 		if (xmlDoc != null) {
@@ -150,7 +150,9 @@ public class JobInfoView extends ViewPart {
 					}
 				}
 			} else {
-				HPCUtils.getApplication().showInfoMessage("No jobs found", "Could not find any running or pending jobs.");
+				if (showMessageOnZeroJobs) {
+					HPCUtils.getApplication().showInfoMessage("No jobs found", "Could not find any running or pending jobs.");					
+				}
 				logger.warn("Didn't get any jobs to parse!");
 			}
 			treeViewer.refresh();

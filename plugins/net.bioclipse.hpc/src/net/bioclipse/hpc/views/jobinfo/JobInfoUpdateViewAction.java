@@ -12,7 +12,7 @@ public class JobInfoUpdateViewAction implements IViewActionDelegate {
 
 	@Override
 	public void run(IAction arg0) {
-		HPCUtils.getApplication().refreshJobInfoView();
+		HPCUtils.getApplication().refreshJobInfoView(true);
 	}
 
 	@Override

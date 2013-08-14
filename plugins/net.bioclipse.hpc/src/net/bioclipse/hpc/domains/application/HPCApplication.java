@@ -53,7 +53,7 @@ public class HPCApplication extends AbstractModelObject {
 		_selectedFiles = new ArrayList<IRemoteFile>();
 	}
 
-	public void refreshJobInfoView() {
+	public void refreshJobInfoView(boolean showMessageOnZeroJobs) {
 		JobInfoView jobInfoView = getJobInfoView();
 
 		if (jobInfoView != null) {
@@ -61,7 +61,7 @@ public class HPCApplication extends AbstractModelObject {
 			if (jobInfoXml != null && !(jobInfoXml.equals(""))) {
 				// TODO: Get a List/HashMap structure instead, so that it can be used
 				// to put out to the console as well, not just for updating the view.
-				jobInfoView.updateViewFromXml(jobInfoXml);
+				jobInfoView.updateViewFromXml(jobInfoXml, showMessageOnZeroJobs);
 			} else {
 				log.error("Could not extract XML for jobinfo! Are you logged in?!");
 			}
@@ -386,6 +386,6 @@ public class HPCApplication extends AbstractModelObject {
 	public void cancelJobWithId(String jobId) {
 		execRemoteCommand("scancel " + jobId);
 		showInfoMessage("Job cancelled", "Successfully cancelled job witn id " + jobId + "!");
-		refreshJobInfoView();
+		refreshJobInfoView(false);
 	}	
 }

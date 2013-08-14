@@ -27,6 +27,7 @@ public class ExecScriptAsBatchJobAction implements IObjectActionDelegate {
 		String JobId = HPCUtils.getMatch("Submitted batch job ([0-9]+)", cmdOutput, 1);
 		logger.debug("Executing remote command (" + commandString + ")");
 		HPCUtils.getApplication().showInfoMessage("Jub submitted", "Successfully submitted job with id: " + JobId);
+		HPCUtils.getApplication().refreshJobInfoView(false);
 	}
 
 	@Override
