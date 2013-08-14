@@ -68,7 +68,8 @@ public class JobInfoLabelProvider implements ITableLabelProvider {
 			if (columnIndex == 0) {
 				String label = ((JobState) element).getJobState();
 				label = upperCaseFirst(label);
-				return label + " jobs"; 				
+				int jobCount = ((JobState) element).getJobs().size();
+				return label + " jobs (" + jobCount + ")"; 				
 			} else {
 				return "";
 			}
