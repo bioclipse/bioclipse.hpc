@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
 
 public class HPCApplication extends AbstractModelObject {
 	private List<IRemoteFile> _selectedFiles;
-	private static final Logger logger = LoggerFactory.getLogger(HPCApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(HPCApplication.class);
 	private enum InfoType {
 		USERINFO,
 		CLUSTERINFO,
@@ -63,10 +63,10 @@ public class HPCApplication extends AbstractModelObject {
 				// to put out to the console as well, not just for updating the view.
 				jobInfoView.updateViewFromXml(jobInfoXml);
 			} else {
-				logger.error("Could not extract XML for jobinfo! Are you logged in?!");
+				log.error("Could not extract XML for jobinfo! Are you logged in?!");
 			}
 		} else {
-			logger.error("Job view not found!");
+			log.error("Job view not found!");
 		}
 	}
 
@@ -78,11 +78,11 @@ public class HPCApplication extends AbstractModelObject {
 			if (projInfoXml != null && !(projInfoXml.equals(""))) {
 				projInfoView.updateViewFromXml(projInfoXml);
 			} else {
-				logger.error("Could not extract XML for projinfo! Are you logged in?!");
+				log.error("Could not extract XML for projinfo! Are you logged in?!");
 				// TODO: Show message to user!
 			}
 		} else {
-			logger.error("Projinfo view not found!");
+			log.error("Projinfo view not found!");
 		}
 	}
 
@@ -105,7 +105,7 @@ public class HPCApplication extends AbstractModelObject {
 			userInfo.put("projects", projects);
 			
 		} else {
-			logger.error("Could not extract XML for userinfo!");
+			log.error("Could not extract XML for userinfo!");
 		}
 		return userInfo;
 	}
@@ -134,7 +134,7 @@ public class HPCApplication extends AbstractModelObject {
 			clusterInfo.put("partitions", partitions);
 
 		} else {
-			logger.error("Could not extract XML for clusterinfo!");
+			log.error("Could not extract XML for clusterinfo!");
 		}
 		return clusterInfo;
 	}
@@ -152,7 +152,7 @@ public class HPCApplication extends AbstractModelObject {
 				modulesForBin.add(moduleStr);
 			}
 		} else {
-			logger.error("Could not extract XML for modules for binary " + binary + "!");
+			log.error("Could not extract XML for modules for binary " + binary + "!");
 		}
 		return modulesForBin;
 	}
@@ -189,7 +189,7 @@ public class HPCApplication extends AbstractModelObject {
 				if (binary != null) {
 					infoTypeStr += " " + binary;
 				} else {
-					this.logger.error("No binary specified to modulesforbin API command");
+					this.log.error("No binary specified to modulesforbin API command");
 				}
 				break;
 			default:
@@ -234,10 +234,10 @@ public class HPCApplication extends AbstractModelObject {
 
 	private IRemoteFile getFirstSelectedRemoteFile() {
 		if (_selectedFiles.size() > 0) {
-			logger.error("No file selected");
+			log.error("No file selected");
 			return (IRemoteFile)_selectedFiles.get(0);
 		}
-		logger.error("No file selected");
+		log.error("No file selected");
 		return null;
 	}
 
@@ -268,7 +268,7 @@ public class HPCApplication extends AbstractModelObject {
 	    messageDialog.setText(title);
 	    messageDialog.setMessage(message);
 	    int returnCode = messageDialog.open();
-	    logger.error("Error opening MessageBox: " + returnCode);
+	    log.error("Error opening MessageBox: " + returnCode);
 	}
 	
 	public void showInfoMessage(String title, String message) {
@@ -294,18 +294,18 @@ public class HPCApplication extends AbstractModelObject {
 
 		if (hpcHost == null) {
 			errMsg = "No active HPC hosts!";
-			logger.error(errMsg);
+			log.error(errMsg);
 			return errMsg;
 		} else if (hpcHost.isOffline()) {
 			errMsg = "You must log in before executing remote commands!";
 			showErrorMessage("You are not logged in", errMsg);
-			logger.error(errMsg);
+			log.error(errMsg);
 			return errMsg;
 		} else {
 			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
 			if (cmdss == null) {
 				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!";
-				logger.error(errMsg);
+				log.error(errMsg);
 				return errMsg;
 			}
 			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
@@ -329,8 +329,8 @@ public class HPCApplication extends AbstractModelObject {
 			} catch (Exception commandError) {
 				showErrorMessage("Error on executing remote command", "Failed to execute remote command!\nAre you logged in?");
 				errMsg = "Failed to execute a remote command: " + command;
-				logger.warn(errMsg);
-				logger.warn(commandError.getMessage());
+				log.warn(errMsg);
+				log.warn(commandError.getMessage());
 				return errMsg;
 			}
 		}
@@ -346,7 +346,7 @@ public class HPCApplication extends AbstractModelObject {
 		ISystemRegistry reg = SystemStartHere.getSystemRegistry();
 		IHost[] hosts = reg.getHosts();
 		if (hosts.length == 0) {
-			logger.error("No host names found!");
+			log.error("No host names found!");
 		}
 
 		for (IHost host : hosts) {
