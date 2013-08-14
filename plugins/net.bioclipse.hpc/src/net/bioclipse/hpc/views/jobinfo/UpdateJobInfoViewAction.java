@@ -1,4 +1,4 @@
-package net.bioclipse.hpc.views;
+package net.bioclipse.hpc.views.jobinfo;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
 
