@@ -48,7 +48,6 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	StyledText commandText;
 	Tool currentTool;
 	List<Widget> widgets;
-	boolean initialized;
 	private static final Logger logger = LoggerFactory.getLogger(ConfigureCommandPage.class);
 	
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
@@ -74,27 +73,28 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 	
 	void onEnterPage() {
-		if (!this.initialized) {
-			this.initialized = true;
-			createControl(parentComposite);
-			
-			Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
-			String selectedToolName = comboTool.getText();
-			currentTool = ToolConfigDomain.getInstance().getToolByName(selectedToolName);
-
-			if (currentTool != null) {
-				parameters = currentTool.getParameters();
-				for (Parameter parameter : parameters) {
-					createWidgetsForParam(parameter);
-				}
-				String commandString = currentTool.getCompleteCommand();
-				createResultingCommandTextbox(commandString);
-			} else {
-				logger.error("Tool with name '" + selectedToolName + "' not found.");
+		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
+		String selectedToolName = comboTool.getText();
+		if (currentTool != null) {
+			String currentToolName = currentTool.getName();			
+			if (!selectedToolName.equals(currentToolName)) {
+				drawPageForTool(selectedToolName);				
 			}
-			
-		    this.composite.pack();
+		} else {
+			drawPageForTool(selectedToolName);
+		}			
+	}
+	
+	void drawPageForTool(String toolName) {
+		createControl(parentComposite);
+		currentTool = ToolConfigDomain.getInstance().getToolByName(toolName);
+		parameters = currentTool.getParameters();
+		for (Parameter parameter : parameters) {
+			createWidgetsForParam(parameter);
 		}
+		String commandString = currentTool.getCompleteCommand();
+		createResultingCommandTextbox(commandString);
+	    this.composite.pack();	
 	}
 
 	private void createResultingCommandTextbox(String commandString) {

@@ -19,14 +19,11 @@ import org.slf4j.LoggerFactory;
 
 public class SelectToolGroupPage extends WizardPage {
 	private static final Logger logger = LoggerFactory.getLogger(SelectToolGroupPage.class);
-
 	public Combo comboToolGroup;
-
 	public String[] toolGroups;
-
 	IWorkbench workbench;
 	IStructuredSelection selection;
-	IWizard wizard = this.getWizard(); 
+	IWizard wizard;
 	String selectedToolGroup;
 
 	protected SelectToolGroupPage(IWorkbench workbench, IStructuredSelection selection) {
@@ -35,6 +32,7 @@ public class SelectToolGroupPage extends WizardPage {
 		setDescription("Select the group of commands that you wish to execute");
 		this.workbench = workbench;
 		this.selection = selection;
+		this.wizard = this.getWizard(); 
 	}
 
 	@Override

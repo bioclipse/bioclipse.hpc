@@ -151,6 +151,8 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 			this.composite.pack();
 
 			((ExecuteCommandWizard) this.getWizard()).setCanFinish(true);
+		} else {
+			updateCodeWindow();
 		}
 	}
 
@@ -227,53 +229,40 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	@Override
 	public void handleEvent(Event event) {
 		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
-			String newSbatchText = getDefaultSbatchTextWithCommand();
+			updateCodeWindow();
+		}
+	}
 
-			for (Widget widget : widgets) {
-				String newValue = null;
-				if (widget instanceof Combo) {
-					newValue = ((Combo) widget).getText();
-				} else if (widget instanceof Text) {
-					newValue = ((Text) widget).getText();
-				} else {
-					logger.error("Could not set newValue");
-				}
-				
-				if (newValue != null && !newValue.equals("")) {
-					// Update the Resulting SBATCH StyledText
-					String id = (String) widget.getData();
-				    if (id.equals("module")) {
-				    	newSbatchText = newSbatchText.replace("[modulename]", newValue);
-				    } else if (id.equals("qosshort")) {
-						// TODO: This is rather UPPMAX specific, no?
-						if (newValue.equals("yes")) {
-							newSbatchText = newSbatchText.replace("[" + id + "]", "--qos=short");
-						} else {
-							newSbatchText = newSbatchText.replace("#SBATCH [" + id + "]\n", "");
-						}
-					} else {
-						newSbatchText = newSbatchText.replace("[" + id + "]", newValue);
-						sbatchStyledText.setText(newSbatchText);
-					}
-					logger.debug(id + " = " + newValue);
-				}
+	private void updateCodeWindow() {
+		String newSbatchText = getDefaultSbatchTextWithCommand();
+		for (Widget widget : widgets) {
+			String newValue = null;
+			if (widget instanceof Combo) {
+				newValue = ((Combo) widget).getText();
+			} else if (widget instanceof Text) {
+				newValue = ((Text) widget).getText();
+			} else {
+				logger.error("Could not set newValue");
 			}
-
-			//			if (id.equals("project")) {
-			//				//	
-			//			} else if (id.equals("partition")) {
-			//				//
-			//			} else if (id.equals("noofnodes")) {
-			//				//	
-			//			} else if (id.equals("noofcpus")) {
-			//				//	
-			//			} else if (id.equals("runtime")) {
-			//				//	
-			//			} else if (id.equals("qosshort")) {
-			//				//	
-			//			} else if (id.equals("jobname")) {
-			//				//	
-			//			}
+			
+			if (newValue != null && !newValue.equals("")) {
+				// Update the Resulting SBATCH StyledText
+				String id = (String) widget.getData();
+			    if (id.equals("module")) {
+			    	newSbatchText = newSbatchText.replace("[modulename]", newValue);
+			    } else if (id.equals("qosshort")) {
+					// TODO: This is rather UPPMAX specific, no?
+					if (newValue.equals("yes")) {
+						newSbatchText = newSbatchText.replace("[" + id + "]", "--qos=short");
+					} else {
+						newSbatchText = newSbatchText.replace("#SBATCH [" + id + "]\n", "");
+					}
+				} else {
+					newSbatchText = newSbatchText.replace("[" + id + "]", newValue);
+					sbatchStyledText.setText(newSbatchText);
+				}
+				logger.debug(id + " = " + newValue);
+			}
 		}
 	}
 

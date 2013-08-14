@@ -14,11 +14,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IWorkbench;
 
 public class SelectToolPage extends WizardPage {
-
-	public Combo comboTool;
-
-	IWorkbench workbench;
-	IStructuredSelection selection;
+	protected Combo comboTool;
+	private IWorkbench workbench;
+	private IStructuredSelection selection;
 
 	protected SelectToolPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 2");
