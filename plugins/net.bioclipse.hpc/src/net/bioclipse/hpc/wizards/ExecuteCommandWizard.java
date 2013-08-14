@@ -82,7 +82,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		// scriptString = addLineToScript(command, scriptString, fileName);
 
 		HPCUtils.getApplication().execRemoteCommand(scriptString);
-		HPCUtils.getApplication().updateFileBrowser();
+		HPCUtils.getApplication().refreshFileBrowser();
 
 		return true;
 	}

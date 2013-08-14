@@ -374,7 +374,7 @@ public class HPCApplication extends AbstractModelObject {
 		store.setDefault("showdialogonstartup", true);
 	}
 
-	public void updateFileBrowser() {
+	public void refreshFileBrowser() {
 		// Update the file browser, to show any newly created files
 		IRemoteFileSubSystem rfss = RemoteFileUtility.getFileSubSystem(getHPCHost());
 		SystemResourceChangeEvent refreshFileSubStystemEvent = new SystemResourceChangeEvent(this, 
