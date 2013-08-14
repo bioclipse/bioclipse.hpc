@@ -147,11 +147,13 @@ public class HPCUtils {
 	}
 
 	public static void createGridLayout(Composite composite, int columnsCount) {
-		// create the desired layout for this wizard page
+		// Configure layout
 		GridLayout gl = new GridLayout();
-		GridData gd = new GridData(SWT.LEFT, SWT.BEGINNING, true, true);
 		gl.numColumns = columnsCount;
 		composite.setLayout(gl);
+
+		// Configure grid data
+		GridData gd = new GridData(SWT.LEFT, SWT.BEGINNING, true, true);
 		composite.setLayoutData(gd);
 	}
 

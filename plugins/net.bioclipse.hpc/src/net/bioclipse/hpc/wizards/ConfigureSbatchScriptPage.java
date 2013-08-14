@@ -147,7 +147,6 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 			createTextField("jobname", 2, "Untitled");
 
 			createResultingSBatchScriptTextbox();
-
 			this.composite.pack();
 
 			((ExecuteCommandWizard) this.getWizard()).setCanFinish(true);
@@ -158,15 +157,11 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 
 	private void createResultingSBatchScriptTextbox() {
 		createLabel("Resulting SBATCH Script");
-
 		sbatchStyledText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
 		sbatchStyledText.setText(this.getDefaultSbatchTextWithCommand());
-		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
-		gridLayoutData.horizontalSpan = 2;
-		gridLayoutData.grabExcessHorizontalSpace = true;
-		gridLayoutData.minimumHeight = 60;
-		gridLayoutData.widthHint = 200;
-		sbatchStyledText.setLayoutData(gridLayoutData);
+		GridData gd = new GridData( SWT.NONE|GridData.FILL_BOTH );
+		gd.horizontalSpan = 2;
+		sbatchStyledText.setLayoutData(gd);
 	}
 
 	private void createComboBox(String identifier, List<String> optionValues, int horizontalSpan, String defValue) {
@@ -208,7 +203,6 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		textGridData.horizontalSpan = horizontalSpan;
 		textGridData.widthHint = 160;
 		textField.setLayoutData(textGridData);
-
 		return textField;
 	}
 

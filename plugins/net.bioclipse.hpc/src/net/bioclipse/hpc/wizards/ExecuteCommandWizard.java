@@ -26,9 +26,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 	protected IStructuredSelection selection;
 	private static final Logger logger = LoggerFactory.getLogger(ExecuteCommandWizard.class);	
 
-	public ExecuteCommandWizard() {
-		// TODO Auto-generated constructor stub
-	}
+	public ExecuteCommandWizard() { }
 
 	@Override
 	/**
@@ -40,9 +38,7 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		this.selection = selection;
 	}
 
-	public void createControl(Composite parent) {
-		//
-	}
+	public void createControl(Composite parent) {}
 
 	public void addPages() {
 		// TODO: Clean up test code

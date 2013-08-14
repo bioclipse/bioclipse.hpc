@@ -48,7 +48,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	StyledText commandText;
 	Tool currentTool;
 	List<Widget> widgets;
-	private static final Logger logger = LoggerFactory.getLogger(ConfigureCommandPage.class);
+	private static Logger log;
 	
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
 		super("Page 3");
@@ -58,6 +58,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		this.selection = selection;
 		this.parameters = new ArrayList<Parameter>();
 		this.widgets = new ArrayList<Widget>();
+		this.log = LoggerFactory.getLogger(ConfigureCommandPage.class);
 	}
 	
 	public boolean canFlipToNextPage() {
@@ -105,7 +106,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
 		gridLayoutData.horizontalSpan = 2;
 		gridLayoutData.grabExcessHorizontalSpace = true;
-		gridLayoutData.minimumHeight = 60;
+		gridLayoutData.minimumHeight = 200;
 		gridLayoutData.widthHint = 200;
 		commandText.setLayoutData(gridLayoutData);
 	}
@@ -205,7 +206,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 						textField.setText(file.getAbsolutePath());
 						textField.notifyListeners(SWT.KeyUp, new Event());
 					} else {
-						logger.error("No valid file selected!");
+						log.error("No valid file selected!");
 					}
 				}
 			}
@@ -290,7 +291,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 						outputFolder.setText(file.getAbsolutePath());
 						outputFolder.notifyListeners(SWT.KeyUp, new Event());
 					} else {
-						logger.error("No valid file selected!");
+						log.error("No valid file selected!");
 					}
 				}
 			}
@@ -325,7 +326,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				} else if (widget instanceof Button && ((Button) widget).getSelection()) {
 					newValue = ((Button) widget).getText();
 				} else {
-					logger.error("Could not set newValue");
+					log.error("Could not set newValue");
 				}
 
 				Object data = widget.getData();
