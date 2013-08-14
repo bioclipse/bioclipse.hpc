@@ -60,7 +60,7 @@
          <action id="net.bioclipse.hpc.views.jobinfoaction1"
             label="Refresh"
             toolbarPath="jobinfoaction1"
-            class="net.bioclipse.hpc.views.jobinfo.UpdateJobInfoViewAction">
+            class="net.bioclipse.hpc.views.jobinfo.JobInfoUpdateViewAction">
          </action>
       </viewContribution>
    </extension>

@@ -8,7 +8,7 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 
-public class UpdateJobInfoViewAction implements IViewActionDelegate {
+public class JobInfoUpdateViewAction implements IViewActionDelegate {
 
 	@Override
 	public void run(IAction arg0) {
