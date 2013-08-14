@@ -41,6 +41,18 @@
    <!-- Remote Object Popup Menu Actions        -->
    <!-- ======================================= -->
 
+   <!-- Projinfo view -->
+
+   <extension point="org.eclipse.ui.viewActions">
+      <viewContribution id="net.bioclipse.hpc.views.ProjInfoViewActionContrib" targetID="net.bioclipse.hpc.views.ProjInfoView">
+         <action id="net.bioclipse.hpc.views.projinfoaction1"
+            label="Refresh"
+            toolbarPath="jobinfoaction1"
+            class="net.bioclipse.hpc.views.projinfo.UpdateProjInfoViewAction">
+         </action>
+      </viewContribution>
+   </extension>
+   
    <!-- Jobinfo view -->
    
    <extension point="org.eclipse.ui.viewActions">

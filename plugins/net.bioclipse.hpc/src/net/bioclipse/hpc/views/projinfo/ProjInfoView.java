@@ -105,7 +105,6 @@ public class ProjInfoView extends ViewPart {
 		Composite container = new Composite(parent, SWT.V_SCROLL);
 		container.setLayout(new GridLayout(1, false));
 
-		createUpdateButton(container);
 		treeViewer = createTreeViewerInComposite(container);
 		configureTableTreeViewer(treeViewer);
 
@@ -116,18 +115,7 @@ public class ProjInfoView extends ViewPart {
 		
 		initializeToolBar();
 		initializeMenu();
-	}
-	
-	private void createUpdateButton(Composite container) {
-		Button btnUpdate = new Button(container, SWT.NONE);
-		btnUpdate.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				updateProjectInfoTable();
-			}
-		});
-		btnUpdate.setText("Update");
-	}		
+	}	
 	
 	// FIXME: It seems, from the JobInfo view, that a TreeViewer will do equally well
 	//        as a TableTreViewer, so should change!
