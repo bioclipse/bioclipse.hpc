@@ -135,7 +135,7 @@ public class HPCApplication extends AbstractModelObject {
 
 	public List<String> getModulesForBinary(String binary) {
 		List<String> modulesForBin = new ArrayList<String>();
-		String xmlStr = getInfoFromCluster(InfoType.MODULESFORBIN);		
+		String xmlStr = getInfoFromCluster(InfoType.MODULESFORBIN, binary);		
 		if (xmlStr != null) {	
 			Document xmlDoc = XmlUtils.xmlToDOMDocument(xmlStr);
 			List<Node> listOfModuleNodes = XmlUtils.evalXPathExprToListOfNodes("/simpleapi/modulesforbin/modules/module", xmlDoc);
@@ -160,7 +160,7 @@ public class HPCApplication extends AbstractModelObject {
 	 * @param infoType
 	 * @return commandOutput
 	 */
-	private String getInfoFromCluster(InfoType infoType) {
+	private String getInfoFromCluster(InfoType infoType, String binary) {
 		String infoTypeStr;
 		String commandOutput;
 		String apiOutput;
@@ -180,11 +180,17 @@ public class HPCApplication extends AbstractModelObject {
 				break;
 			case MODULESFORBIN:
 				infoTypeStr = "modulesforbin";
+				if (binary != null) {
+					infoTypeStr += " " + binary;
+				} else {
+					this.logger.error("No binary specified to modulesforbin API command");
+				}
 				break;
 			default:
 				infoTypeStr = "";
 				break;
 		}
+		
 		
 		commandOutput = execRemoteCommand("simpleapi " + infoTypeStr);
 		// Extract the API part from the messy terminal output
@@ -192,6 +198,10 @@ public class HPCApplication extends AbstractModelObject {
 		
 		return apiOutput;
 	}	
+	
+	private String getInfoFromCluster(InfoType infoType) {
+		return getInfoFromCluster(infoType, null);	
+	}
 	
 	/**
 	 * Gets the Command subsystem associated with the current host
