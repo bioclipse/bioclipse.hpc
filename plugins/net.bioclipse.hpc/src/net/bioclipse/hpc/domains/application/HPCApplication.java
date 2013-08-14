@@ -381,5 +381,9 @@ public class HPCApplication extends AbstractModelObject {
 				ISystemResourceChangeEvents.EVENT_REFRESH_SELECTED_PARENT, rfss);
 		ISystemRegistry registry = SystemStartHere.getSystemRegistry();
 		registry.fireEvent(refreshFileSubStystemEvent);
+	}
+
+	public void cancelJobWithId(String jobId) {
+		showInfoMessage("Not implemented!", "This action is not yet implemented!");
 	}	
 }

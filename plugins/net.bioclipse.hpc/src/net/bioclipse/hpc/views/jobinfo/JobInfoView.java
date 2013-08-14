@@ -12,12 +12,17 @@ import net.bioclipse.hpc.views.projinfo.ProjInfoView;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Tree;
@@ -79,6 +84,30 @@ public class JobInfoView extends ViewPart {
 		treeViewer.setContentProvider(new JobInfoContentProvider());
 		treeViewer.setLabelProvider(new JobInfoLabelProvider());
 		treeViewer.setInput(contentModel); 
+		
+		// Create context menu
+		treeViewer.addSelectionChangedListener(
+	            new ISelectionChangedListener(){
+	                public void selectionChanged(SelectionChangedEvent event) {
+	                    if(event.getSelection() instanceof IStructuredSelection) {
+	                        IStructuredSelection selection = (IStructuredSelection)event.getSelection();            
+	                        Object o = selection.getFirstElement();     
+
+	                        MenuManager menuMgr = new MenuManager();
+
+	                        if (o instanceof Job){
+	                            Menu menu = menuMgr.createContextMenu(treeViewer.getControl());
+	                            treeViewer.getControl().setMenu(menu);
+	                            getSite().registerContextMenu(menuMgr, treeViewer);
+	                            menuMgr.add(new JobInfoCancelJobAction());
+	                        }else {
+	                            //what ?
+	                        }
+	                    }
+
+	                }
+	            }   
+	    );
 		
 		initializeToolBar();
 		initializeMenu();
