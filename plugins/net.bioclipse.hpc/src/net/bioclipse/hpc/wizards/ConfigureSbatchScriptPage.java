@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
-import net.bioclipse.hpc.views.projinfo.ProjInfoView;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -31,7 +29,8 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	// Taken care of in the createControl(), and onEnterPage() functions
 	Composite parentComposite;
 	Composite composite;
-
+	String currentToolName;
+	
 	StyledText sbatchStyledText;
 	List<Widget> widgets;
 
@@ -57,6 +56,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		this.workbench = workbench;
 		this.selection = selection;
 		this.widgets = new ArrayList<Widget>();
+		this.currentToolName = "";
 	}
 
 	@Override
@@ -70,9 +70,10 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	@SuppressWarnings("unchecked")
 	void onEnterPage() {
 		// Don't redraw wizard page on second visit
-		if (!this.initialized) {
+		if (!this.initialized || toolHasChangedSinceLastVisit()) {
 			this.initialized = true;
-
+			this.currentToolName = getCommandPage().getToolName();
+					
 			createControl(parentComposite);
 			createSbatchConfigControls();
 			createResultingSBatchScriptTextbox();
@@ -84,6 +85,16 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		} else {
 			updateCodeWindow();
 		}
+	}
+	
+	/**
+	 * Check if the selected tool on the command page has changed
+	 * since last visit on this page.
+	 * @return
+	 */
+	private boolean toolHasChangedSinceLastVisit() {
+		String toolName = getCommandPage().getToolName();
+		return (!toolName.equals(this.currentToolName));
 	}
 
 	private void createSbatchConfigControls() {
@@ -234,7 +245,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		}
 	}
 
-	private void updateCodeWindow() {
+	private void updateCodeWindow() {		
 		String newSbatchText = getDefaultSbatchTextWithCommand();
 		for (Widget widget : widgets) {
 			String newValue = null;
@@ -268,9 +279,13 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	}
 
 	private String getDefaultSbatchTextWithCommand() {
-		String command = ((ConfigureCommandPage) this.getWizard().getPage("Configure Command Page")).getCommandText();
+		String command = getCommandPage().getCommandText();
 		String newSbatchText = sbatchTemplate + "\n" + command;
 		return newSbatchText;
+	}
+
+	private ConfigureCommandPage getCommandPage() {
+		return ((ConfigureCommandPage) this.getWizard().getPage("Configure Command Page"));
 	}
 
 	public String getResultingSbatchAndCommandText() {

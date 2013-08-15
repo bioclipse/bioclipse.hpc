@@ -7,7 +7,6 @@ import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
-import net.bioclipse.hpc.views.projinfo.ProjInfoView;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -19,11 +18,11 @@ import org.eclipse.rse.files.ui.dialogs.SystemRemoteFolderDialog;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
@@ -370,6 +369,10 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	public String getCommandText() {
 		return commandText.getText();
+	}
+	
+	public String getToolName() {
+		return this.currentTool.getName();
 	}
 	
 	@Override
