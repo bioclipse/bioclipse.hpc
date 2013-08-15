@@ -19,7 +19,8 @@ public class SelectToolPage extends WizardPage {
 	private IStructuredSelection selection;
 
 	protected SelectToolPage(IWorkbench workbench, IStructuredSelection selection) {
-		super("Page 2");
+		// Set the name for this page
+		super("Select Tool Page");
 		setTitle("Select tool");
 		setDescription("Select a tool from the ones available in the tool group just selected ...");
 		this.workbench = workbench;
@@ -65,7 +66,7 @@ public class SelectToolPage extends WizardPage {
 	}
 
 	public void onEnterPage() {
-		SelectToolGroupPage selectToolGroupPage = ((SelectToolGroupPage) this.getWizard().getPage("Page 1"));
+		SelectToolGroupPage selectToolGroupPage = ((SelectToolGroupPage) this.getWizard().getPage("Select ToolGroup Page"));
 		String currentToolGroupName = selectToolGroupPage.comboToolGroup.getText();
 		String[] toolNames = ToolConfigDomain.getInstance().getToolNamesForGroupName(currentToolGroupName);
 		updateDroplist(toolNames);
@@ -79,7 +80,7 @@ public class SelectToolPage extends WizardPage {
 
 	@Override
 	public IWizardPage getNextPage() {
-		ConfigureCommandPage configCommandPage = ((ConfigureCommandPage) this.getWizard().getPage("Page 3"));
+		ConfigureCommandPage configCommandPage = ((ConfigureCommandPage) this.getWizard().getPage("Configure Command Page"));
 		configCommandPage.onEnterPage();
 		return configCommandPage;
 	}

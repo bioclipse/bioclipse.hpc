@@ -50,8 +50,13 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	List<Widget> widgets;
 	private static Logger log;
 	
+	/**
+	 * Constructor
+	 * @param workbench
+	 * @param selection
+	 */
 	protected ConfigureCommandPage(IWorkbench workbench, IStructuredSelection selection) {
-		super("Page 3");
+		super("Configure Command Page");
 		setTitle("Select tool");
 		setDescription("Select a tool from the ones available in the tool group just selected ...");
 		this.workbench = workbench;
@@ -61,20 +66,15 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		this.log = LoggerFactory.getLogger(ConfigureCommandPage.class);
 	}
 	
+	/**
+	 * Set whether the "Next" button is active
+	 */
 	public boolean canFlipToNextPage() {
 		return true;
 	}
 	
-	@Override
-	public void createControl(Composite parent) {
-		parentComposite = parent;
-		composite =  new Composite(parent, SWT.NULL);
-		HPCUtils.createGridLayout(composite, 3);
-		setControl(composite);
-	}
-	
 	void onEnterPage() {
-		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Page 2")).comboTool;
+		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Select Tool Page")).comboTool;
 		String selectedToolName = comboTool.getText();
 		if (currentTool != null) {
 			String currentToolName = currentTool.getName();			
@@ -86,7 +86,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}			
 	}
 	
-	void drawPageForTool(String toolName) {
+	private void drawPageForTool(String toolName) {
 		createControl(parentComposite);
 		currentTool = ToolConfigDomain.getInstance().getToolByName(toolName);
 		parameters = currentTool.getParameters();
@@ -98,6 +98,14 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	    this.composite.pack();	
 	}
 
+	@Override
+	public void createControl(Composite parent) {
+		parentComposite = parent;
+		composite =  new Composite(parent, SWT.NULL);
+		HPCUtils.createGridLayout(composite, 3);
+		setControl(composite);
+	}
+	
 	private void createResultingCommandTextbox(String commandString) {
 		createLabel("Resulting command");
 		
@@ -366,7 +374,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	
 	@Override
 	public IWizardPage getNextPage() {
-		ConfigureSbatchScriptPage configSbatchScriptPage = ((ConfigureSbatchScriptPage) this.getWizard().getPage("Page 4"));
+		ConfigureSbatchScriptPage configSbatchScriptPage = ((ConfigureSbatchScriptPage) this.getWizard().getPage("Configure Sbatch Page"));
 		configSbatchScriptPage.onEnterPage();
 		return configSbatchScriptPage;
 	}

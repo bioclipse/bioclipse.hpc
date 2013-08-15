@@ -12,6 +12,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -50,7 +51,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		
 
 	protected ConfigureSbatchScriptPage(IWorkbench workbench, IStructuredSelection selection) {
-		super("Page 4");
+		super("Configure Sbatch Page");
 		setTitle("Configure SBATCH parameters");
 		setDescription("Set the parameters for the SBATCH job batch script to be sent to the SLURM resource manager");
 		this.workbench = workbench;
@@ -61,8 +62,8 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	@Override
 	public void createControl(Composite parent) {
 		parentComposite = parent;
-		composite =  new Composite(parent, SWT.NULL);
-		HPCUtils.createGridLayout(composite, 3);
+		composite =  new Composite(parent, SWT.NULL );
+		HPCUtils.createGridLayout(composite, 2);
 		setControl(composite);
 	}
 
@@ -71,82 +72,12 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		// Don't redraw wizard page on second visit
 		if (!this.initialized) {
 			this.initialized = true;
+
 			createControl(parentComposite);
-
-			// Get user info, to use for writing the SBATCH config
-			String currentBinary = ((ConfigureCommandPage) this.getWizard().getPage("Page 3")).currentTool.getBinary();
-			List<String> modulesForCommand = HPCUtils.getApplication().getModulesForBinary(currentBinary);
-
-			// Get user info, to use for writing the SBATCH config
-			Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
-			// String username = (String) userInfo.get("username");
-			List<String> projects = (List<String>) userInfo.get("projects");
-
-			// Get various info used for writing SBATCH config
-			Map<String,Object> clusterInfo = HPCUtils.getApplication().getClusterInfo();
-			String maxNodesStr = (String) clusterInfo.get("maxnodes");
-			String maxCpusStr = (String) clusterInfo.get("maxcpus");
-			List<String> partitions = (List<String>) clusterInfo.get("partitions");
-
-			// Populate wizard here
-			// Modules relevant to the binary chosen in the previous wizard page
-			createLabel("HPC Module to load");
-			createComboBox("module", modulesForCommand, 2);
-
-			// -A [project name] | Combo  // TODO: Retrieve the user's project automatic
-			createLabel("Project to account");
-			createComboBox("project", projects, 2);
-
-			// -p [partition]    | Combo  // Simple list, or get info from cluster?
-			createLabel("Partition (type of job)");
-			createComboBox("partition", partitions, 2);
-
-			// -N [no of nodes]  | Text-field / up-down number field?
-			createLabel("No of Nodes");
-			List<String> maxNodesStringList = new ArrayList<String>();
-			if (maxNodesStr != null) {
-				int maxNodes = Integer.parseInt(maxNodesStr);
-				if (maxNodes > 0) {
-					int[] nodeNos = HPCUtils.range(1, maxNodes, 1);
-					for (int i=0;i<maxNodes;i++) {
-						String nodeNoStr = Integer.toString(nodeNos[i]);
-						maxNodesStringList.add(nodeNoStr);
-					}
-				} else {
-					logger.error("MaxCPUs is zero!");
-				}
-			}
-			createComboBox("noofnodes", maxNodesStringList, 2);
-
-			// -n [no of cpus]   | Text-field / up-down number field?
-			createLabel("No of CPUs");
-			List<String> maxCpusStringList = new ArrayList<String>();
-			if (maxCpusStr != null) {
-				int maxCpus = Integer.parseInt(maxCpusStr);
-				if (maxCpus > 0) {
-					int[] cpuNos = HPCUtils.range(1, maxCpus, 1);
-					for (int i=0;i<maxCpus;i++) {
-						String cpuNoStr = Integer.toString(cpuNos[i]);
-						maxCpusStringList.add(cpuNoStr);
-					}
-				} else {
-					logger.error("MaxCPUs is zero!");
-				}
-			}
-			createComboBox("noofcpus", maxCpusStringList, 2);
-
-			// -t d-hh:mm:ss     | ?      
-			createLabel("Running time (d-hh:mm:ss)"); // TODO: Find a good widget for setting the time?
-			createTextField("runtime", 2);
-
-			// --qos=short       | Combo (yes/no)
-			createLabel("Activate --qos=short option?");
-			createComboBox("qosshort", Arrays.asList("no", "yes"), 2, "no");
-			// -J [JobName]      | TextField
-			createLabel("Job name");
-			createTextField("jobname", 2, "Untitled");
-
+			createSbatchConfigControls();
 			createResultingSBatchScriptTextbox();
+			updateCodeWindow();
+
 			this.composite.pack();
 
 			((ExecuteCommandWizard) this.getWizard()).setCanFinish(true);
@@ -155,12 +86,88 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		}
 	}
 
+	private void createSbatchConfigControls() {
+		// Get user info, to use for writing the SBATCH config
+		String currentBinary = ((ConfigureCommandPage) this.getWizard().getPage("Configure Command Page")).currentTool.getBinary();
+		List<String> modulesForCommand = HPCUtils.getApplication().getModulesForBinary(currentBinary);
+
+		// Get user info, to use for writing the SBATCH config
+		Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
+		// String username = (String) userInfo.get("username");
+		List<String> projects = (List<String>) userInfo.get("projects");
+
+		// Get various info used for writing SBATCH config
+		Map<String,Object> clusterInfo = HPCUtils.getApplication().getClusterInfo();
+		String maxNodesStr = (String) clusterInfo.get("maxnodes");
+		String maxCpusStr = (String) clusterInfo.get("maxcpus");
+		List<String> partitions = (List<String>) clusterInfo.get("partitions");
+
+		// Populate wizard here
+		// Modules relevant to the binary chosen in the previous wizard page
+		createLabel("HPC Module to load");
+		createComboBox("module", modulesForCommand, 1);
+
+		// -A [project name] | Combo  // TODO: Retrieve the user's project automatic
+		createLabel("Project to account");
+		createComboBox("project", projects, 1);
+
+		// -p [partition]    | Combo  // Simple list, or get info from cluster?
+		createLabel("Partition (type of job)");
+		createComboBox("partition", partitions, 1);
+
+		// -N [no of nodes]  | Text-field / up-down number field?
+		createLabel("No of Nodes");
+		List<String> maxNodesStringList = new ArrayList<String>();
+		if (maxNodesStr != null) {
+			int maxNodes = Integer.parseInt(maxNodesStr);
+			if (maxNodes > 0) {
+				int[] nodeNos = HPCUtils.range(1, maxNodes, 1);
+				for (int i=0;i<maxNodes;i++) {
+					String nodeNoStr = Integer.toString(nodeNos[i]);
+					maxNodesStringList.add(nodeNoStr);
+				}
+			} else {
+				logger.error("MaxCPUs is zero!");
+			}
+		}
+		createComboBox("noofnodes", maxNodesStringList, 1);
+
+		// -n [no of cpus]   | Text-field / up-down number field?
+		createLabel("No of CPUs");
+		List<String> maxCpusStringList = new ArrayList<String>();
+		if (maxCpusStr != null) {
+			int maxCpus = Integer.parseInt(maxCpusStr);
+			if (maxCpus > 0) {
+				int[] cpuNos = HPCUtils.range(1, maxCpus, 1);
+				for (int i=0;i<maxCpus;i++) {
+					String cpuNoStr = Integer.toString(cpuNos[i]);
+					maxCpusStringList.add(cpuNoStr);
+				}
+			} else {
+				logger.error("MaxCPUs is zero!");
+			}
+		}
+		createComboBox("noofcpus", maxCpusStringList, 1);
+
+		// -t d-hh:mm:ss     | ?      
+		createLabel("Running time (d-hh:mm:ss)"); // TODO: Find a good widget for setting the time?
+		createTextField("runtime", 1);
+
+		// --qos=short       | Combo (yes/no)
+		createLabel("Activate --qos=short option?");
+		createComboBox("qosshort", Arrays.asList("no", "yes"), 1, "no");
+		// -J [JobName]      | TextField
+		createLabel("Job name");
+		createTextField("jobname", 1, "Untitled");
+	}
+
 	private void createResultingSBatchScriptTextbox() {
 		createLabel("Resulting SBATCH Script");
-		sbatchStyledText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
-		sbatchStyledText.setText(this.getDefaultSbatchTextWithCommand());
-		GridData gd = new GridData( SWT.NONE|GridData.FILL_BOTH );
-		gd.horizontalSpan = 2;
+		sbatchStyledText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL ); // SWT.WRAP
+		GridData gd = new GridData( SWT.NONE | GridData.FILL_BOTH );
+		gd.grabExcessHorizontalSpace = true;
+		gd.minimumWidth = 320;
+		gd.heightHint = 180;
 		sbatchStyledText.setLayoutData(gd);
 	}
 
@@ -261,7 +268,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	}
 
 	private String getDefaultSbatchTextWithCommand() {
-		String command = ((ConfigureCommandPage) this.getWizard().getPage("Page 3")).getCommandText();
+		String command = ((ConfigureCommandPage) this.getWizard().getPage("Configure Command Page")).getCommandText();
 		String newSbatchText = sbatchTemplate + "\n" + command;
 		return newSbatchText;
 	}

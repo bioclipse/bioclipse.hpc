@@ -27,7 +27,8 @@ public class SelectToolGroupPage extends WizardPage {
 	String selectedToolGroup;
 
 	protected SelectToolGroupPage(IWorkbench workbench, IStructuredSelection selection) {
-		super("Page 1");
+		// Set the name for this page
+		super("Select ToolGroup Page");
 		setTitle("Configure command: Select tool group");
 		setDescription("Select the group of commands that you wish to execute");
 		this.workbench = workbench;
@@ -87,7 +88,7 @@ public class SelectToolGroupPage extends WizardPage {
 
 	@Override
 	public IWizardPage getNextPage() {
-		SelectToolPage selectToolPage = ((SelectToolPage) this.getWizard().getPage("Page 2"));
+		SelectToolPage selectToolPage = ((SelectToolPage) this.getWizard().getPage("Select Tool Page"));
 		selectToolPage.onEnterPage();
 		return selectToolPage;
 	}
