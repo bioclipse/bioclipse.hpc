@@ -12,6 +12,10 @@ import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 import net.bioclipse.hpc.views.jobinfo.JobInfoView;
 import net.bioclipse.hpc.views.projinfo.ProjInfoView;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.rse.core.events.ISystemResourceChangeEvents;
 import org.eclipse.rse.core.events.SystemResourceChangeEvent;
@@ -28,6 +32,7 @@ import org.eclipse.rse.subsystems.shells.core.model.SimpleCommandOperation;
 import org.eclipse.rse.subsystems.shells.core.subsystems.IRemoteCmdSubSystem;
 import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
@@ -71,19 +76,31 @@ public class HPCApplication extends AbstractModelObject {
 	}
 
 	public void updateProjInfoView() {
-		ProjInfoView projInfoView = getProjInfoView();
 
-		if (projInfoView!=null) {
-			String projInfoXml = getInfoFromCluster(InfoType.PROJINFO);
-			if (projInfoXml != null && !(projInfoXml.equals(""))) {
-				projInfoView.updateViewFromXml(projInfoXml);
-			} else {
-				log.error("Could not extract XML for projinfo! Are you logged in?!");
-				// TODO: Show message to user!
-			}
-		} else {
-			log.error("Projinfo view not found!");
-		}
+			// Run as a background job
+			Job bgJob = new Job("Updating project info ...") {
+				String projInfoXml;
+				protected IStatus run(IProgressMonitor monitor) {
+					projInfoXml = getInfoFromCluster(InfoType.PROJINFO);
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							ProjInfoView projInfoView = getProjInfoView();
+							if (projInfoView!=null) {
+								if (projInfoXml != null && !(projInfoXml.equals(""))) {
+									projInfoView.updateViewFromXml(projInfoXml);
+								} else {
+									log.error("Could not extract XML for projinfo! Are you logged in?!");
+								}
+							} else {
+								log.error("Projinfo view not found!");
+							}
+						}
+					}); 
+					return Status.OK_STATUS;
+				}
+			};			
+			bgJob.setPriority(Job.SHORT);
+			bgJob.schedule();
 	}
 
 	public Map<String,Object> getUserInfo() {
