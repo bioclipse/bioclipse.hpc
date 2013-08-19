@@ -58,21 +58,33 @@ public class HPCApplication extends AbstractModelObject {
 		_selectedFiles = new ArrayList<IRemoteFile>();
 	}
 
-	public void refreshJobInfoView(boolean showMessageOnZeroJobs) {
-		JobInfoView jobInfoView = getJobInfoView();
-
-		if (jobInfoView != null) {
-			String jobInfoXml = getInfoFromCluster(InfoType.JOBINFO);
-			if (jobInfoXml != null && !(jobInfoXml.equals(""))) {
-				// TODO: Get a List/HashMap structure instead, so that it can be used
-				// to put out to the console as well, not just for updating the view.
-				jobInfoView.updateViewFromXml(jobInfoXml, showMessageOnZeroJobs);
-			} else {
-				log.error("Could not extract XML for jobinfo! Are you logged in?!");
+	public void refreshJobInfoView(final boolean showMessageOnZeroJobs) {
+		// Run as a background job
+		Job bgJob = new Job("Updating job info ...") {		
+			String jobInfoXml;
+			protected IStatus run(IProgressMonitor monitor) {
+				jobInfoXml = getInfoFromCluster(InfoType.JOBINFO);
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						JobInfoView jobInfoView = getJobInfoView();
+						if (jobInfoView != null) {
+							if (jobInfoXml != null && !(jobInfoXml.equals(""))) {
+								// TODO: Get a List/HashMap structure instead, so that it can be used
+								// to put out to the console as well, not just for updating the view.
+								jobInfoView.updateViewFromXml(jobInfoXml, showMessageOnZeroJobs);
+							} else {
+								log.error("Could not extract XML for jobinfo! Are you logged in?!");
+							}
+						} else {
+							log.error("Job view not found!");
+						}
+					}
+				}); 
+				return Status.OK_STATUS;
 			}
-		} else {
-			log.error("Job view not found!");
-		}
+		};
+		bgJob.setPriority(Job.SHORT);
+		bgJob.schedule();
 	}
 
 	public void refreshProjInfoView() {
