@@ -1,8 +1,15 @@
 package net.bioclipse.hpc.wizards;
 
+import java.util.Map;
+
 import net.bioclipse.hpc.Activator;
+import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -34,6 +41,28 @@ public class SelectToolGroupPage extends WizardPage {
 		this.workbench = workbench;
 		this.selection = selection;
 		this.wizard = this.getWizard(); 
+
+		getClusterAndUserInfo();
+	}
+
+	/**
+	 * Update info about the cluster and the current user,
+	 * and update the SBATCH config page with that, to be
+	 * used later when configuring SBATCH commands
+	 */
+	private void getClusterAndUserInfo() {
+		System.out.println("Test");
+		Job job = new Job("Retrieving cluster info ...") {
+			protected IStatus run(IProgressMonitor monitor) {
+				Map<String,Object> clusterInfo = HPCUtils.getApplication().getClusterInfo();
+				getSbatchConfigPage().setClusterInfo(clusterInfo);
+				Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
+				getSbatchConfigPage().setUserInfo(userInfo);
+				return Status.OK_STATUS;
+			}
+		};
+		job.setPriority(Job.SHORT);
+		job.schedule();		
 	}
 
 	@Override
@@ -73,6 +102,10 @@ public class SelectToolGroupPage extends WizardPage {
 		composite.setLayout(gridLayout);
 	}
 
+	public void onEnterPage() {
+
+	}
+	
 	@Override
 	public boolean canFlipToNextPage() {
 		return true;
@@ -91,6 +124,11 @@ public class SelectToolGroupPage extends WizardPage {
 		SelectToolPage selectToolPage = ((SelectToolPage) this.getWizard().getPage("Select Tool Page"));
 		selectToolPage.onEnterPage();
 		return selectToolPage;
+	}
+	
+	public ConfigureSbatchScriptPage getSbatchConfigPage() {
+		ConfigureSbatchScriptPage sbatchConfigPage = ((ConfigureSbatchScriptPage) this.getWizard().getPage("Configure Sbatch Page"));
+		return sbatchConfigPage;		
 	}
 
 }

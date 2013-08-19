@@ -46,7 +46,7 @@ import org.w3c.dom.NodeList;
 public class HPCApplication extends AbstractModelObject {
 	private List<IRemoteFile> _selectedFiles;
 	private static final Logger log = LoggerFactory.getLogger(HPCApplication.class);
-	private enum InfoType {
+	public enum InfoType {
 		USERINFO,
 		CLUSTERINFO,
 		PROJINFO,

@@ -33,6 +33,9 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	
 	StyledText sbatchStyledText;
 	List<Widget> widgets;
+	List<String> modulesForCommand;
+	Map<String,Object> clusterInfo;
+	Map<String,Object> userInfo;
 
 	boolean initialized = false;
 	private static final Logger logger = LoggerFactory.getLogger(ConfigureSbatchScriptPage.class);
@@ -57,6 +60,9 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		this.selection = selection;
 		this.widgets = new ArrayList<Widget>();
 		this.currentToolName = "";
+		this.modulesForCommand = new ArrayList<String>();
+		this.clusterInfo = null;
+		this.userInfo = null;
 	}
 
 	@Override
@@ -98,20 +104,12 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 	}
 
 	private void createSbatchConfigControls() {
-		// Get user info, to use for writing the SBATCH config
-		String currentBinary = ((ConfigureCommandPage) this.getWizard().getPage("Configure Command Page")).currentTool.getBinary();
-		List<String> modulesForCommand = HPCUtils.getApplication().getModulesForBinary(currentBinary);
-
-		// Get user info, to use for writing the SBATCH config
-		Map<String,Object> userInfo = HPCUtils.getApplication().getUserInfo();
 		// String username = (String) userInfo.get("username");
 		List<String> projects = (List<String>) userInfo.get("projects");
 
-		// Get various info used for writing SBATCH config
-		Map<String,Object> clusterInfo = HPCUtils.getApplication().getClusterInfo();
-		String maxNodesStr = (String) clusterInfo.get("maxnodes");
-		String maxCpusStr = (String) clusterInfo.get("maxcpus");
-		List<String> partitions = (List<String>) clusterInfo.get("partitions");
+		String maxNodesStr = (String) getClusterInfo().get("maxnodes");
+		String maxCpusStr = (String) getClusterInfo().get("maxcpus");
+		List<String> partitions = (List<String>) getClusterInfo().get("partitions");
 
 		// Populate wizard here
 		// Modules relevant to the binary chosen in the previous wizard page
@@ -290,6 +288,48 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 
 	public String getResultingSbatchAndCommandText() {
 		return this.sbatchStyledText.getText();
+	}
+
+	/**
+	 * @return the modulesForCommand
+	 */
+	public List<String> getModulesForCommand() {
+		return modulesForCommand;
+	}
+
+	/**
+	 * @param modulesForCommand the modulesForCommand to set
+	 */
+	public void setModulesForCommand(List<String> modulesForCommand) {
+		this.modulesForCommand = modulesForCommand;
+	}
+
+	/**
+	 * @return the clusterInfo
+	 */
+	public Map<String, Object> getClusterInfo() {
+		return clusterInfo;
+	}
+
+	/**
+	 * @param clusterInfo the clusterInfo to set
+	 */
+	public void setClusterInfo(Map<String, Object> clusterInfo) {
+		this.clusterInfo = clusterInfo;
+	}
+
+	/**
+	 * @return the userInfo
+	 */
+	public Map<String, Object> getUserInfo() {
+		return userInfo;
+	}
+
+	/**
+	 * @param userInfo the userInfo to set
+	 */
+	public void setUserInfo(Map<String, Object> userInfo) {
+		this.userInfo = userInfo;
 	}
 
 }

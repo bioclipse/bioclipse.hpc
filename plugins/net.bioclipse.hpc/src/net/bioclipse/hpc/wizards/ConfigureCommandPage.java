@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
+import net.bioclipse.hpc.domains.application.HPCApplication.InfoType;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -28,6 +33,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Listener;
@@ -78,13 +84,30 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		if (currentTool != null) {
 			String currentToolName = currentTool.getName();			
 			if (!selectedToolName.equals(currentToolName)) {
-				drawPageForTool(selectedToolName);				
+				drawPageForTool(selectedToolName);
+				String binaryName = ToolConfigDomain.getInstance().getToolByName(selectedToolName).getCommand();
+				updateModulesForBinary(binaryName);
 			}
 		} else {
 			drawPageForTool(selectedToolName);
+			updateModulesForBinary(selectedToolName);
 		}			
 	}
 	
+	private void updateModulesForBinary(final String binaryName) {
+		Job bgJob = new Job("Retrieving modules for " + binaryName + " ...") {
+			List<String> modules;
+			protected IStatus run(IProgressMonitor monitor) {
+				modules = HPCUtils.getApplication().getModulesForBinary(binaryName);
+				System.out.println("Tool name: " + binaryName);
+				((ConfigureSbatchScriptPage) getWizard().getPage("Configure Sbatch Page")).setModulesForCommand(modules);
+				return Status.OK_STATUS;
+			}
+		};
+		bgJob.setPriority(Job.SHORT);
+		bgJob.schedule();
+	}
+
 	private void drawPageForTool(String toolName) {
 		createControl(parentComposite);
 		currentTool = ToolConfigDomain.getInstance().getToolByName(toolName);
