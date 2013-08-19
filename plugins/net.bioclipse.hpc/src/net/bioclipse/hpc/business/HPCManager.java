@@ -60,7 +60,7 @@ public class HPCManager implements IBioclipseManager {
 	}
 	
 	public void updateProjInfoView() {
-		application.updateProjInfoView();
+		application.refreshProjInfoView();
 	}
 	
 	public void updateJobInfoView() {

@@ -75,8 +75,7 @@ public class HPCApplication extends AbstractModelObject {
 		}
 	}
 
-	public void updateProjInfoView() {
-
+	public void refreshProjInfoView() {
 			// Run as a background job
 			Job bgJob = new Job("Updating project info ...") {
 				String projInfoXml;

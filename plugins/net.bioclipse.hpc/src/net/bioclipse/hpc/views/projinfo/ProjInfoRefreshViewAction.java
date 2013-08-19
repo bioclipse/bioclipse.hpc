@@ -8,11 +8,11 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IViewActionDelegate;
 import org.eclipse.ui.IViewPart;
 
-public class UpdateProjInfoViewAction implements IViewActionDelegate {
+public class ProjInfoRefreshViewAction implements IViewActionDelegate {
 
 	@Override
 	public void run(IAction arg0) {
-		HPCUtils.getApplication().updateProjInfoView();
+		HPCUtils.getApplication().refreshProjInfoView();
 	}
 
 	@Override

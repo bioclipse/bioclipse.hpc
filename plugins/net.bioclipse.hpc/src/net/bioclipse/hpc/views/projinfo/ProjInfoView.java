@@ -164,7 +164,7 @@ public class ProjInfoView extends ViewPart {
 	}	
 
 	private void updateProjectInfoTable() {
-		HPCUtils.getApplication().updateProjInfoView();
+		HPCUtils.getApplication().refreshProjInfoView();
 	}
 
 	protected IRemoteFile getFirstSelectedRemoteFile() {
