@@ -2,6 +2,10 @@ package net.bioclipse.hpc.wizards;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.rse.core.events.ISystemResourceChangeEvents;
@@ -77,10 +81,21 @@ public class ExecuteCommandWizard extends Wizard implements INewWizard {
 		// Command line already added in sbatch config page
 		// scriptString = addLineToScript(command, scriptString, fileName);
 
-		HPCUtils.getApplication().execRemoteCommand(scriptString);
-		HPCUtils.getApplication().refreshFileBrowser();
+		createSbatchFile(scriptString);
 
 		return true;
+	}
+
+	private void createSbatchFile(final String scriptString) {
+		Job job = new Job("Creating SBATCH file ...") {
+			    protected IStatus run(IProgressMonitor monitor) {
+					HPCUtils.getApplication().execRemoteCommand(scriptString);
+					HPCUtils.getApplication().refreshFileBrowser();
+			        return Status.OK_STATUS;
+			    }
+			};
+		job.setPriority(Job.SHORT);
+		job.schedule(); 
 	}
 
 	public String addLineToScript(String line, String scriptString, String scriptFileName) {
