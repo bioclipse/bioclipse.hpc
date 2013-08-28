@@ -361,8 +361,17 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				}
 
 				Object data = widget.getData();
-				if (data instanceof Option) {
-					Parameter parameter = ((Option) data).getParameter();
+				if (data instanceof Parameter || data instanceof Option) {
+					
+					// Make sure we're dealing with a parameter here
+					Parameter parameter = null;
+					if (data instanceof Parameter) {
+						parameter = (Parameter) data;
+					} else if (data instanceof Option) {
+						parameter = ((Option) data).getParameter();
+					}
+
+					// From here on, we assume that we're dealing with a parameter
 					if (parameter.getParamType().equals("output")) {
 						String outputFolderAndFileName = newValue + "/" + (String) ((Text) getWidgetWithData("Output filename")).getText();
 						tempCommand = tempCommand.replace("$" + parameter.getName(), outputFolderAndFileName);
