@@ -105,7 +105,6 @@ public class ToolConfigDomain {
 					logger.error("Current tool folder is not a directory: " + toolFolder.getName());
 				}
 			}
-			// TODO: Don't use hard-coded file name
 			logger.debug("Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
 		}
 	}
