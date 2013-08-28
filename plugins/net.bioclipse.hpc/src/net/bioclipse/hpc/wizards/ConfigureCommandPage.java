@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.bioclipse.hpc.domains.application.HPCUtils;
 import net.bioclipse.hpc.domains.application.HPCApplication.InfoType;
+import net.bioclipse.hpc.domains.toolconfig.Option;
 import net.bioclipse.hpc.domains.toolconfig.Parameter;
 import net.bioclipse.hpc.domains.toolconfig.Tool;
 import net.bioclipse.hpc.domains.toolconfig.ToolConfigDomain;
@@ -179,7 +180,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private void createRadioButtonsForParam(Parameter parameter, int i) {
-		List<String> selectOptions = parameter.getSelectOptionValues();
+		List<Option> selectOptions = parameter.getSelectOptions();
 		Group radioGroup = new Group(composite, SWT.HORIZONTAL);
 		radioGroup.setLayout(new RowLayout());
 		// radioGroup.setText(parameter.getName());
@@ -188,12 +189,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		layoutData.horizontalSpan = i;
 		radioGroup.setLayoutData(layoutData);
 		
-		for (String optionValue : selectOptions) {
+		for (Option option : selectOptions) {
 			Button btn = new Button(radioGroup, SWT.RADIO);
-			btn.setText(optionValue);
+			btn.setText(option.getText());
 			// Event handling stuff
 			btn.addListener(SWT.Selection, this);
-			btn.setData(parameter);
+			btn.setData(option);
 			widgets.add(btn);
 		}
 	}
@@ -354,14 +355,14 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				} else if (widget instanceof Text) {
 					newValue = ((Text) widget).getText();
 				} else if (widget instanceof Button && ((Button) widget).getSelection()) {
-					newValue = ((Button) widget).getText();
+					newValue = ((Option) ((Button) widget).getData()).getValue();
 				} else {
-					log.error("Could not set newValue");
+					log.debug("Did not set newValue of widget: " + widget.toString());
 				}
 
 				Object data = widget.getData();
-				if (data instanceof Parameter) {
-					Parameter parameter = (Parameter) data;
+				if (data instanceof Option) {
+					Parameter parameter = ((Option) data).getParameter();
 					if (parameter.getParamType().equals("output")) {
 						String outputFolderAndFileName = newValue + "/" + (String) ((Text) getWidgetWithData("Output filename")).getText();
 						tempCommand = tempCommand.replace("$" + parameter.getName(), outputFolderAndFileName);

@@ -176,6 +176,10 @@ public class ToolConfigDomain {
 		param.setType(attrType);
 		if (attrType.equals("select")) {
 			List<Option> selectOptions = getSelectOptionsForNode(currentNode);
+			// Make sure the parent parameter is accessible from all options
+			for (Option selectOption : selectOptions) {
+				selectOption.setParameter(param);
+			}
 			param.setSelectOptions(selectOptions);
 		}
 		String attrLabel = getAttributeValue(attrs, "label");

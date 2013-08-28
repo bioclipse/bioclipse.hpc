@@ -5,6 +5,7 @@ package net.bioclipse.hpc.domains.toolconfig;
  * @author samuel
  */
 public class Option {
+	private Parameter m_param; // The owning parameter of this option
 	private String m_value;
 	private Boolean m_selected;
 	private String m_text;
@@ -37,6 +38,14 @@ public class Option {
 
 	public void setText(String m_text) {
 		this.m_text = m_text;
+	}
+
+	public Parameter getParameter() {
+		return this.m_param;
+	}
+	
+	public void setParameter(Parameter param) {
+		this.m_param = param;
 	}
 	
 }
