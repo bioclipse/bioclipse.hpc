@@ -26,7 +26,7 @@ public class ToolConfigDomain {
 	private Map<String,ToolGroup> m_toolGroups;
 	final int PARAMTYPE_NORMAL = 1;
 	final int PARAMTYPE_OUTPUT = 2;
-	private static final Logger logger = LoggerFactory.getLogger(ToolConfigDomain.class); 
+	private static final Logger log = LoggerFactory.getLogger(ToolConfigDomain.class); 
 	
 	private static ToolConfigDomain instance = new ToolConfigDomain();
 	
@@ -75,7 +75,7 @@ public class ToolConfigDomain {
 		int xmlFilesCount = 0;
 
 		if (!toolsFolder.isDirectory()) {
-			logger.error("The path set as galaxy toolconfig folder is not a directory: " + toolsFolderPath);
+			log.error("The path set as galaxy toolconfig folder is not a directory: " + toolsFolderPath);
 		} else {
 			// Get a list of the individual tool folders, from the over-arching
 			// tools folder (located under Galaxy's root rolder)
@@ -102,10 +102,10 @@ public class ToolConfigDomain {
 						}
 					}
 				} else {
-					logger.error("Current tool folder is not a directory: " + toolFolder.getName());
+					log.error("Current tool folder is not a directory: " + toolFolder.getName());
 				}
 			}
-			logger.debug("Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
+			log.debug("Initialized Galaxy tool configurations (" + xmlFilesCount + " XML files)");  
 		}
 	}
 
@@ -154,7 +154,7 @@ public class ToolConfigDomain {
 			tool.setAttributes(attributes);
 
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			log.error(e.getMessage());
 		}
 		return tool;
 	}
