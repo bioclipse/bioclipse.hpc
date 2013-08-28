@@ -186,7 +186,7 @@ public class HPCApplication extends AbstractModelObject {
 	}
 
 	public void readToolConfigFiles(String folderPath) {
-		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(folderPath);
+		ToolConfigDomain.getInstance().parseGalaxyXmlConfigs(folderPath);
 	}
 
 	/**
@@ -391,7 +391,7 @@ public class HPCApplication extends AbstractModelObject {
 	public void readGalaxyToolConfigFiles() {
 		// Activate Galaxy tool configuration
 		String galaxyToolConfigPath = Activator.getDefault().getPreferenceStore().getString("galaxytoolconfigpath");
-		ToolConfigDomain.getInstance().readToolConfigsFromXmlFiles(galaxyToolConfigPath);
+		ToolConfigDomain.getInstance().parseGalaxyXmlConfigs(galaxyToolConfigPath);
 	}
 
 	public void setDefaultPreferences() {

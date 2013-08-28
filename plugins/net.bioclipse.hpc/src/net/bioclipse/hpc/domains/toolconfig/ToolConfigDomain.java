@@ -70,7 +70,7 @@ public class ToolConfigDomain {
 	 * folder
 	 * @param toolsFolderPath
 	 */
-	public void readToolConfigsFromXmlFiles(String toolsFolderPath) {
+	public void parseGalaxyXmlConfigs(String toolsFolderPath) {
 		File toolsFolder = new File(toolsFolderPath);
 		int xmlFilesCount = 0;
 
