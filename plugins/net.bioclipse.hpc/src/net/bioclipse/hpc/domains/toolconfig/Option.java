@@ -7,10 +7,12 @@ package net.bioclipse.hpc.domains.toolconfig;
 public class Option {
 	private String m_value;
 	private Boolean m_selected;
+	private String m_text;
 	
 	public Option() {
-		m_value = "";
-		m_selected = false;
+		this.m_value = "";
+		this.m_selected = false;
+		this.m_text = "";
 	}
 
 	public String getValue() {
@@ -27,6 +29,14 @@ public class Option {
 
 	public void setSelected(Boolean selected) {
 		m_selected = selected;
+	}
+
+	public String getText() {
+		return m_text;
+	}
+
+	public void setText(String m_text) {
+		this.m_text = m_text;
 	}
 	
 }
