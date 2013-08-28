@@ -195,11 +195,18 @@ public class ToolConfigDomain {
 				Option newOption = new Option();
 				NamedNodeMap optionAttrs = currentChildNode.getAttributes();
 
+				// Get the value of the "value" attribute of the <option> tag
 				String optionValue = getAttributeValue(optionAttrs, "value");
 				if (optionValue != null) {
 					newOption.setValue(optionValue);
 				}
 
+				// Get the part between the <option> tags: <option>THIS</option>
+				String optionText = currentChildNode.getTextContent();
+				if (optionText != null) {
+					newOption.setText(optionText);
+				}
+				
 				String optionSelected = getAttributeValue(optionAttrs, "selected");
 				if (optionSelected != null) {
 					boolean selected = Boolean.parseBoolean(optionSelected);
