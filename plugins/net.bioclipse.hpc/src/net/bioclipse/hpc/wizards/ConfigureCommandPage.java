@@ -51,6 +51,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	IStructuredSelection selection;
 	Composite parentComposite;
 	Composite composite;
+	ScrolledComposite scrollComposite;
 	List<Parameter> parameters;
 	StyledText commandText;
 	Tool currentTool;
@@ -119,25 +120,25 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 		String commandString = currentTool.getCompleteCommand();
 		createResultingCommandTextbox(commandString);
-	    this.composite.pack();	
+	    this.composite.pack();
+	    // This probably has to happen here, after the composite is packed?
+        this.scrollComposite.setMinSize(this.composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 		parentComposite = parent;
 
-		ScrolledComposite sc = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
+		scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
 		
-		composite =  new Composite(sc, SWT.NULL);
+		composite =  new Composite(scrollComposite, SWT.NULL);
 		HPCUtils.createGridLayout(composite, 3);
 
-        sc.setContent(composite);
-        sc.setExpandHorizontal(true);
-        sc.setExpandVertical(true);
-        // sc.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-        sc.setMinSize(320, 1280); // TODO: Find out how to set a dynamically calculated size!
-		
-		setControl(sc);
+        scrollComposite.setContent(composite);
+        scrollComposite.setExpandHorizontal(true);
+        scrollComposite.setExpandVertical(true);
+        
+		setControl(scrollComposite);
 	}
 	
 	private void createResultingCommandTextbox(String commandString) {
