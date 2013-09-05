@@ -24,6 +24,7 @@ import org.eclipse.rse.files.ui.dialogs.SystemRemoteFolderDialog;
 import org.eclipse.rse.subsystems.files.core.subsystems.IRemoteFile;
 import org.eclipse.rse.ui.SystemBasePlugin;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -124,9 +125,19 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	@Override
 	public void createControl(Composite parent) {
 		parentComposite = parent;
-		composite =  new Composite(parent, SWT.NULL);
+
+		ScrolledComposite sc = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
+		
+		composite =  new Composite(sc, SWT.NULL);
 		HPCUtils.createGridLayout(composite, 3);
-		setControl(composite);
+
+        sc.setContent(composite);
+        sc.setExpandHorizontal(true);
+        sc.setExpandVertical(true);
+        // sc.setMinSize(composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        sc.setMinSize(320, 1280); // TODO: Find out how to set a dynamically calculated size!
+		
+		setControl(sc);
 	}
 	
 	private void createResultingCommandTextbox(String commandString) {
