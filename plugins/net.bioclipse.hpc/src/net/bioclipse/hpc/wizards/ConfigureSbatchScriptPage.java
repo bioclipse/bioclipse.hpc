@@ -91,6 +91,7 @@ public class ConfigureSbatchScriptPage extends WizardPage implements Listener {
 		} else {
 			updateCodeWindow();
 		}
+		getShell().layout(true, true);
 	}
 	
 	/**
