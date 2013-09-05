@@ -94,7 +94,10 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		} else {
 			drawPageForTool(selectedToolName);
 			updateModulesForBinary(selectedToolName);
-		}			
+		}		
+		// Needs to clear layout cache for some reason. 
+		// For more info, see: http://stackoverflow.com/questions/586414
+		getShell().layout(true, true);
 	}
 	
 	private void updateModulesForBinary(final String binaryName) {
@@ -122,6 +125,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		createResultingCommandTextbox(commandString);
 	    this.composite.pack();
 	    // This probably has to happen here, after the composite is packed?
+        this.scrollComposite.pack();
         this.scrollComposite.setMinSize(this.composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
