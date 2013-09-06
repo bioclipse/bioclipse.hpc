@@ -495,12 +495,10 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 						} else {
 							if (param != null && newParamVal != null && !newParamVal.equals("")) {
 								tempCmd = replaceParamInStr(tempCmd, param.getName(), newParamVal);
-								this.commandText.setText(tempCmd);
-							} else {
-								// logger.error("Parameter or widget value was null");
 							}
 						}						
 					}
+					this.commandText.setText(tempCmd);
 				}
 			}
 		}
