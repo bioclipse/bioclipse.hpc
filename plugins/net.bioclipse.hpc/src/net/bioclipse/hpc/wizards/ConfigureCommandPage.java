@@ -92,7 +92,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		if ((this.currentTool == null) || (!toolSelectedInCombo.equals(this.currentTool.getCommand()))) {
 			this.currentTool = getToolByName(toolSelectedInCombo);
 			drawPageForTool(this.currentTool);
-			updateSbatchPageWithModulesForBinary(this.currentTool.getCommand());
+			updateSbatchPageWithModulesForBinary(this.currentTool.getBinary());
 			clearLayoutCache();
 		}
 	}
