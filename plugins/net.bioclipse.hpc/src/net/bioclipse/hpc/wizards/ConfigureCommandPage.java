@@ -243,6 +243,8 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				createRadioButtons(param, 2);
 			} else if (type.equals("select") && optionsCnt >= 4) {
 				createComboBox(param, 2);
+			} else if (type.equals("boolean")) {
+				createCheckBox(param, 2);
 			} else {
 				createTextField(param, 2);
 			} 
@@ -252,15 +254,28 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 	}
 
-	private void createRadioButtons(Parameter parameter, int horizontalSpan) {
+	private void createCheckBox(Parameter param, int horizSpan) {
+		Button checkBox = new Button(contentComposite, SWT.CHECK);
+		checkBox.setData(param);
+		// Not currently needed, since we have a separate label for this.
+		// checkBox.setText(param.getLabel());
+
+		GridData gd = new GridData();
+		gd.horizontalSpan = horizSpan;
+		checkBox.setLayoutData(gd);
+
+		this.widgets.add(checkBox);
+	}
+
+	private void createRadioButtons(Parameter parameter, int horizSpan) {
 		List<Option> selectOptions = parameter.getSelectOptions();
 		Group radioGroup = new Group(contentComposite, SWT.HORIZONTAL);
 		radioGroup.setLayout(new RowLayout());
 		// radioGroup.setText(parameter.getName());
 
-		GridData layoutData = new GridData();
-		layoutData.horizontalSpan = horizontalSpan;
-		radioGroup.setLayoutData(layoutData);
+		GridData gd = new GridData();
+		gd.horizontalSpan = horizSpan;
+		radioGroup.setLayoutData(gd);
 		
 		for (Option option : selectOptions) {
 			Button btn = createRadioOption(radioGroup, option);
@@ -433,7 +448,6 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
 			String tempCmd = currentTool.getFullCommand();
 			for (Widget widget : this.widgets) {
-				String newParamVal = getSelectedParamVal(widget);
 				Object widgetData = widget.getData();
 				if (widgetData instanceof Parameter || widgetData instanceof Option) {
 					// Make sure we're dealing with a parameter here
@@ -445,44 +459,47 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					} else if (widgetData instanceof Option) {
 						param = ((Option) widgetData).getParameter();
 					}
-									
-					if (param.getIsOptional() && newParamVal.equals("")) {
-						tempCmd = removeParamAndFlagInStr(tempCmd, param.getName());
-					}
-					
+
 					// Take care of "boolean" flags that can either be present or not
 					if (param.getType().equals("boolean")) {
-						if (newParamVal.equals("true")) {
-							String trueVal;
+						// tempCmd = replaceParamInStr(tempCmd, param.getName(), falseVal);
+						boolean selected = ((Button) widget).getSelection();
+						if (selected) {
+							String trueValue;
 							if (param.getTrueValue() != null) {
-								trueVal = param.getTrueValue();
+								trueValue = param.getTrueValue();
 							} else {
-								trueVal = "yes";
+								trueValue = "yes";
 							}
-							tempCmd = replaceParamInStr(tempCmd, param.getName(), trueVal);
+							tempCmd = replaceParamInStr(tempCmd, param.getName(), trueValue);
 						} else {
-							String falseVal;
+							String falseValue;
 							if (param.getFalseValue() != null) {
-								falseVal = param.getFalseValue();
+								falseValue = param.getFalseValue();
 							} else {
-								falseVal = "no";
+								falseValue = "no";
 							}
-							tempCmd = replaceParamInStr(tempCmd, param.getName(), falseVal);
+							tempCmd = replaceParamInStr(tempCmd, param.getName(),falseValue);							
 						}
-					}
+					} else { // If not of type "boolean" ...
+						String newParamVal = getSelectedParamVal(widget);
+						if (param.getIsOptional() && newParamVal.equals("")) {
+							tempCmd = removeParamAndFlagInStr(tempCmd, param.getName());
+						}
 
-					// From here on, we assume that we're dealing with a parameter
-					if (param.getParamType().equals("output")) {
-						String outFilePath = newParamVal + "/" + (String) ((Text) getWidgetForData("Output filename")).getText();
-						tempCmd = replaceParamInStr(tempCmd, param.getName(), outFilePath);
-						this.commandText.setText(tempCmd);
-					} else {
-						if (param != null && newParamVal != null && !newParamVal.equals("")) {
-							tempCmd = replaceParamInStr(tempCmd, param.getName(), newParamVal);
+						// From here on, we assume that we're dealing with a parameter
+						if (param.getParamType().equals("output")) {
+							String outFilePath = newParamVal + "/" + (String) ((Text) getWidgetForData("Output filename")).getText();
+							tempCmd = replaceParamInStr(tempCmd, param.getName(), outFilePath);
 							this.commandText.setText(tempCmd);
 						} else {
-							// logger.error("Parameter or widget value was null");
-						}
+							if (param != null && newParamVal != null && !newParamVal.equals("")) {
+								tempCmd = replaceParamInStr(tempCmd, param.getName(), newParamVal);
+								this.commandText.setText(tempCmd);
+							} else {
+								// logger.error("Parameter or widget value was null");
+							}
+						}						
 					}
 				}
 			}
