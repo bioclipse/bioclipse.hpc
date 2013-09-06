@@ -140,7 +140,8 @@ public class ToolConfigDomain {
 			for (int i=0; i<paramNodes.getLength(); i++) {
 				Node currentNode = paramNodes.item(i);
 				// Create new Parameter objects for each node, and connect to Tool object 
-				configureNewParamAndAddToTool(tool, currentNode, PARAMTYPE_NORMAL);
+				Parameter param = configureNewParam(currentNode, PARAMTYPE_NORMAL);
+				tool.addParameter(param);
 			}
 
 			NodeList outputNodes = (NodeList) XmlUtils.evalXPathExprToNodeList("/tool/outputs/data", xmlDoc);
@@ -148,7 +149,8 @@ public class ToolConfigDomain {
 			for (int i=0; i<outputNodes.getLength(); i++) {
 				Node currentNode = outputNodes.item(i);
 				// Create new Parameter objects for each node, and connect to Tool object 
-				configureNewParamAndAddToTool(tool, currentNode, PARAMTYPE_OUTPUT);
+				Parameter param = configureNewParam(currentNode, PARAMTYPE_OUTPUT);
+				tool.addParameter(param);
 			}
 
 			tool.setAttributes(attributes);
@@ -159,7 +161,7 @@ public class ToolConfigDomain {
 		return tool;
 	}
 
-	private void configureNewParamAndAddToTool(Tool tool, Node currentNode, int paramType) {
+	private Parameter configureNewParam(Node currentNode, int paramType) {
 		Parameter param = new Parameter();
 		NamedNodeMap attrs = currentNode.getAttributes();
 
@@ -172,8 +174,10 @@ public class ToolConfigDomain {
 		// Get details of a parameter
 		String attrName = getAttributeValue(attrs, "name");
 		param.setName(attrName);
+		// Parse the "type" attribute 
 		String attrType = getAttributeValue(attrs, "type");
 		param.setType(attrType);
+		// If param is of type "select", parse the select options
 		if (attrType.equals("select")) {
 			List<Option> selectOptions = getSelectOptionsForNode(currentNode);
 			// Make sure the parent parameter is accessible from all options
@@ -182,12 +186,17 @@ public class ToolConfigDomain {
 			}
 			param.setSelectOptions(selectOptions);
 		}
+		// Parse the "label" attribute
 		String attrLabel = getAttributeValue(attrs, "label");
 		param.setLabel(attrLabel);
+		// Parse the "value" attribute
 		String attrValue = getAttributeValue(attrs, "value");
 		param.setValue(attrValue);
-
-		tool.addParameter(param);
+		// Parse the "optional" attribute
+		String attrIsOptionalStr = getAttributeValue(attrs, "optional");
+		boolean attrIsOptional = Boolean.parseBoolean(attrIsOptionalStr);
+		param.setIsOptional(attrIsOptional);
+		return param;
 	}
 
 	private List<Option> getSelectOptionsForNode(Node currentNode) {

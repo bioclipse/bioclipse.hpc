@@ -431,52 +431,77 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	@Override
 	public void handleEvent(Event event) {
 		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
-			String tempCommand = currentTool.getFullCommand();
+			String tempCmd = currentTool.getFullCommand();
 			for (Widget widget : this.widgets) {
-				// Get the new value from the widget
-				String newValue = null;
-				if (widget instanceof Combo) {
-					newValue = ((Combo) widget).getText();
-				} else if (widget instanceof Text) {
-					newValue = ((Text) widget).getText();
-				} else if (widget instanceof Button && ((Button) widget).getSelection()) {
-					newValue = ((Option) ((Button) widget).getData()).getValue();
-				} else {
-					log.debug("Did not set newValue of widget: " + widget.toString());
-				}
-
-				Object data = widget.getData();
-				if (data instanceof Parameter || data instanceof Option) {
-					
+				String newParamVal = getSelectedParamVal(widget);
+				Object widgetData = widget.getData();
+				if (widgetData instanceof Parameter || widgetData instanceof Option) {
 					// Make sure we're dealing with a parameter here
-					Parameter parameter = null;
-					if (data instanceof Parameter) {
-						parameter = (Parameter) data;
-					} else if (data instanceof Option) {
-						parameter = ((Option) data).getParameter();
+					// This is a workaround for the fact that we sometimes have a 
+					// parameter and sometimes an option, as widget data.
+					Parameter param = null;
+					if (widgetData instanceof Parameter) {
+						param = (Parameter) widgetData;
+					} else if (widgetData instanceof Option) {
+						param = ((Option) widgetData).getParameter();
 					}
-
+					
+					boolean isOptional = param.getIsOptional();
+					
+					if (isOptional) {
+						log.debug("Parameter " + param.getName() + " is optional!");
+					}
 					// From here on, we assume that we're dealing with a parameter
-					if (parameter.getParamType().equals("output")) {
-						String outputFolderAndFileName = newValue + "/" + (String) ((Text) getWidgetWithData("Output filename")).getText();
-						tempCommand = tempCommand.replace("$" + parameter.getName(), outputFolderAndFileName);
-						commandText.setText(tempCommand);
+					if (param.getParamType().equals("output")) {
+						String outFilePath = newParamVal + "/" + (String) ((Text) getWidgetForData("Output filename")).getText();
+						tempCmd = replaceParamInStr(tempCmd, param.getName(), outFilePath);
+						this.commandText.setText(tempCmd);
 					} else {
-						if (parameter != null && newValue != null && !newValue.equals("")) {
-							tempCommand = tempCommand.replace("$" + parameter.getName(), newValue);
-							commandText.setText(tempCommand);
+						if (param != null && newParamVal != null && !newParamVal.equals("")) {
+							tempCmd = replaceParamInStr(tempCmd, param.getName(), newParamVal);
+							this.commandText.setText(tempCmd);
 						} else {
 							// logger.error("Parameter or widget value was null");
 						}
 					}
-				} else if (data instanceof String && ((String) data).equals("Output filename")) {
-					// Nothing
 				}
 			}
 		}
 	}
 
-	private Widget getWidgetWithData(Object data) {
+	/**
+	 * Does the actual replacement of the parameter pars in the command string
+	 * (or any other string, of course)
+	 * @param tempCmd
+	 * @param paramName
+	 * @param newVal
+	 * @return
+	 */
+	private String replaceParamInStr(String tempCmd, String paramName, String newVal) {
+		return tempCmd.replace("$" + paramName, newVal);
+	}
+
+	/**
+	 * @param widget
+	 * @return
+	 */
+	private String getSelectedParamVal(Widget widget) {
+		// Get the new value from the widget
+		String newParamVal = null;
+		if (widget instanceof Combo) {
+			newParamVal = ((Combo) widget).getText();
+		} else if (widget instanceof Text) {
+			newParamVal = ((Text) widget).getText();
+		} else if (widget instanceof Button && ((Button) widget).getSelection()) {
+			newParamVal = ((Option) ((Button) widget).getData()).getValue();
+		} else {
+			log.debug("Did not set newValue of widget: " + widget.toString());
+			newParamVal = "";
+		}
+		return newParamVal;
+	}
+
+	private Widget getWidgetForData(Object data) {
 		for (Widget widget : this.widgets) {
 			if (widget.getData().equals(data)) {
 				return widget;

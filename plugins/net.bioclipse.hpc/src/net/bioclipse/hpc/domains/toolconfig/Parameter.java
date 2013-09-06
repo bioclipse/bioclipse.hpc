@@ -19,6 +19,7 @@ public class Parameter {
 	private int m_size;
 	private String m_value;
 	private List<Option> m_selectOptions;
+	private boolean m_isOptional;
 	
 	public Parameter() {
 		// TODO: Should they be initialized to null instead?
@@ -30,6 +31,7 @@ public class Parameter {
 		m_size = 0;
 		m_value = "";
 		m_selectOptions = new ArrayList<Option>();
+		m_isOptional = false; // is false by default also in Galaxy
 	}
 	
 	public String getName() {
@@ -107,5 +109,13 @@ public class Parameter {
 
 	public String getParamType() {
 		return m_paramType;
+	}
+
+	public boolean getIsOptional() {
+		return m_isOptional;
+	}
+	
+	public void setIsOptional(boolean isOptional) {
+		m_isOptional = isOptional;
 	}
 }
