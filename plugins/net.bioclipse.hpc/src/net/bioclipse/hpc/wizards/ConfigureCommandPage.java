@@ -59,7 +59,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	private static Logger log;
 	
 	/**
-	 * Constructor
+	 * Constructor. Initialize Class variables etc.
 	 * @param workbench
 	 * @param selection
 	 */
@@ -81,23 +81,59 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		return true;
 	}
 	
+	/**
+	 * Tells what happens when we enter the page. 
+	 * Note that different things need to happen depending on if it is the first
+	 * time we enter the page, or not, and whether we have changed the selected
+	 * tool in the previous page or not etc.
+	 */
 	void onEnterPage() {
-		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Select Tool Page")).comboTool;
-		String selectedToolName = comboTool.getText();
-		if (currentTool != null) {
-			String currentToolName = currentTool.getName();			
-			if (!selectedToolName.equals(currentToolName)) {
-				drawPageForTool(selectedToolName);
-				String binaryName = ToolConfigDomain.getInstance().getToolByName(selectedToolName).getCommand();
-				updateModulesForBinary(binaryName);
-			}
-		} else {
-			drawPageForTool(selectedToolName);
-			updateModulesForBinary(selectedToolName);
-		}		
-		// Needs to clear layout cache for some reason. 
-		// For more info, see: http://stackoverflow.com/questions/586414
+		String toolSelectedInCombo = getToolSelectedInComboAsText();
+		if ((this.currentTool == null) || (!toolSelectedInCombo.equals(this.currentTool.getCommand()))) {
+			this.currentTool = getToolByName(toolSelectedInCombo);
+			drawPageForTool(this.currentTool);
+			updateModulesForBinary(this.currentTool.getCommand());
+			clearLayoutCache();
+		}
+	}
+
+	/**
+	 * Needs to clear layout cache for some reason. 
+	 * For more info, see: http://stackoverflow.com/questions/586414
+	 */
+	private void clearLayoutCache() {
 		getShell().layout(true, true);
+	}
+
+	/**
+	 * @param toolSelectedInCombo
+	 * @return
+	 */
+	private Tool getToolByName(String toolSelectedInCombo) {
+		return ToolConfigDomain.getInstance().getToolByName(toolSelectedInCombo);
+	}
+
+	/**
+	 * Get the name of the currently selected tool on the tool select page.
+	 * Note that this is not the same as the "currentTool", but instead
+	 * the return value of this function can be used to update the currentTool
+	 * variable at the appropriate time. 
+	 * @return
+	 */
+	private String getToolSelectedInComboAsText() {
+		Combo comboTool = getToolSelectCombo();
+		String selectedToolName = comboTool.getText();
+		return selectedToolName;
+	}
+
+	/**
+	 * Get the widget (a dropbox / combo, in this case) where the current 
+	 * selected tool is set
+	 * @return comboTool
+	 */
+	private Combo getToolSelectCombo() {
+		Combo comboTool = ((SelectToolPage) this.getWizard().getPage("Select Tool Page")).comboTool;
+		return comboTool;
 	}
 	
 	private void updateModulesForBinary(final String binaryName) {
@@ -114,14 +150,13 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		bgJob.schedule();
 	}
 
-	private void drawPageForTool(String toolName) {
+	private void drawPageForTool(Tool tool) {
 		createControl(parentComposite);
-		currentTool = ToolConfigDomain.getInstance().getToolByName(toolName);
-		parameters = currentTool.getParameters();
+		parameters = tool.getParameters();
 		for (Parameter parameter : parameters) {
 			createWidgetsForParam(parameter);
 		}
-		String commandString = currentTool.getCompleteCommand();
+		String commandString = tool.getCompleteCommand();
 		createResultingCommandTextbox(commandString);
 	    this.composite.pack();
 	    // This probably has to happen here, after the composite is packed?
@@ -153,8 +188,8 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
 		gridLayoutData.horizontalSpan = 2;
 		gridLayoutData.grabExcessHorizontalSpace = true;
-		gridLayoutData.minimumHeight = 200;
-		gridLayoutData.widthHint = 200;
+		gridLayoutData.minimumHeight = 200; // TODO: Figure out better value
+		gridLayoutData.widthHint = 200; // TODO: Figure out better value
 		commandText.setLayoutData(gridLayoutData);
 	}
 
