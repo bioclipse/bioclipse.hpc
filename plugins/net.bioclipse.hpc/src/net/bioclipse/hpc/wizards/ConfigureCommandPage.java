@@ -215,11 +215,11 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		commandText.setLayoutData(gridLayoutData);
 	}
 
-	private void createWidgetsForParam(Parameter parameter) {
-		String label = parameter.getLabel();
-		String name = parameter.getName();
-		String type = parameter.getType();
-		String paramType = parameter.getParamType();
+	private void createWidgetsForParam(Parameter param) {
+		String label = param.getLabel();
+		String name = param.getName();
+		String type = param.getType();
+		String paramType = param.getParamType();
 
 		if (paramType.equals("normal")) {
 			if (label != "" && label != null) {
@@ -228,31 +228,31 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				createLabel(name);
 			}
 			
-			String paramValue = parameter.getValue();
+			String paramValue = param.getValue();
 			if (paramValue == null) {
 				paramValue = "";
 			}
+
+			int optionsCnt = param.getSelectOptions().size();
 			
 			// This is a way to recognize fields for specifying "input data file"
-			// TODO Use more different kinds of widgets here
-			
-			int optionsCnt = parameter.getSelectOptions().size();
-			
+			// TODO: Use more different kinds of widgets here
 			if (type.equals("data")) {
-				createSelectRemoteFileForParam(parameter);
+				createSelectRemoteFile(param);
 			} else if (type.equals("select") && optionsCnt < 4) {
-				createRadioButtonsForParam(parameter, 2);
+				createRadioButtons(param, 2);
 			} else if (type.equals("select") && optionsCnt >= 4) {
-				createComboBoxForParam(parameter, 2);
+				createComboBox(param, 2);
 			} else {
-				createTextFieldForParam(parameter, 2);
+				createTextField(param, 2);
 			} 
+
 		} else if (paramType.equals("output")) {
-			createOutputFileNameWidgets(parameter);
+			createOutputFileNameWidgets(param);
 		}
 	}
 
-	private void createRadioButtonsForParam(Parameter parameter, int i) {
+	private void createRadioButtons(Parameter parameter, int i) {
 		List<Option> selectOptions = parameter.getSelectOptions();
 		Group radioGroup = new Group(contentComposite, SWT.HORIZONTAL);
 		radioGroup.setLayout(new RowLayout());
@@ -282,12 +282,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		fieldLabel.setLayoutData(labelGridData);
 	}
 	
-	private void createSelectRemoteFileForParam(Parameter parameter) {
+	private void createSelectRemoteFile(Parameter parameter) {
 		// TODO: These are not used, no?
 		// ISystemRegistry sysReg = RSECorePlugin.getTheSystemRegistry();
 		// final IRSECoreRegistry coreReg = RSECorePlugin.getTheCoreRegistry();
 		
-		final Text textField = createTextFieldForParam(parameter, 1);
+		final Text textField = createTextField(parameter, 1);
 		
 		Button btnBrowseRemoteFiles = new Button(contentComposite, SWT.NONE);
 		btnBrowseRemoteFiles.setText("Browse...");
@@ -317,7 +317,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		});
 	}
 	
-	private void createComboBoxForParam(Parameter parameter, int horizontalSpan) {
+	private void createComboBox(Parameter parameter, int horizontalSpan) {
 		List<String> selectOptions = parameter.getSelectOptionValues();
 		Combo currentCombo = Utils.createCombo(contentComposite);
 
@@ -338,7 +338,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 	}
 
-	private Text createTextFieldForParam(Parameter parameter, int horizontalSpan) {
+	private Text createTextField(Parameter parameter, int horizontalSpan) {
 		Text textField = new Text(this.contentComposite, SWT.BORDER);
 		textField.setText(parameter.getValue());
 
