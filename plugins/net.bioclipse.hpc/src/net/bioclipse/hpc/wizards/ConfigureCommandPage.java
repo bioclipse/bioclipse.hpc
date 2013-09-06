@@ -445,12 +445,11 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					} else if (widgetData instanceof Option) {
 						param = ((Option) widgetData).getParameter();
 					}
-					
-					boolean isOptional = param.getIsOptional();
-					
-					if (isOptional) {
-						log.debug("Parameter " + param.getName() + " is optional!");
+									
+					if (param.getIsOptional() && newParamVal.equals("")) {
+						tempCmd = removeParamAndFlagInStr(tempCmd, param.getName());
 					}
+
 					// From here on, we assume that we're dealing with a parameter
 					if (param.getParamType().equals("output")) {
 						String outFilePath = newParamVal + "/" + (String) ((Text) getWidgetForData("Output filename")).getText();
@@ -467,6 +466,12 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 				}
 			}
 		}
+	}
+
+	private String removeParamAndFlagInStr(String tempCmd, String name) {
+		String regex = "[ ]+-{1,2}[a-zA-Z0-9]+[ ]+\\$" + name;
+		tempCmd = tempCmd.replaceAll(regex, "");
+		return tempCmd;
 	}
 
 	/**
