@@ -182,19 +182,21 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
         this.scrollComposite.setMinSize(this.contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
+	/**
+	 * Create composites (scroll- and content-) and connect with each other.
+	 */
 	@Override
 	public void createControl(Composite parent) {
-		parentComposite = parent;
+		// Initialization
+		this.parentComposite = parent;
+		this.scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );		
+		this.contentComposite =  new Composite(scrollComposite, SWT.NULL);
 
-		scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
-		
-		contentComposite =  new Composite(scrollComposite, SWT.NULL);
+		// Connecting things
 		HPCUtils.createGridLayout(contentComposite, 3);
-
         scrollComposite.setContent(contentComposite);
         scrollComposite.setExpandHorizontal(true);
         scrollComposite.setExpandVertical(true);
-        
 		setControl(scrollComposite);
 	}
 	
