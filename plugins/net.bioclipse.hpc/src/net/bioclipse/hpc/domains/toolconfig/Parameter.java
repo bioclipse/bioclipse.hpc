@@ -20,6 +20,8 @@ public class Parameter {
 	private String m_value;
 	private List<Option> m_selectOptions;
 	private boolean m_isOptional;
+	private String m_trueValue;
+	private String m_falseValue;
 	
 	public Parameter() {
 		// TODO: Should they be initialized to null instead?
@@ -117,5 +119,21 @@ public class Parameter {
 	
 	public void setIsOptional(boolean isOptional) {
 		m_isOptional = isOptional;
+	}
+
+	public String getTrueValue() {
+		return m_trueValue;
+	}
+
+	public void setTrueValue(String trueValue) {
+		m_trueValue = trueValue;
+	}
+
+	public String getFalseValue() {
+		return m_falseValue;
+	}
+
+	public void setFalseValue(String falseValue) {
+		m_falseValue = falseValue;
 	}
 }

@@ -186,16 +186,27 @@ public class ToolConfigDomain {
 			}
 			param.setSelectOptions(selectOptions);
 		}
+
 		// Parse the "label" attribute
 		String attrLabel = getAttributeValue(attrs, "label");
 		param.setLabel(attrLabel);
+
 		// Parse the "value" attribute
 		String attrValue = getAttributeValue(attrs, "value");
 		param.setValue(attrValue);
+
 		// Parse the "optional" attribute
 		String attrIsOptionalStr = getAttributeValue(attrs, "optional");
 		boolean attrIsOptional = Boolean.parseBoolean(attrIsOptionalStr);
 		param.setIsOptional(attrIsOptional);
+
+		// Parse truevalue attribute
+		String trueValue = getAttributeValue(attrs, "truevalue");
+		param.setTrueValue(trueValue);
+
+		// Parse falsevalue attribute
+		String falseValue = getAttributeValue(attrs, "falsevalue");
+		param.setFalseValue(falseValue);
 		return param;
 	}
 

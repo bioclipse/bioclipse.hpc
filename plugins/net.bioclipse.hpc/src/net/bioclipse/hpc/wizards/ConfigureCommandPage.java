@@ -449,6 +449,27 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					if (param.getIsOptional() && newParamVal.equals("")) {
 						tempCmd = removeParamAndFlagInStr(tempCmd, param.getName());
 					}
+					
+					// Take care of "boolean" flags that can either be present or not
+					if (param.getType().equals("boolean")) {
+						if (newParamVal.equals("true")) {
+							String trueVal;
+							if (param.getTrueValue() != null) {
+								trueVal = param.getTrueValue();
+							} else {
+								trueVal = "yes";
+							}
+							tempCmd = replaceParamInStr(tempCmd, param.getName(), trueVal);
+						} else {
+							String falseVal;
+							if (param.getFalseValue() != null) {
+								falseVal = param.getFalseValue();
+							} else {
+								falseVal = "no";
+							}
+							tempCmd = replaceParamInStr(tempCmd, param.getName(), falseVal);
+						}
+					}
 
 					// From here on, we assume that we're dealing with a parameter
 					if (param.getParamType().equals("output")) {
