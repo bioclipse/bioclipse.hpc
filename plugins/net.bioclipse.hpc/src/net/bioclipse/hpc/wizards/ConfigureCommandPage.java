@@ -252,24 +252,34 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		}
 	}
 
-	private void createRadioButtons(Parameter parameter, int i) {
+	private void createRadioButtons(Parameter parameter, int horizontalSpan) {
 		List<Option> selectOptions = parameter.getSelectOptions();
 		Group radioGroup = new Group(contentComposite, SWT.HORIZONTAL);
 		radioGroup.setLayout(new RowLayout());
 		// radioGroup.setText(parameter.getName());
 
 		GridData layoutData = new GridData();
-		layoutData.horizontalSpan = i;
+		layoutData.horizontalSpan = horizontalSpan;
 		radioGroup.setLayoutData(layoutData);
 		
 		for (Option option : selectOptions) {
-			Button btn = new Button(radioGroup, SWT.RADIO);
-			btn.setText(option.getText());
-			// Event handling stuff
-			btn.addListener(SWT.Selection, this);
-			btn.setData(option);
-			widgets.add(btn);
+			Button btn = createRadioOption(radioGroup, option);
+			this.widgets.add(btn);
 		}
+	}
+
+	/**
+	 * @param radioGroup
+	 * @param option
+	 * @return
+	 */
+	private Button createRadioOption(Group radioGroup, Option option) {
+		Button btn = new Button(radioGroup, SWT.RADIO);
+		btn.setData(option);
+		btn.setText(option.getText());
+		// Event handling stuff
+		btn.addListener(SWT.Selection, this);
+		return btn;
 	}
 
 	private void createLabel(String labelText) {
