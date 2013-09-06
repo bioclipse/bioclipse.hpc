@@ -314,9 +314,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 					dialog.setDefaultSystemConnection(hpcHost, true);
 					
 					dialog.open();
-					Object o = dialog.getSelectedObject();
-					if (o instanceof IRemoteFile) {
-						IRemoteFile file = (IRemoteFile) o; 
+					Object obj = dialog.getSelectedObject();
+					if (obj instanceof IRemoteFile) {
+						IRemoteFile file = (IRemoteFile) obj; 
 						textField.setText(file.getAbsolutePath());
 						textField.notifyListeners(SWT.KeyUp, new Event());
 					} else {
@@ -425,7 +425,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		outputFileName.setLayoutData(outputFileNameGridData);
 	}
 
-
+	/** 
+	 * Main event handling loop.
+	 */
 	@Override
 	public void handleEvent(Event event) {
 		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
