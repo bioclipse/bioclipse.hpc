@@ -263,6 +263,8 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		GridData gd = new GridData();
 		gd.horizontalSpan = horizSpan;
 		checkBox.setLayoutData(gd);
+		
+		checkBox.addListener(SWT.Selection, this);		
 
 		this.widgets.add(checkBox);
 	}
