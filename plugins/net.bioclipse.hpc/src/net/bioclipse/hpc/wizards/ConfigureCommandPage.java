@@ -50,9 +50,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	IWorkbench workbench;
 	IStructuredSelection selection;
 	Composite parentComposite;
-	Composite composite;
+	Composite contentComposite;
 	ScrolledComposite scrollComposite;
-	List<Parameter> parameters;
+	List<Parameter> toolParams;
 	StyledText commandText;
 	Tool currentTool;
 	List<Widget> widgets;
@@ -69,7 +69,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		setDescription("Select a tool from the ones available in the tool group just selected ...");
 		this.workbench = workbench;
 		this.selection = selection;
-		this.parameters = new ArrayList<Parameter>();
+		this.toolParams = new ArrayList<Parameter>();
 		this.widgets = new ArrayList<Widget>();
 		this.log = LoggerFactory.getLogger(ConfigureCommandPage.class);
 	}
@@ -92,7 +92,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		if ((this.currentTool == null) || (!toolSelectedInCombo.equals(this.currentTool.getCommand()))) {
 			this.currentTool = getToolByName(toolSelectedInCombo);
 			drawPageForTool(this.currentTool);
-			updateModulesForBinary(this.currentTool.getCommand());
+			updateSbatchPageWithModulesForBinary(this.currentTool.getCommand());
 			clearLayoutCache();
 		}
 	}
@@ -136,7 +136,13 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		return comboTool;
 	}
 	
-	private void updateModulesForBinary(final String binaryName) {
+	/**
+	 * Update the SBATCH page with the modules that contain a binary with name
+	 * binaryName. Useful to run every time a new tool is selected.
+	 * Is run as a background job, as not to freeze the user interface. 
+	 * @param binaryName
+	 */
+	private void updateSbatchPageWithModulesForBinary(final String binaryName) {
 		Job bgJob = new Job("Retrieving modules for " + binaryName + " ...") {
 			List<String> modules;
 			protected IStatus run(IProgressMonitor monitor) {
@@ -150,18 +156,30 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		bgJob.schedule();
 	}
 
+	/**
+	 * The main method for drawing the wizard page.
+	 * @param tool
+	 */
 	private void drawPageForTool(Tool tool) {
 		createControl(parentComposite);
-		parameters = tool.getParameters();
-		for (Parameter parameter : parameters) {
-			createWidgetsForParam(parameter);
+		toolParams = tool.getParameters();
+		for (Parameter param : toolParams) {
+			createWidgetsForParam(param);
 		}
-		String commandString = tool.getCompleteCommand();
-		createResultingCommandTextbox(commandString);
-	    this.composite.pack();
-	    // This probably has to happen here, after the composite is packed?
+		String commandStr = tool.getFullCommand();
+		createCommandTextbox(commandStr);
+	    packComposites();
+	}
+
+	/**
+	 * Pack both the scrolled composite, and the content composite (contained
+	 * INSIDE the scrolled composite), in the correct order.
+	 */
+	private void packComposites() {
+		// Order of the packing is important here!
+		this.contentComposite.pack();
         this.scrollComposite.pack();
-        this.scrollComposite.setMinSize(this.composite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+        this.scrollComposite.setMinSize(this.contentComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 
 	@Override
@@ -170,20 +188,20 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 		scrollComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
 		
-		composite =  new Composite(scrollComposite, SWT.NULL);
-		HPCUtils.createGridLayout(composite, 3);
+		contentComposite =  new Composite(scrollComposite, SWT.NULL);
+		HPCUtils.createGridLayout(contentComposite, 3);
 
-        scrollComposite.setContent(composite);
+        scrollComposite.setContent(contentComposite);
         scrollComposite.setExpandHorizontal(true);
         scrollComposite.setExpandVertical(true);
         
 		setControl(scrollComposite);
 	}
 	
-	private void createResultingCommandTextbox(String commandString) {
+	private void createCommandTextbox(String commandString) {
 		createLabel("Resulting command");
 		
-		commandText = new StyledText(composite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
+		commandText = new StyledText(contentComposite, SWT.MULTI | SWT.BORDER | SWT.WRAP | SWT.V_SCROLL );
 		commandText.setText(commandString);
 		GridData gridLayoutData = new GridData( SWT.NONE|GridData.FILL_BOTH );
 		gridLayoutData.horizontalSpan = 2;
@@ -232,7 +250,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 
 	private void createRadioButtonsForParam(Parameter parameter, int i) {
 		List<Option> selectOptions = parameter.getSelectOptions();
-		Group radioGroup = new Group(composite, SWT.HORIZONTAL);
+		Group radioGroup = new Group(contentComposite, SWT.HORIZONTAL);
 		radioGroup.setLayout(new RowLayout());
 		// radioGroup.setText(parameter.getName());
 
@@ -251,9 +269,9 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private void createLabel(String labelText) {
-		StyledText fieldLabel = new StyledText(this.composite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
+		StyledText fieldLabel = new StyledText(this.contentComposite, SWT.RIGHT | SWT.WRAP | SWT.READ_ONLY );
 		labelText = HPCUtils.ensureEndsWithColon(labelText);
-		fieldLabel.setBackground (composite.getBackground());
+		fieldLabel.setBackground (contentComposite.getBackground());
 		fieldLabel.setText(labelText);
 		GridData labelGridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
 		labelGridData.widthHint = 160;
@@ -267,7 +285,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		
 		final Text textField = createTextFieldForParam(parameter, 1);
 		
-		Button btnBrowseRemoteFiles = new Button(composite, SWT.NONE);
+		Button btnBrowseRemoteFiles = new Button(contentComposite, SWT.NONE);
 		btnBrowseRemoteFiles.setText("Browse...");
 		btnBrowseRemoteFiles.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -297,7 +315,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	
 	private void createComboBoxForParam(Parameter parameter, int horizontalSpan) {
 		List<String> selectOptions = parameter.getSelectOptionValues();
-		Combo currentCombo = Utils.createCombo(composite);
+		Combo currentCombo = Utils.createCombo(contentComposite);
 
 		// Layout stuff
 		GridData comboLayoutData = new GridData();
@@ -317,7 +335,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private Text createTextFieldForParam(Parameter parameter, int horizontalSpan) {
-		Text textField = new Text(this.composite, SWT.BORDER);
+		Text textField = new Text(this.contentComposite, SWT.BORDER);
 		textField.setText(parameter.getValue());
 
 		// Connect the widget to it's corresponding parameter
@@ -339,7 +357,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		createLabel("Output directory");
 
 		String defaultText = parameter.getValue(); 
-		final Text outputFolder = new Text(this.composite, SWT.BORDER|SWT.READ_ONLY);
+		final Text outputFolder = new Text(this.contentComposite, SWT.BORDER|SWT.READ_ONLY);
 		outputFolder.setText(defaultText);
 		// Connect the widget to it's corresponding parameter
 		outputFolder.setData(parameter);
@@ -351,7 +369,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		outputFolder.setLayoutData(outputFolderGridData);
 		outputFolder.setBackground(new Color(null, new RGB(240, 240, 240)));
 		
-		Button btnBrowseRemoteOutputFolder = new Button(composite, SWT.NONE);
+		Button btnBrowseRemoteOutputFolder = new Button(contentComposite, SWT.NONE);
 		btnBrowseRemoteOutputFolder.setText("Browse...");
 		
 		btnBrowseRemoteOutputFolder.addSelectionListener(new SelectionAdapter() {
@@ -380,7 +398,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 		});
 		
 		createLabel("Output filename");
-		final Text outputFileName = new Text(this.composite, SWT.BORDER);
+		final Text outputFileName = new Text(this.contentComposite, SWT.BORDER);
 		outputFileName.setText(defaultText);
 		// Connect the widget to it's corresponding parameter
 		outputFileName.setData("Output filename");
@@ -397,7 +415,7 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	@Override
 	public void handleEvent(Event event) {
 		if (event.type == SWT.Selection || event.type == SWT.KeyUp) {
-			String tempCommand = currentTool.getCompleteCommand();
+			String tempCommand = currentTool.getFullCommand();
 			for (Widget widget : this.widgets) {
 				// Get the new value from the widget
 				String newValue = null;

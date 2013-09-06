@@ -40,7 +40,7 @@ public class Tool {
 		return m_command;
 	}
 
-	public String getCompleteCommand() {
+	public String getFullCommand() {
 		String interpreter = getInterpreter();
 		String completeCommand = "";
 		if (!interpreter.equals("")) {
