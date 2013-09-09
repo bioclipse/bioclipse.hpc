@@ -99,8 +99,25 @@ public class Tool {
 	}
 
 	public String getBinary() {
-		String[] commandParts = this.getCommand().split(" ");
-		String binary = commandParts[0];
+		String binary = extractCommandFromCommandTagContent(this.getCommand());
+		return binary;
+	}
+
+	/**
+	 * @return
+	 */
+	private String extractCommandFromCommandTagContent(String command) {
+		String[] commandLines = command.split("\n");
+		String binary = null;
+		for (String commandLine : commandLines) {
+			if (commandLine.startsWith("#")) {
+				continue;
+			} else {
+				String[] commandParts = commandLine.split(" ");
+				binary = commandParts[0];
+				return binary;				
+			}
+		}
 		return binary;
 	}
 
