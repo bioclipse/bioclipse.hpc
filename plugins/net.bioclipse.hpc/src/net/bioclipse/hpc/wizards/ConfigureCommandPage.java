@@ -507,8 +507,8 @@ public class ConfigureCommandPage extends WizardPage implements Listener {
 	}
 
 	private String removeParamAndFlagInStr(String tempCmd, String name) {
-		String regex = "[ ]*-{1,2}[a-zA-Z0-9]+[ ]+\\$" + name + " ";
-		tempCmd = tempCmd.replaceAll(regex, "");
+		String regex = "[ ]*-{1,2}[a-zA-Z0-9\\.]+[ ]+\\$" + name + " ";
+		tempCmd = tempCmd.replaceAll(regex, " ");
 		return tempCmd;
 	}
 
