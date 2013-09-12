@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: HPC
 Bundle-SymbolicName: net.bioclipse.hpc;singleton:=true
-Bundle-Version: 1.0.0.v20101007
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: net.bioclipse.hpc.Activator
 Bundle-Vendor: The Bioclipse project
 Bundle-ClassPath: .,
