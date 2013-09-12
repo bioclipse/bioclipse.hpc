@@ -43,7 +43,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.rse.subsystems.terminals.core;bundle-version="1.0.300",
  org.eclipse.rse.subsystems.terminals.ssh;bundle-version="1.0.200",
  org.eclipse.rse.terminals.ui;bundle-version="1.2.0",
- org.eclipse.rse.useractions;bundle-version="1.1.400"
+ org.eclipse.rse.useractions;bundle-version="1.1.400",
+ org.eclipse.jsch.core;bundle-version="1.1.400",
+ com.jcraft.jsch;bundle-version="0.1.46",
+ org.eclipse.jsch.ui;bundle-version="1.1.400"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.jface.databinding.viewers,
  org.eclipse.swt.graphics,
