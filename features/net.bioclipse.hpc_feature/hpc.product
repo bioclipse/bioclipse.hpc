@@ -54,6 +54,7 @@
       <feature id="net.bioclipse.core_feature"/>
       <feature id="net.bioclipse.hpc_feature"/>
       <feature id="net.bioclipse.statistics_feature"/>
+      <feature id="net.bioclipse.advanced_feature"/>
    </features>
 
 
