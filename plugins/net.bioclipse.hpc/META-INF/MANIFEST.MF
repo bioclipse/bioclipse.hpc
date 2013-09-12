@@ -47,7 +47,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jsch.core;bundle-version="1.1.400",
  com.jcraft.jsch;bundle-version="0.1.46",
  org.eclipse.jsch.ui;bundle-version="1.1.400",
- org.eclipse.rse;bundle-version="3.4.0"
+ org.eclipse.rse;bundle-version="3.4.0",
+ org.apache.felix.gogo.shell;bundle-version="0.8.0",
+ org.eclipse.tm.terminal;bundle-version="3.2.2",
+ org.eclipse.tm.terminal.ssh;bundle-version="2.1.200",
+ org.eclipse.tm.terminal.view;bundle-version="2.4.1",
+ org.apache.felix.gogo.command;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.jface.databinding.viewers,
  org.eclipse.swt.graphics,

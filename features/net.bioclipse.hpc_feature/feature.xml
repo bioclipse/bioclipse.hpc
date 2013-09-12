@@ -75,10 +75,15 @@ Jena is built on top of other sub-systems which we gratefully acknowledge: detai
       <import plugin="org.eclipse.jsch.core" version="1.1.400" match="greaterOrEqual"/>
       <import plugin="com.jcraft.jsch" version="0.1.46" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jsch.ui" version="1.1.400" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.rse" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.felix.gogo.shell" version="0.8.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.tm.terminal" version="3.2.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.tm.terminal.ssh" version="2.1.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.tm.terminal.view" version="2.4.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface.databinding"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="slf4j.api"/>
-      <import plugin="org.eclipse.rse" version="3.4.0" match="greaterOrEqual"/>
+      <import plugin="org.apache.felix.gogo.command" version="0.8.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
