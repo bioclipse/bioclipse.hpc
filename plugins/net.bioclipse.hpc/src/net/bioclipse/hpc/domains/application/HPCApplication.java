@@ -332,7 +332,7 @@ public class HPCApplication extends AbstractModelObject {
 		} else {
 			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
 			if (cmdss == null) {
-				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost)!";
+				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost), where hpcHost is " + hpcHost + "!";
 				log.error(errMsg);
 				return errMsg;
 			}
