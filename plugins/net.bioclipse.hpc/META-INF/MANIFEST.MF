@@ -46,7 +46,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.rse.useractions;bundle-version="1.1.400",
  org.eclipse.jsch.core;bundle-version="1.1.400",
  com.jcraft.jsch;bundle-version="0.1.46",
- org.eclipse.jsch.ui;bundle-version="1.1.400"
+ org.eclipse.jsch.ui;bundle-version="1.1.400",
+ org.eclipse.rse;bundle-version="3.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.eclipse.jface.databinding.viewers,
  org.eclipse.swt.graphics,
