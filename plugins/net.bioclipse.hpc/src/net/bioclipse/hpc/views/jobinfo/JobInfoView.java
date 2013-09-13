@@ -153,7 +153,6 @@ public class JobInfoView extends ViewPart {
 				if (showMessageOnZeroJobs) {
 					HPCUtils.getApplication().showInfoMessage("No jobs found", "Could not find any running or pending jobs.");					
 				}
-				logger.warn("Didn't get any jobs to parse!");
 			}
 			treeViewer.refresh();
 			treeViewer.expandAll();
