@@ -229,6 +229,9 @@ public class HPCApplication extends AbstractModelObject {
 		commandOutput = execRemoteCommand("simpleapi " + infoTypeStr);
 		// Extract the API part from the messy terminal output
 		apiOutput = getMatch("<simpleapi>.*?</simpleapi>", commandOutput);
+		if (apiOutput == null) {
+			showErrorMessage("Could not get info from cluster", "Could not get information from the remote cluster. Cluster API file seem to be missing. Please report this problem to the cluster administrator!");
+		}
 		
 		return apiOutput;
 	}	
@@ -341,10 +344,15 @@ public class HPCApplication extends AbstractModelObject {
 				allOutput = "";
 				tempStr = "";
 				cmdOp.runCommand(command, true);
+				boolean captureOutput = false; 
 				while (tempStr != null) {
-					tempStr = null;
 					tempStr = cmdOp.readLine(true);
-					allOutput += tempStr + "\n";
+					// Only start reading after we have seen the command being echoed once
+					if (!captureOutput && tempStr.contains(command)) {
+						captureOutput = true;
+					} else if (captureOutput) {
+						allOutput += tempStr + "\n";						
+					}
 				}
 			} catch (Exception cmdError) {
 				showErrorMessage("Error on executing remote command", "Failed to execute remote command!\nAre you logged in?");

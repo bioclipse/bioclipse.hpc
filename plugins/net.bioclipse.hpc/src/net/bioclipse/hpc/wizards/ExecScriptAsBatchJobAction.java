@@ -29,7 +29,8 @@ public class ExecScriptAsBatchJobAction implements IObjectActionDelegate {
 			} else {
 				String JobId = HPCUtils.getMatch("Submitted batch job ([0-9]+)", cmdOutput, 1);
 				if (JobId == null) {
-					String errMsg = "Could not start job. See SLURM output below for possible reasons:\n\n" + cmdOutput;
+					String sbatchOutput = extractSbatchLinesFromCommandOutput(cmdOutput);
+					String errMsg = "Could not start job. See SBATCH output below for possible reasons:\n\n" + sbatchOutput;
 					app.showErrorMessage("Failed to submit job", errMsg);
 				} else {
 					app.showInfoMessage("Jub submitted", "Successfully submitted job with id: " + JobId);
@@ -49,5 +50,15 @@ public class ExecScriptAsBatchJobAction implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		this.part = targetPart;
+	}
+	
+	private String extractSbatchLinesFromCommandOutput(String commandOutput) {
+		String sbatchLines = "";
+		for (String cmdOutputLine : commandOutput.split("\n")) {
+			if (cmdOutputLine.startsWith("sbatch:")) {
+				sbatchLines += cmdOutputLine + "\n";
+			}
+		}
+		return sbatchLines;
 	}
 }
