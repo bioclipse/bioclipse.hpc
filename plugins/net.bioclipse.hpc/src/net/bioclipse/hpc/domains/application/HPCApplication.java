@@ -359,7 +359,7 @@ public class HPCApplication extends AbstractModelObject {
 				errMsg = "Failed to execute a remote command: " + command;
 				log.warn(errMsg);
 				log.warn(commandError.getMessage());
-				return errMsg;
+				return null;
 			}
 		}
 		return allOutput;
