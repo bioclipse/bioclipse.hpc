@@ -88,6 +88,7 @@ public class HPCApplication extends AbstractModelObject {
 	}
 
 	public void refreshProjInfoView() {
+		if (isLoggedIn()) {
 			// Run as a background job
 			Job bgJob = new Job("Updating project info ...") {
 				String projInfoXml;
@@ -111,7 +112,10 @@ public class HPCApplication extends AbstractModelObject {
 				}
 			};			
 			bgJob.setPriority(Job.SHORT);
-			bgJob.schedule();
+			bgJob.schedule();			
+		} else {
+			showErrorMessageForNotLoggedIn();
+		}
 	}
 
 	public Map<String,Object> getUserInfo() {
@@ -380,7 +384,7 @@ public class HPCApplication extends AbstractModelObject {
 		if (hosts.length == 0) {
 			log.error("No host names found!");
 		}
-
+	
 		for (IHost host : hosts) {
 			String hostAlias = host.getAliasName();
 			String hostNameInPrefPage = Activator.getDefault().getPreferenceStore().getString("hostname");
