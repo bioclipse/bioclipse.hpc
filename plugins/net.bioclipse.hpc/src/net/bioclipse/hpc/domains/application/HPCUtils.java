@@ -101,7 +101,7 @@ public class HPCUtils {
 
 	public static List<String> getMatches(String regexPattern, String text) {
 		List<String> result = new ArrayList<String>();
-		Pattern p = Pattern.compile(regexPattern);
+		Pattern p = Pattern.compile(regexPattern, Pattern.DOTALL);
 		Matcher m = p.matcher(text);
 		while (m.find()) {
 			String currentMatchString = m.group();
@@ -112,7 +112,7 @@ public class HPCUtils {
 
 	public static String getMatch(String regexPattern, String text, int group) {
 		String result = null;
-		Pattern p = Pattern.compile(regexPattern);
+		Pattern p = Pattern.compile(regexPattern, Pattern.DOTALL);
 		Matcher m = p.matcher(text);
 		if (m.find()) {
 			result = m.group(group);
