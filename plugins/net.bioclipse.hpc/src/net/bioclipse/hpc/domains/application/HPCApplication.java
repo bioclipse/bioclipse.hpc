@@ -274,7 +274,7 @@ public class HPCApplication extends AbstractModelObject {
 
 	private String getMatch(String regexPattern, String text) {
 		String result = null;
-		Pattern p = Pattern.compile(regexPattern);
+		Pattern p = Pattern.compile(regexPattern, Pattern.DOTALL);
 		Matcher m = p.matcher(text);
 		if (m.find()) {
 			result = m.group();
