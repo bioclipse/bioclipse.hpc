@@ -19,15 +19,26 @@ public class ExecScriptAsBatchJobAction implements IObjectActionDelegate {
 	
 	@Override
 	public void run(IAction action) {
-		String filePath = HPCUtils.getFileAbsolutePathFromSelection((IStructuredSelection) selection);
-		String commandString = "sbatch " + filePath;
-		logger.debug("File path: " + filePath);
 		HPCApplication app = HPCUtils.getApplication();
-		String cmdOutput = app.execRemoteCommand(commandString);
-		String JobId = HPCUtils.getMatch("Submitted batch job ([0-9]+)", cmdOutput, 1);
-		logger.debug("Executing remote command (" + commandString + ")");
-		HPCUtils.getApplication().showInfoMessage("Jub submitted", "Successfully submitted job with id: " + JobId);
-		HPCUtils.getApplication().refreshJobInfoView(false);
+		if (app.isLoggedIn()) {
+			String filePath = HPCUtils.getFileAbsolutePathFromSelection((IStructuredSelection) selection);
+			String commandString = "sbatch " + filePath;
+			String cmdOutput = app.execRemoteCommand(commandString);
+			if (cmdOutput == null) {
+				app.showErrorMessage("Failed to communicate with remote host", "Could not communicate with the remote host. Please check your network connection!");
+			} else {
+				String JobId = HPCUtils.getMatch("Submitted batch job ([0-9]+)", cmdOutput, 1);
+				if (JobId == null) {
+					String errMsg = "Could not start job. See SLURM output below for possible reasons:\n\n" + cmdOutput;
+					app.showErrorMessage("Failed to submit job", errMsg);
+				} else {
+					app.showInfoMessage("Jub submitted", "Successfully submitted job with id: " + JobId);
+					app.refreshJobInfoView(false);				
+				}
+			}
+		} else {
+			app.showErrorMessageForNotLoggedIn();
+		}
 	}
 
 	@Override

@@ -416,4 +416,22 @@ public class HPCApplication extends AbstractModelObject {
 		showInfoMessage("Job cancelled", "Successfully cancelled job witn id " + jobId + "!");
 		refreshJobInfoView(false);
 	}	
+	
+	/**
+	 * Return true if the current user is currently logged in to the remote system
+	 * defined in the preferences dialog, and false otherwise.
+	 * @return
+	 */
+	public boolean isLoggedIn() {
+		IHost host = getHPCHost();
+		if (host.isOffline()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public void showErrorMessageForNotLoggedIn() {
+		showErrorMessage("Not logged in", "You must log in to perform this action!");
+	}
 }
