@@ -316,7 +316,7 @@ public class HPCApplication extends AbstractModelObject {
 	public String execRemoteCommand(String command) {
 		String errMsg;
 		IHost hpcHost;
-		String temp = "";
+		String tempStr = "";
 		String allOutput = "";
 		hpcHost = getHPCHost();
 
@@ -330,35 +330,27 @@ public class HPCApplication extends AbstractModelObject {
 			log.error(errMsg);
 			return errMsg;
 		} else {
-			IRemoteCmdSubSystem cmdss = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
-			if (cmdss == null) {
+			IRemoteCmdSubSystem cmdSubSys = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
+			if (cmdSubSys == null) {
 				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost), where hpcHost is " + hpcHost + "!";
 				log.error(errMsg);
 				return errMsg;
 			}
-			SimpleCommandOperation simpleCommandOp = new SimpleCommandOperation(cmdss, new RemoteFileEmpty(), true);
+			SimpleCommandOperation cmdOp = new SimpleCommandOperation(cmdSubSys, new RemoteFileEmpty(), true);
 			try {
 				allOutput = "";
-				temp = "";
-				simpleCommandOp.runCommand(command, true);
-				while (temp != null) {
-					temp = null;
-					temp = simpleCommandOp.readLine(true);
-					// if (temp != "") {
-					allOutput += temp + "\n";
-					// logger.debug("Output from : " + temp);
-					// }
-					// try {
-					//     Thread.sleep(0);
-					// } catch (Exception sleepError) {
-					//     sleepError.printStackTrace();
-					// }
+				tempStr = "";
+				cmdOp.runCommand(command, true);
+				while (tempStr != null) {
+					tempStr = null;
+					tempStr = cmdOp.readLine(true);
+					allOutput += tempStr + "\n";
 				}
-			} catch (Exception commandError) {
+			} catch (Exception cmdError) {
 				showErrorMessage("Error on executing remote command", "Failed to execute remote command!\nAre you logged in?");
 				errMsg = "Failed to execute a remote command: " + command;
 				log.warn(errMsg);
-				log.warn(commandError.getMessage());
+				log.warn(cmdError.getMessage());
 				return null;
 			}
 		}
