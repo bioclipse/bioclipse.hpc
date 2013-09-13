@@ -317,6 +317,7 @@ public class HPCApplication extends AbstractModelObject {
 	 * @return String allOutput
 	 */
 	public String execRemoteCommand(String command) {
+		String errTitle;
 		String errMsg;
 		IHost hpcHost;
 		String tempStr = "";
@@ -324,20 +325,23 @@ public class HPCApplication extends AbstractModelObject {
 		hpcHost = getHPCHost();
 
 		if (hpcHost == null) {
-			errMsg = "No active HPC hosts!";
-			log.error(errMsg);
-			return errMsg;
+			errTitle = "No active HPC hosts";
+			errMsg = "You need to set up an SSH connection to the remote cluster, and add it's hostname and other details in Windows > Preferences > HPC Integration";
+			showErrorMessage(errTitle, errMsg);
+			log.error(errTitle);
+			return null;
 		} else if (hpcHost.isOffline()) {
 			errMsg = "You must log in before executing remote commands!";
 			showErrorMessage("You are not logged in", errMsg);
 			log.error(errMsg);
-			return errMsg;
+			return null;
 		} else {
 			IRemoteCmdSubSystem cmdSubSys = RemoteCommandHelpers.getCmdSubSystem(hpcHost); // It is here that it breaks!
 			if (cmdSubSys == null) {
 				errMsg = "Could not find CmdSubSystem in RemoteCommandHelpers.getCmdSubSystem(hpcHost), where hpcHost is " + hpcHost + "!";
+				showErrorMessage("Command sub-system not found!", errMsg);
 				log.error(errMsg);
-				return errMsg;
+				return null;
 			}
 			SimpleCommandOperation cmdOp = new SimpleCommandOperation(cmdSubSys, new RemoteFileEmpty(), true);
 			try {
