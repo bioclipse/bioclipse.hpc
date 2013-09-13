@@ -345,7 +345,7 @@ public class HPCApplication extends AbstractModelObject {
 					temp = null;
 					temp = simpleCommandOp.readLine(true);
 					// if (temp != "") {
-					allOutput += temp;
+					allOutput += temp + "\n";
 					// logger.debug("Output from : " + temp);
 					// }
 					// try {
