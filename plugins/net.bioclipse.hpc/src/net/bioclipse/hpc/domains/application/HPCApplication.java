@@ -297,22 +297,32 @@ public class HPCApplication extends AbstractModelObject {
 	}	
 
 	/* ------------ Utility methods ------------ */
-
+	
 	public void showErrorMessage(String title, String message) {
-	    MessageBox messageDialog = new MessageBox(getShell(), SWT.ERROR);
-	    messageDialog.setText(title);
-	    messageDialog.setMessage(message);
-	    int returnCode = messageDialog.open();
-	    log.error("Error opening MessageBox: " + returnCode);
+		this.showMessage(title, message, SWT.ERROR);
 	}
 	
 	public void showInfoMessage(String title, String message) {
-	    MessageBox messageDialog = new MessageBox(getShell(), 
-	            SWT.ICON_INFORMATION);
-        messageDialog.setText(title);
-        messageDialog.setMessage(message);
-        int returnCode = messageDialog.open();
-        System.out.println(returnCode);
+	    this.showMessage(title, message, SWT.ICON_INFORMATION);
+	}
+
+	public void showMessage(String title, String message, int iconType) {
+		class MessageDialogTask implements Runnable {
+	        String title;
+	        String message;
+	        int iconType;
+	        // Constructor
+	        MessageDialogTask(String t, String m, int i) { title = t; message = m; iconType = i; }
+	        public void run() {
+			    MessageBox messageDialog = new MessageBox(getShell(), iconType);
+			    messageDialog.setText(title);
+			    messageDialog.setMessage(message);
+			    int returnCode = messageDialog.open();
+			    log.error("Error opening MessageBox: " + returnCode);
+	        }
+	    }
+		// We need to run via syncExec in order be call UI elements from background jobs
+		Display.getDefault().syncExec(new MessageDialogTask(title, message, iconType));	    
 	}
 	
 	/**
